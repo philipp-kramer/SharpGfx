@@ -24,19 +24,5 @@ namespace SharpGfx
                     values[offset + 1],
                     values[offset + 2]));
         }
-
-        public static void Set(this float[] values, long offset, Vector3 value)
-        {
-            values[offset + 0] = value[0];
-            values[offset + 1] = value[1];
-            values[offset + 2] = value[2];
-        }
-
-        public static void Set(this float[] values, long offset, Point3 value)
-        {
-            values[offset + 0] = value.X;
-            values[offset + 1] = value.Y;
-            values[offset + 2] = value.Z;
-        }
     }
 }
