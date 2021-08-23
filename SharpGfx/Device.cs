@@ -54,7 +54,7 @@ namespace SharpGfx
 
         public abstract void Render(ICollection<RenderObject> scene, Size pixels, Point3 cameraPosition, Color4 ambientColor);
         public abstract void TakeColorPicture(ICollection<RenderObject> scene, Size pixels, Color4 ambientColor, Point3 cameraPosition, CameraView cameraView, TextureHandle texture);
-        public abstract TextureHandle TakeDepthPicture(ICollection<RenderObject> scene, Size pixels, Color4 ambientColor, Point3 cameraPosition, CameraView cameraView);
+        public abstract TextureHandle TakeDepthPicture(ICollection<RenderObject> scene, Size pixels, Color4 ambientColor, Point3 cameraPosition, CameraView cameraView, Matrix4 projection);
     }
 
     public static class DeviceExtensions

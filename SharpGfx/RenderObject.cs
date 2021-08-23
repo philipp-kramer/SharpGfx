@@ -23,7 +23,7 @@ namespace SharpGfx
             }
         }
 
-        public Material Material { get; set; }
+        public Material Material { get; }
         public Matrix4 Transform { get; set; }
         
         protected RenderObject(Space space, Material material)

@@ -23,6 +23,7 @@
     <None Remove="Resources\Shaders\basic.vert" />
     <None Remove="Resources\Shaders\diffuse_lighting.frag" />
     <None Remove="Resources\Shaders\flat_texture.vert" />
+    <None Remove="Resources\Shaders\nop.frag" />
     <None Remove="Resources\Shaders\normal_lighting.vert" />
     <None Remove="Resources\Shaders\phong_lighting.frag" />
     <None Remove="Resources\Shaders\single_color.frag" />
@@ -35,6 +36,7 @@
     <EmbeddedResource Include="Resources\Shaders\basic.vert" />
     <EmbeddedResource Include="Resources\Shaders\diffuse_lighting.frag" />
     <EmbeddedResource Include="Resources\Shaders\flat_texture.vert" />
+    <EmbeddedResource Include="Resources\Shaders\nop.frag" />
     <EmbeddedResource Include="Resources\Shaders\normal_lighting.vert" />
     <EmbeddedResource Include="Resources\Shaders\phong_lighting.frag" />
     <EmbeddedResource Include="Resources\Shaders\single_color.frag" />

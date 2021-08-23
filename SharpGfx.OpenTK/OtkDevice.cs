@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using OpenTK.Graphics.OpenGL;
 using SharpGfx.Primitives;
 
@@ -103,13 +104,13 @@ namespace SharpGfx.OpenTK
 
         public override void SetCameraView(ICollection<RenderObject> scene, CameraView cameraView)
         {
-            OtkRenderer.SetCameraView(this, scene, cameraView);
+            OtkRenderer.SetCameraView(this, scene.GroupBy(obj => (OtkShadedMaterial)obj.Material), cameraView);
         }
 
         public override void SetProjection(ICollection<RenderObject> scene, Matrix4 projection)
         {
             if (!projection.In(View)) throw new ArgumentException("needs to be in view-space", nameof(projection));
-            OtkRenderer.SetProjection(scene, projection);
+            OtkRenderer.SetProjection(scene.GroupBy(obj => (OtkShadedMaterial)obj.Material), projection);
         }
 
         public override void Render(
@@ -118,7 +119,7 @@ namespace SharpGfx.OpenTK
             Point3 cameraPosition,
             Color4 ambientColor)
         {
-            OtkRenderer.Render(scene, pixels, cameraPosition, ambientColor);
+            OtkRenderer.Render(scene.GroupBy(obj => (OtkShadedMaterial)obj.Material), pixels, cameraPosition, ambientColor);
         }
 
         public void UndefinedChannels(ICollection<RenderObject> scene, bool check)
@@ -147,11 +148,12 @@ namespace SharpGfx.OpenTK
             Size pixels,
             Color4 ambientColor,
             Point3 cameraPosition,
-            CameraView cameraView)
+            CameraView cameraView,
+            Matrix4 projection)
         {
             if (!cameraPosition.Vector.In(World)) throw new ArgumentException("needs to be in world-space", nameof(cameraPosition));
 
-            return OtkRenderer.TakeDepthPicture(this, scene, pixels, ambientColor, cameraPosition, cameraView);
+            return OtkRenderer.TakeDepthPicture(this, scene, pixels, ambientColor, cameraPosition, cameraView, projection);
         }
     }
 }

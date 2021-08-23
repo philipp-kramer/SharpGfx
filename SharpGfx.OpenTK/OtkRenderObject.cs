@@ -51,15 +51,9 @@ namespace SharpGfx.OpenTK
 
         public override void Render()
         {
-            var shading = ((OtkShadedMaterial) Material).Shading;
-            shading.Set("model", Transform);
-            shading.CheckInputs();
-
             GL.BindVertexArray(Handle);
             Draw();
             GL.BindVertexArray(0);
-
-            shading.ResetIdentityMatrix4("model");
         }
 
         protected virtual void Draw()

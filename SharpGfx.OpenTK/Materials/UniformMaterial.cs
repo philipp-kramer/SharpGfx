@@ -1,5 +1,4 @@
-﻿using SharpGfx.OpenTK;
-using SharpGfx.Primitives;
+﻿using SharpGfx.Primitives;
 
 namespace SharpGfx.OpenTK.Materials
 {
