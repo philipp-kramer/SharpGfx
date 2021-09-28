@@ -25,7 +25,7 @@ namespace SharpGfx
 
         public Material Material { get; }
         public Matrix4 Transform { get; set; }
-        
+
         protected RenderObject(Space space, Material material)
         {
             _space = space;
@@ -43,14 +43,14 @@ namespace SharpGfx
 
         public RenderObject Scale(Vector3 scale)
         {
-            if (Space != scale.Space) throw new ArgumentException("cross space operation");
             Transform *= scale.Space.Scale4(scale);
             return this;
         }
 
         public RenderObject Translate(Vector3 delta)
         {
-            if (Space != delta.Space) throw new ArgumentException("cross space operation");
+            if (Space.Domain > delta.Space.Domain) throw new ArgumentException("cross space operation");
+            Space = delta.Space;
             Transform *= delta.Space.Translation4(delta);
             return this;
         }
