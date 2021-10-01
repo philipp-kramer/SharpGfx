@@ -39,21 +39,31 @@ namespace SharpGfx
             switch (key)
             {
                 case ConsoleKey.NumPad5:
+                case ConsoleKey.E:
                     rendering.CameraForward(NavigationSpeed);
                     break;
                 case ConsoleKey.NumPad0:
+                case ConsoleKey.Q:
                     rendering.CameraForward(-NavigationSpeed);
                     break;
                 case ConsoleKey.NumPad4:
+                case ConsoleKey.LeftArrow:
+                case ConsoleKey.A:
                     rendering.CameraRight(-NavigationSpeed);
                     break;
                 case ConsoleKey.NumPad6:
+                case ConsoleKey.RightArrow:
+                case ConsoleKey.D:
                     rendering.CameraRight(NavigationSpeed);
                     break;
                 case ConsoleKey.NumPad8:
+                case ConsoleKey.UpArrow:
+                case ConsoleKey.W:
                     rendering.CameraUp(NavigationSpeed);
                     break;
                 case ConsoleKey.NumPad2:
+                case ConsoleKey.DownArrow:
+                case ConsoleKey.S:
                     rendering.CameraUp(-NavigationSpeed);
                     break;
             }
