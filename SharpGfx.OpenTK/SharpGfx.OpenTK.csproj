@@ -1,57 +1,62 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Authors>Philipp Kramer</Authors>
-    <Company>OST INS</Company>
-    <Product>SharpGfx</Product>
-    <PackageId>SharpGfx.OpenTK</PackageId>
-    <AssemblyVersion>1.0.0.1</AssemblyVersion>
-    <FileVersion>1.0.0.1</FileVersion>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<Authors>Philipp Kramer</Authors>
+		<Company>OST INS</Company>
+		<Product>SharpGfx</Product>
+		<PackageId>SharpGfx.OpenTK</PackageId>
+		<AssemblyVersion>1.0.0.1</AssemblyVersion>
+		<FileVersion>1.0.0.1</FileVersion>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
+	<PropertyGroup>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Version>1.0.1</Version>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Resources\Shaders\basic.vert" />
-    <None Remove="Resources\Shaders\diffuse_lighting.frag" />
-    <None Remove="Resources\Shaders\flat_texture.vert" />
-    <None Remove="Resources\Shaders\nop.frag" />
-    <None Remove="Resources\Shaders\normal_lighting.vert" />
-    <None Remove="Resources\Shaders\phong_lighting.frag" />
-    <None Remove="Resources\Shaders\single_color.frag" />
-    <None Remove="Resources\Shaders\texture.frag" />
-    <None Remove="Resources\Shaders\vertex_color.frag" />
-    <None Remove="Resources\Shaders\vertex_color.vert" />
-  </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Shaders\basic.vert" />
-    <EmbeddedResource Include="Resources\Shaders\diffuse_lighting.frag" />
-    <EmbeddedResource Include="Resources\Shaders\flat_texture.vert" />
-    <EmbeddedResource Include="Resources\Shaders\nop.frag" />
-    <EmbeddedResource Include="Resources\Shaders\normal_lighting.vert" />
-    <EmbeddedResource Include="Resources\Shaders\phong_lighting.frag" />
-    <EmbeddedResource Include="Resources\Shaders\single_color.frag" />
-    <EmbeddedResource Include="Resources\Shaders\texture.frag" />
-    <EmbeddedResource Include="Resources\Shaders\vertex_color.frag" />
-    <EmbeddedResource Include="Resources\Shaders\vertex_color.vert" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Resources\Shaders\basic.vert" />
+		<None Remove="Resources\Shaders\diffuse_lighting.frag" />
+		<None Remove="Resources\Shaders\flat_texture.vert" />
+		<None Remove="Resources\Shaders\nop.frag" />
+		<None Remove="Resources\Shaders\normal_lighting.vert" />
+		<None Remove="Resources\Shaders\phong_lighting.frag" />
+		<None Remove="Resources\Shaders\single_color.frag" />
+		<None Remove="Resources\Shaders\texture.frag" />
+		<None Remove="Resources\Shaders\vertex_color.frag" />
+		<None Remove="Resources\Shaders\vertex_color.vert" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="OpenTK.NetStandard" Version="1.0.5.32" />
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\Shaders\basic.vert" />
+		<EmbeddedResource Include="Resources\Shaders\diffuse_lighting.frag" />
+		<EmbeddedResource Include="Resources\Shaders\flat_texture.vert" />
+		<EmbeddedResource Include="Resources\Shaders\nop.frag" />
+		<EmbeddedResource Include="Resources\Shaders\normal_lighting.vert" />
+		<EmbeddedResource Include="Resources\Shaders\phong_lighting.frag" />
+		<EmbeddedResource Include="Resources\Shaders\single_color.frag" />
+		<EmbeddedResource Include="Resources\Shaders\texture.frag" />
+		<EmbeddedResource Include="Resources\Shaders\vertex_color.frag" />
+		<EmbeddedResource Include="Resources\Shaders\vertex_color.vert" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\GlslParser\GlslParser.csproj" />
-    <ProjectReference Include="..\SharpGfx\SharpGfx.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="OpenTK.NetStandard" Version="1.0.5.32" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\GlslParser\GlslParser.csproj" />
+		<ProjectReference Include="..\SharpGfx\SharpGfx.csproj" />
+	</ItemGroup>
 
 </Project>

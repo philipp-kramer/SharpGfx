@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 namespace SharpGfx
 {
@@ -16,14 +15,6 @@ namespace SharpGfx
         {
             Rendering = rendering;
             MouseTracking = new PositionTracking();
-        }
-
-        [DllImport("user32.dll", EntryPoint = "GetKeyState", SetLastError = true)]
-        private static extern int GetKeyState(int nVirtKey);
-
-        private static bool IsNumLocked()
-        {
-            return ((ushort)GetKeyState(0x90) & 0xffff) != 0;
         }
 
         private static float Limit(float value, float range)
@@ -73,7 +64,6 @@ namespace SharpGfx
         {
             if (Rendering is CameraRendering cameraRendering)
             {
-                cameraRendering.Navigable = IsNumLocked();
                 cameraRendering.CameraYaw = Limit(cameraRendering.CameraYaw + MouseTracking.DeltaX / MouseSensitivity, MathF.PI);
                 cameraRendering.CameraPitch = Limit(cameraRendering.CameraPitch - MouseTracking.DeltaY / MouseSensitivity, MathF.PI / 2);
             }
