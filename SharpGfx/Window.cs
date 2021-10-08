@@ -5,7 +5,7 @@ namespace SharpGfx
     public abstract class Window
     {
         private const float NavigationSpeed = 0.1f;
-        private const float MouseSensitivity = 100f;
+        private const float MouseSensitivity = 1/200f;
 
         protected readonly PositionTracking MouseTracking;
 
@@ -30,10 +30,12 @@ namespace SharpGfx
             switch (key)
             {
                 case ConsoleKey.NumPad5:
+                case ConsoleKey.PageUp:
                 case ConsoleKey.E:
                     rendering.CameraForward(NavigationSpeed);
                     break;
                 case ConsoleKey.NumPad0:
+                case ConsoleKey.PageDown:
                 case ConsoleKey.Q:
                     rendering.CameraForward(-NavigationSpeed);
                     break;
@@ -64,8 +66,8 @@ namespace SharpGfx
         {
             if (Rendering is CameraRendering cameraRendering)
             {
-                cameraRendering.CameraYaw = Limit(cameraRendering.CameraYaw + MouseTracking.DeltaX / MouseSensitivity, MathF.PI);
-                cameraRendering.CameraPitch = Limit(cameraRendering.CameraPitch - MouseTracking.DeltaY / MouseSensitivity, MathF.PI / 2);
+                cameraRendering.CameraYaw = Limit(cameraRendering.CameraYaw + MouseTracking.DeltaX * MouseSensitivity, MathF.PI);
+                cameraRendering.CameraPitch = Limit(cameraRendering.CameraPitch - MouseTracking.DeltaY * MouseSensitivity, MathF.PI / 2);
             }
         }
     }
