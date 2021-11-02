@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using OpenTK.Graphics.OpenGL;
 
 namespace SharpGfx.OpenTK
@@ -23,6 +24,11 @@ namespace SharpGfx.OpenTK
         private void ReleaseUnmanagedResources()
         {
             GL.DeleteBuffer(Handle);
+        }
+
+        ~OtkIndexBuffer()
+        {
+            UnmanagedRelease.Add(ReleaseUnmanagedResources);
         }
     }
 }

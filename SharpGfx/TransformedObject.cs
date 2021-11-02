@@ -1,13 +1,14 @@
 ﻿namespace SharpGfx
 {
-    public sealed class TransformedObject : RenderObject
+    internal sealed class TransformedObject : RenderObject
     {
         private readonly RenderObject _object;
 
-        public TransformedObject(RenderObject @object) 
+        internal TransformedObject(RenderObject @object) 
             : base(@object.Space, @object.Material)
         {
             _object = @object;
+            Transform = @object.Transform;
         }
 
         public override void Render()

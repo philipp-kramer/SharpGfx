@@ -10,7 +10,7 @@ namespace SharpGfx.OpenTK
 
 
         public OtkTextureMaterial(Device device, string vertexShader, string fragmentShader, TextureHandle handle, int unit)
-            : base(vertexShader, fragmentShader)
+            : base(vertexShader, fragmentShader, true)
         {
             _device = device;
             _handle = handle;
@@ -18,13 +18,15 @@ namespace SharpGfx.OpenTK
             Shading.DoInContext(() => Shading.Set("texUnit", _unit));
         }
 
-        public override void Apply(Point3 cameraPosition)
+        protected internal override void Apply(Point3 cameraPosition)
         {
             _handle.ActivateTexture(_unit);
+            base.Apply(cameraPosition);
         }
 
-        public override void UnApply()
+        protected internal override void UnApply()
         {
+            base.UnApply();
             _device.ClearTexture(_unit);
         }
 

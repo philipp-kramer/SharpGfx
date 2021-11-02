@@ -3,7 +3,7 @@ using SharpGfx.Primitives;
 
 namespace SharpGfx
 {
-    public abstract class RenderObject : IDisposable
+    public abstract class RenderObject
     {
         private Space _space;
 
@@ -34,6 +34,11 @@ namespace SharpGfx
         }
 
         public abstract void Render();
+
+        public RenderObject Copy()
+        {
+            return new TransformedObject(this);
+        }
 
         public RenderObject Scale(float scale)
         {
@@ -71,25 +76,6 @@ namespace SharpGfx
         {
             Transform *= Space.RotationZ4(angle);
             return this;
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                Material?.Dispose();
-            }
-        }
-
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-            Dispose(true);
-        }
-
-        ~RenderObject()
-        {
-            Dispose(false);
         }
     }
 }

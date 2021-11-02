@@ -2,19 +2,7 @@
 
 namespace SharpGfx
 {
-    public abstract class FrameBuffer : IDisposable
+    public abstract class FrameBuffer
     {
-        protected abstract void Dispose(bool disposing);
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~FrameBuffer()
-        {
-            Dispose(false);
-        }
     }
 }

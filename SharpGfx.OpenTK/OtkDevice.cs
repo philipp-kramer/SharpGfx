@@ -120,13 +120,14 @@ namespace SharpGfx.OpenTK
             Color4 ambientColor)
         {
             OtkRenderer.Render(scene.GroupBy(obj => (OtkShadedMaterial)obj.Material), pixels, cameraPosition, ambientColor);
+            UnmanagedRelease.ExecutePending();
         }
 
         public void UndefinedChannels(ICollection<RenderObject> scene, bool check)
         {
             foreach (var obj in scene)
             {
-                ((OtkShadedMaterial) obj.Material).Shading.UndefinedChannels = check;
+                ((OtkShadedMaterial) obj.Material).Shading.CheckUndefinedChannels = check;
             }
         }
 

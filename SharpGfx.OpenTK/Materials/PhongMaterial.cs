@@ -18,28 +18,35 @@ namespace SharpGfx.OpenTK.Materials
         {
         }
 
-        protected PhongMaterial(string vertexShader, string fragmentShader, Light light, Color3 materialDiffuse, Color3 specular, float shininess)
+        protected PhongMaterial(
+            string vertexShader, 
+            string fragmentShader, 
+            Light light, 
+            Color3 materialDiffuse, 
+            Color3 specular, 
+            float shininess)
             : base(
                 vertexShader,
                 fragmentShader,
                 light,
-                materialDiffuse)
+                materialDiffuse,
+                false)
         {
             _specular = specular;
             _shininess = shininess;
         }
 
-        public override void Apply(Point3 cameraPosition)
+        protected internal override void Apply(Point3 cameraPosition)
         {
-            base.Apply(cameraPosition);
             Shading.Set("light.specular", Light.Specular.Vector);
             Shading.Set("material.specular", _specular.Vector);
             Shading.Set("material.shininess", _shininess);
 
             Shading.Set("cameraPosition", cameraPosition.Vector);
+            base.Apply(cameraPosition);
         }
 
-        public override void UnApply()
+        protected internal override void UnApply()
         {
             base.UnApply();
             Shading.ResetVector3("light.specular");

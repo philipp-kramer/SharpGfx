@@ -13,7 +13,7 @@
 
 	<PropertyGroup>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.0.1</Version>
+		<Version>1.0.7</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -31,6 +31,8 @@
 		<None Remove="Resources\Shaders\nop.frag" />
 		<None Remove="Resources\Shaders\normal_lighting.vert" />
 		<None Remove="Resources\Shaders\phong_lighting.frag" />
+		<None Remove="Resources\Shaders\shadow_texture.frag" />
+		<None Remove="Resources\Shaders\shadow_texture.vert" />
 		<None Remove="Resources\Shaders\single_color.frag" />
 		<None Remove="Resources\Shaders\texture.frag" />
 		<None Remove="Resources\Shaders\vertex_color.frag" />
@@ -44,6 +46,8 @@
 		<EmbeddedResource Include="Resources\Shaders\nop.frag" />
 		<EmbeddedResource Include="Resources\Shaders\normal_lighting.vert" />
 		<EmbeddedResource Include="Resources\Shaders\phong_lighting.frag" />
+		<EmbeddedResource Include="Resources\Shaders\shadow_texture.frag" />
+		<EmbeddedResource Include="Resources\Shaders\shadow_texture.vert" />
 		<EmbeddedResource Include="Resources\Shaders\single_color.frag" />
 		<EmbeddedResource Include="Resources\Shaders\texture.frag" />
 		<EmbeddedResource Include="Resources\Shaders\vertex_color.frag" />

@@ -1,8 +1,9 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using System;
+using OpenTK.Graphics.OpenGL;
 
 namespace SharpGfx.OpenTK
 {
-    internal class OtkVertexBuffer<T> : VertexBuffer
+    internal class OtkVertexBuffer<T> : VertexBuffer, IDisposable
         where T : struct
     {
         internal readonly int Handle;
@@ -15,7 +16,13 @@ namespace SharpGfx.OpenTK
             Handle = OtkBuffer.CreateBuffer(data, BufferTarget.ArrayBuffer);
         }
 
-        protected override void Dispose(bool disposing)
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
         {
             ReleaseUnmanagedResources();
         }
@@ -23,6 +30,11 @@ namespace SharpGfx.OpenTK
         private void ReleaseUnmanagedResources()
         {
             GL.DeleteBuffer(Handle);
+        }
+
+        ~OtkVertexBuffer()
+        {
+            UnmanagedRelease.Add(() => Dispose(false));
         }
     }
 }

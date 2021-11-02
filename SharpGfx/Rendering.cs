@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using SharpGfx.Primitives;
 
 namespace SharpGfx
@@ -50,14 +51,37 @@ namespace SharpGfx
             Device.Render(Scene, Size, default, AmbientColor.GetColor4(1));
         }
 
+        protected void DisposeObjects()
+        {
+            foreach (var @object in Scene)
+            {
+                if (@object is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
+            }
+        }
+
+        protected void DisposeMaterials()
+        {
+            var materials = Scene
+                .Select(o => o.Material)
+                .Distinct();
+            foreach (var material in materials)
+            {
+                if (material is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
+            }
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
-                foreach (var @object in Scene)
-                {
-                    @object.Dispose();
-                }
+                DisposeObjects();
+                DisposeMaterials();
             }
         }
 

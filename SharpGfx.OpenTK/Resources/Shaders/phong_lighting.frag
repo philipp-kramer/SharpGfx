@@ -35,8 +35,8 @@ void main()
 
     const vec3 cameraDir = normalize(cameraPosition - fragPos);
     const vec3 reflectDir = reflect(-lightDir, normDir);
-    const float spec = pow(max(dot(cameraDir, reflectDir), 0.0), material.shininess);
-    const vec3 specular = spec * light.specular * material.specular;
+    const float intensity = pow(max(dot(cameraDir, reflectDir), 0.0), material.shininess);
+    const vec3 specular = intensity * light.specular * material.specular;
 
 	fragColor = vec4(ambient + diffuse + specular, 1.0);
 }

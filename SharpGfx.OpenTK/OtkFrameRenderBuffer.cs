@@ -40,6 +40,7 @@ namespace SharpGfx.OpenTK
             {
                 _frameBuffer.Dispose();
             }
+            base.Dispose(disposing);
         }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Linq;
 using OpenTK.Graphics.OpenGL;
 
 namespace SharpGfx.OpenTK
 {
-    internal class OtkRenderObject : RenderObject
+    internal class OtkRenderObject : RenderObject, IDisposable
     {
         private readonly int _vertexCount;
         internal readonly int Handle;
@@ -61,15 +62,21 @@ namespace SharpGfx.OpenTK
             GL.DrawArrays(PrimitiveType.Triangles, 0, _vertexCount);
         }
 
-        protected override void Dispose(bool disposing)
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
         {
             ReleaseUnmanagedResources();
 
             if (disposing)
             {
-                foreach (var attribute in _attributes)
+                foreach (var buffer in _attributes.Select(a => a.Buffer).Cast<IDisposable>())
                 {
-                    attribute.Buffer.Dispose();
+                    buffer.Dispose();
                 }
             }
         }
@@ -77,6 +84,11 @@ namespace SharpGfx.OpenTK
         private void ReleaseUnmanagedResources()
         {
             GL.DeleteVertexArray(Handle);
+        }
+
+        ~OtkRenderObject()
+        {
+            UnmanagedRelease.Add(() => Dispose(false));
         }
     }
 }

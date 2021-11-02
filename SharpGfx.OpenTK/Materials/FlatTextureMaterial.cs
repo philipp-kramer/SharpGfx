@@ -7,7 +7,8 @@
                 device,
                 Resources.Get<FlatTextureMaterial>("Shaders.flat_texture.vert"),
                 Resources.Get<FlatTextureMaterial>("Shaders.texture.frag"),
-                handle, unit)
+                handle,
+                unit)
         {
         }
     }

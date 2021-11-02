@@ -1,8 +1,9 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using System;
+using OpenTK.Graphics.OpenGL;
 
 namespace SharpGfx.OpenTK
 {
-    internal class OtkFrameBuffer : FrameBuffer
+    internal class OtkFrameBuffer : FrameBuffer, IDisposable
     {
         internal readonly int Handle;
 
@@ -18,9 +19,20 @@ namespace SharpGfx.OpenTK
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }
 
-        protected override void Dispose(bool disposing)
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
         {
             ReleaseUnmanagedResources();
+        }
+
+        ~OtkFrameBuffer()
+        {
+            UnmanagedRelease.Add(() => Dispose(false));
         }
     }
 }

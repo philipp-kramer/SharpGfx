@@ -5,7 +5,8 @@
         public VertexColorMaterial()
             : base(
                 Resources.Get<VertexColorMaterial>("Shaders.vertex_color.vert"), 
-                Resources.Get<VertexColorMaterial>("Shaders.vertex_color.frag"))
+                Resources.Get<VertexColorMaterial>("Shaders.vertex_color.frag"),
+                false)
         {
         }
     }

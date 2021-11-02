@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using GlslParser;
 using GlslParser.Tree;
 using OpenTK.Graphics.OpenGL;
@@ -11,13 +13,15 @@ namespace SharpGfx.OpenTK
 {
     public sealed class OtkShading : IDisposable
     {
+        private static readonly Dictionary<byte[], int> Lookup = new Dictionary<byte[], int>(new ArrayComparer<byte>());
+
         private readonly Dictionary<string, Direction> _channels;
         private readonly Dictionary<string, Direction> _inputs;
         private readonly int _handle;
 
-        public bool UndefinedChannels { get; set; } = true;
+        public bool CheckUndefinedChannels { get; set; } = true;
 
-        internal OtkShading(string vertexShader, string fragmentShader)
+        internal OtkShading(string vertexShader, string fragmentShader, bool hasTexture) // TODO: figure out why caching does not work with textures
         {
             _channels = new Dictionary<string, Direction>();
             _inputs = new Dictionary<string, Direction>();
@@ -27,14 +31,20 @@ namespace SharpGfx.OpenTK
 
             diagnosis.Source = "vertex shader";
             CheckShader(vertexShader, diagnosis);
-            pipeline.Add(GetCompiledShader(vertexShader, ShaderType.VertexShader));
 
             diagnosis.Source = "fragment shader";
             var outputChannels = CheckShader(fragmentShader, diagnosis);
             if (outputChannels.Count != 1)
             {
-                diagnosis.ReportError("fragment shaders must have a single output defining the color");
+                throw new ArgumentException($"fragment shaders must have a single output defining the color, but it has {outputChannels.Count}.");
             }
+
+            if (!hasTexture && TryGetCached(vertexShader, fragmentShader, out _handle))
+            {
+                return;
+            }
+
+            pipeline.Add(GetCompiledShader(vertexShader, ShaderType.VertexShader));
             pipeline.Add(GetCompiledShader(fragmentShader, ShaderType.FragmentShader));
 
             if (diagnosis.HasErrors)
@@ -45,6 +55,29 @@ namespace SharpGfx.OpenTK
             _handle = GL.CreateProgram();
             GL.BindFragDataLocation(_handle, 0, outputChannels.Single().Name);
             LinkProgram(_handle, pipeline);
+
+            if (!hasTexture)
+            {
+                Cache(vertexShader, fragmentShader, _handle);
+            }
+        }
+
+        private static void Cache(string vertexShader, string fragmentShader, int handle)
+        {
+            var hashValue = CalculateHash(vertexShader, fragmentShader);
+            Lookup.Add(hashValue, handle);
+        }
+
+        private static bool TryGetCached(string vertexShader, string fragmentShader, out int handle)
+        {
+            var hashValue = CalculateHash(vertexShader, fragmentShader);
+            return Lookup.TryGetValue(hashValue, out handle);
+        }
+
+        private static byte[] CalculateHash(string vertexShader, string fragmentShader)
+        {
+            using var hashing = SHA256.Create();
+            return hashing.ComputeHash(Encoding.ASCII.GetBytes(vertexShader + fragmentShader));
         }
 
         private List<ChannelNode> CheckShader(string shader, Diagnosis diagnosis)
@@ -147,7 +180,7 @@ namespace SharpGfx.OpenTK
                         throw new InvalidOperationException($"input {kind} {channel.Key} should be {channel.Value}");
                     }
                 }
-                else if (UndefinedChannels && channel.Value != Direction.Out)
+                else if (CheckUndefinedChannels && channel.Value != Direction.Out)
                 {
                     throw new InvalidOperationException($"{kind} channel {channel.Key} has no input");
                 }
@@ -280,7 +313,7 @@ namespace SharpGfx.OpenTK
 
         private void CheckAndSet(string input)
         {
-            if (UndefinedChannels)
+            if (CheckUndefinedChannels)
             {
                 if (!_channels.ContainsKey(input))
                 {
@@ -297,7 +330,7 @@ namespace SharpGfx.OpenTK
 
         private void CheckAndReset(string input)
         {
-            if (UndefinedChannels && !_channels.ContainsKey(input)) throw new ArgumentException("shader channel not found", nameof(input));
+            if (CheckUndefinedChannels && !_channels.ContainsKey(input)) throw new ArgumentException("shader channel not found", nameof(input));
             _inputs.Remove(input);
         }
 
@@ -309,11 +342,6 @@ namespace SharpGfx.OpenTK
             }
         }
 
-        private void Dispose(bool disposing)
-        {
-            ReleaseUnmanagedResources();
-        }
-
         private void ReleaseUnmanagedResources()
         {
             GL.DeleteProgram(_handle);
@@ -322,7 +350,12 @@ namespace SharpGfx.OpenTK
         public void Dispose()
         {
             GC.SuppressFinalize(this);
-            Dispose(true);
+            ReleaseUnmanagedResources();
+        }
+
+        ~OtkShading()
+        {
+            UnmanagedRelease.Add(ReleaseUnmanagedResources);
         }
     }
 }

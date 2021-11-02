@@ -74,7 +74,7 @@ namespace SharpGfx.OpenTK
             CameraView cameraView,
             TextureHandle texture)
         {
-            using (device.FrameRenderBuffer(pixels))
+            using (new OtkFrameRenderBuffer(pixels))
             {
                 if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
                 {
@@ -107,32 +107,42 @@ namespace SharpGfx.OpenTK
         {
             var depthTexture = device.DepthTexture(pixels);
 
-            using var frameBuffer = device.FrameBuffer();
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2D, ((OtkTextureHandle)depthTexture).Handle, 0);
-
-            GL.DrawBuffer(DrawBufferMode.None);
-            GL.ReadBuffer(ReadBufferMode.None);
-
-            if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
+            using (new OtkFrameRenderBuffer(pixels))
             {
-                throw new InvalidOperationException("framebuffer not configured correctly");
+                GL.FramebufferTexture2D(
+                    FramebufferTarget.Framebuffer, 
+                    FramebufferAttachment.DepthAttachment,
+                    TextureTarget.Texture2D, 
+                    ((OtkTextureHandle) depthTexture).Handle, 0);
+
+                GL.DrawBuffer(DrawBufferMode.None);
+                GL.ReadBuffer(ReadBufferMode.None);
+
+                if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
+                {
+                    throw new InvalidOperationException("framebuffer not configured correctly");
+                }
+
+                device.CheckSpaces(scene);
+
+                using var material = new NopMaterial();
+                var nopMaterialScene = new[]
+                {
+                    new Grouping<OtkShadedMaterial, RenderObject>(material, scene)
+                };
+                SetProjection(nopMaterialScene, projection);
+                SetCameraPosition(device.World, nopMaterialScene, cameraPosition); // supply scene also the same way as for Render
+                SetCameraView(device, nopMaterialScene, cameraView);
+                Render(nopMaterialScene, pixels, cameraPosition, ambientColor);
+
+                GL.FramebufferTexture2D(
+                    FramebufferTarget.Framebuffer, 
+                    FramebufferAttachment.DepthAttachment,
+                    TextureTarget.Texture2D, 
+                    0, 0); // detach
+
+                return depthTexture;
             }
-
-            device.CheckSpaces(scene);
-
-            using var material = new NopMaterial();
-            var nopMaterialScene = new[]
-            {
-                new Grouping<OtkShadedMaterial, RenderObject>(material, scene)
-            };
-            SetProjection(nopMaterialScene, projection);
-            SetCameraPosition(device.World, nopMaterialScene, cameraPosition); // supply scene also the same way as for Render
-            SetCameraView(device, nopMaterialScene, cameraView);
-            Render(nopMaterialScene, pixels, cameraPosition, ambientColor);
-
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2D, 0, 0); // detach
-
-            return depthTexture;
         }
 
         private static void SetCameraPosition(Space world, IEnumerable<IGrouping<OtkShadedMaterial, RenderObject>> scene, Point3 position)
