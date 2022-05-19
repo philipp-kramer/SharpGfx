@@ -18,6 +18,7 @@ namespace SharpGfx.OpenTK
 
         public void Dispose()
         {
+            GC.SuppressFinalize(this);
             ReleaseUnmanagedResources();
         }
 

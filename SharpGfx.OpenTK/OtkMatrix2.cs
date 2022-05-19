@@ -5,10 +5,10 @@ namespace SharpGfx.OpenTK
 {
     internal readonly struct OtkMatrix2 : Matrix2
     {
-        private readonly global::OpenTK.Matrix2 _value;
+        private readonly global::OpenTK.Mathematics.Matrix2 _value;
         private readonly Space _space;
 
-        public OtkMatrix2(Space space, global::OpenTK.Matrix2 value)
+        public OtkMatrix2(Space space, global::OpenTK.Mathematics.Matrix2 value)
         {
             _space = space;
             _value = value;
@@ -22,6 +22,6 @@ namespace SharpGfx.OpenTK
             _value.M21, _value.M22,
         };
 
-        Space Primitive.Space => _space;
+        Space IPrimitive.Space => _space;
     }
 }

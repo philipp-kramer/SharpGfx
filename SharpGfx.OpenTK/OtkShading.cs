@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using GlslParser;
 using GlslParser.Tree;
 using OpenTK.Graphics.OpenGL;
@@ -13,15 +11,13 @@ namespace SharpGfx.OpenTK
 {
     public sealed class OtkShading : IDisposable
     {
-        private static readonly Dictionary<byte[], int> Lookup = new Dictionary<byte[], int>(new ArrayComparer<byte>());
-
         private readonly Dictionary<string, Direction> _channels;
         private readonly Dictionary<string, Direction> _inputs;
         private readonly int _handle;
 
         public bool CheckUndefinedChannels { get; set; } = true;
 
-        internal OtkShading(string vertexShader, string fragmentShader, bool hasTexture) // TODO: figure out why caching does not work with textures
+        internal OtkShading(string vertexShader, string fragmentShader)
         {
             _channels = new Dictionary<string, Direction>();
             _inputs = new Dictionary<string, Direction>();
@@ -39,11 +35,6 @@ namespace SharpGfx.OpenTK
                 throw new ArgumentException($"fragment shaders must have a single output defining the color, but it has {outputChannels.Count}.");
             }
 
-            if (!hasTexture && TryGetCached(vertexShader, fragmentShader, out _handle))
-            {
-                return;
-            }
-
             pipeline.Add(GetCompiledShader(vertexShader, ShaderType.VertexShader));
             pipeline.Add(GetCompiledShader(fragmentShader, ShaderType.FragmentShader));
 
@@ -55,29 +46,6 @@ namespace SharpGfx.OpenTK
             _handle = GL.CreateProgram();
             GL.BindFragDataLocation(_handle, 0, outputChannels.Single().Name);
             LinkProgram(_handle, pipeline);
-
-            if (!hasTexture)
-            {
-                Cache(vertexShader, fragmentShader, _handle);
-            }
-        }
-
-        private static void Cache(string vertexShader, string fragmentShader, int handle)
-        {
-            var hashValue = CalculateHash(vertexShader, fragmentShader);
-            Lookup.Add(hashValue, handle);
-        }
-
-        private static bool TryGetCached(string vertexShader, string fragmentShader, out int handle)
-        {
-            var hashValue = CalculateHash(vertexShader, fragmentShader);
-            return Lookup.TryGetValue(hashValue, out handle);
-        }
-
-        private static byte[] CalculateHash(string vertexShader, string fragmentShader)
-        {
-            using var hashing = SHA256.Create();
-            return hashing.ComputeHash(Encoding.ASCII.GetBytes(vertexShader + fragmentShader));
         }
 
         private List<ChannelNode> CheckShader(string shader, Diagnosis diagnosis)
@@ -232,32 +200,37 @@ namespace SharpGfx.OpenTK
         public void ResetVector2(string name)
         {
             CheckAndReset(name);
-            Set(name, global::OpenTK.Vector2.Zero);
+            Set(name, global::OpenTK.Mathematics.Vector2.Zero);
         }
 
-        private void Set(string name, global::OpenTK.Vector2 value)
+        private void Set(string name, global::OpenTK.Mathematics.Vector2 value)
         {
             GL.Uniform2(GL.GetUniformLocation(_handle, name), ref value);
         }
 
-        public void Set(string name, Vector3 value)
+        public void Set(string name, IVector3 value)
         {
             CheckAndSet(name);
+            Set(name, ((OtkVector3)value).Value);
+        }
+
+        public void SetUnchecked(string name, IVector3 value)
+        {
             Set(name, ((OtkVector3)value).Value);
         }
 
         public void ResetVector3(string name)
         {
             CheckAndReset(name);
-            Set(name, global::OpenTK.Vector3.Zero);
+            Set(name, global::OpenTK.Mathematics.Vector3.Zero);
         }
 
-        private void Set(string name, global::OpenTK.Vector3 value)
+        private void Set(string name, global::OpenTK.Mathematics.Vector3 value)
         {
             GL.Uniform3(GL.GetUniformLocation(_handle, name), ref value);
         }
 
-        public void Set(string name, ICollection<Vector3> values)
+        public void Set(string name, ICollection<IVector3> values)
         {
             CheckAndSet(name);
             var floats = new float[values.Count * 3];
@@ -280,10 +253,10 @@ namespace SharpGfx.OpenTK
         public void ResetVector4(string name)
         {
             CheckAndReset(name);
-            Set(name, global::OpenTK.Vector4.Zero);
+            Set(name, global::OpenTK.Mathematics.Vector4.Zero);
         }
 
-        private void Set(string name, global::OpenTK.Vector4 value)
+        private void Set(string name, global::OpenTK.Mathematics.Vector4 value)
         {
             GL.Uniform4(GL.GetUniformLocation(_handle, name), ref value);
         }
@@ -297,16 +270,16 @@ namespace SharpGfx.OpenTK
         public void ResetZeroMatrix4(string name)
         {
             CheckAndReset(name);
-            Set(name, global::OpenTK.Matrix4.Zero);
+            Set(name, global::OpenTK.Mathematics.Matrix4.Zero);
         }
 
         public void ResetIdentityMatrix4(string name)
         {
             CheckAndReset(name);
-            Set(name, global::OpenTK.Matrix4.Identity);
+            Set(name, global::OpenTK.Mathematics.Matrix4.Identity);
         }
 
-        private void Set(string name, global::OpenTK.Matrix4 value)
+        private void Set(string name, global::OpenTK.Mathematics.Matrix4 value)
         {
             GL.UniformMatrix4(GL.GetUniformLocation(_handle, name), true, ref value);
         }
@@ -317,7 +290,8 @@ namespace SharpGfx.OpenTK
             {
                 if (!_channels.ContainsKey(input))
                 {
-                    throw new ArgumentException($"shader channel {input} not found", nameof(input));
+                    // TODO: add info in which resource the shader is stored
+                    throw new ArgumentException($"shader channel {input} not found");
                 }
                 if (_channels[input] != Direction.Uniform)
                 {

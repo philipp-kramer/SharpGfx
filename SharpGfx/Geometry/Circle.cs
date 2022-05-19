@@ -50,18 +50,18 @@ namespace SharpGfx.Geometry
             return vertices;
         }
 
-        public static ushort[] GetCakeIndices(int sectors)
+        public static ushort[] GetCakeTriangles(int sectors)
         {
-            var indices = new ushort[3 * sectors];
+            var triangles = new ushort[3 * sectors];
             int i = 0;
             for (int sector = 0; sector < sectors; sector++)
             {
-                indices[i++] = 0;
-                indices[i++] = (ushort)(1 + sector);
-                indices[i++] = (ushort)(1 + (sector + 1) % sectors);
+                triangles[i++] = 0;
+                triangles[i++] = (ushort)(1 + sector);
+                triangles[i++] = (ushort)(1 + (sector + 1) % sectors);
             }
 
-            return indices;
+            return triangles;
         }
 
         public static float[] GetIsoVertices(int rings)
@@ -94,21 +94,21 @@ namespace SharpGfx.Geometry
             return vertices;
         }
 
-        public static ushort[] GetIsoIndices(int rings)
+        public static ushort[] GetIsoTriangles(int rings)
         {
-            var indices = new List<ushort>();
-            SetIsoIndices(rings, indices);
-            return indices.ToArray();
+            var triangles = new List<ushort>();
+            AddIsoTriangles(rings, triangles);
+            return triangles.ToArray();
         }
 
-        internal static void SetIsoIndices(int rings, List<ushort> indices)
+        internal static void AddIsoTriangles(int rings, List<ushort> triangles)
         {
             int sectors = 6;
             for (int sector = 0; sector < sectors; sector++)
             {
-                indices.Add(0);
-                indices.Add((ushort) (1 + sector));
-                indices.Add((ushort) (1 + (sector + 1) % sectors));
+                triangles.Add(0);
+                triangles.Add((ushort) (1 + sector));
+                triangles.Add((ushort) (1 + (sector + 1) % sectors));
             }
 
             int innerStart = 1;
@@ -122,21 +122,21 @@ namespace SharpGfx.Geometry
                     int innerNext = (innerSector + 1) % sectors;
                     int outerNext = (outerSector + 1) % (sectors + 6);
 
-                    indices.Add((ushort) (innerStart + innerSector));
-                    indices.Add((ushort) (outerStart + outerSector));
-                    indices.Add((ushort) (outerStart + outerNext));
+                    triangles.Add((ushort) (innerStart + innerSector));
+                    triangles.Add((ushort) (outerStart + outerSector));
+                    triangles.Add((ushort) (outerStart + outerNext));
 
-                    indices.Add((ushort) (innerStart + innerSector));
-                    indices.Add((ushort) (outerStart + outerNext));
-                    indices.Add((ushort) (innerStart + innerNext));
+                    triangles.Add((ushort) (innerStart + innerSector));
+                    triangles.Add((ushort) (outerStart + outerNext));
+                    triangles.Add((ushort) (innerStart + innerNext));
 
                     outerSector = outerNext;
                     if (innerSector % moduloCorders == moduloCorders - 1)
                     {
-                        indices.Add((ushort) (innerStart + innerNext));
-                        indices.Add((ushort) (outerStart + outerSector));
+                        triangles.Add((ushort) (innerStart + innerNext));
+                        triangles.Add((ushort) (outerStart + outerSector));
                         outerSector = (outerSector + 1) % (sectors + 6);
-                        indices.Add((ushort) (outerStart + outerSector));
+                        triangles.Add((ushort) (outerStart + outerSector));
                     }
                 }
 

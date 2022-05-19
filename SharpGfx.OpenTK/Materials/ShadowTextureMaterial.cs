@@ -18,8 +18,8 @@ namespace SharpGfx.OpenTK.Materials
             Matrix4 lightViewProjection)
             : base(
                 device,
-                Resources.Get<ShadowTextureMaterial>("Shaders.shadow_texture.vert"),
-                Resources.Get<ShadowTextureMaterial>("Shaders.shadow_texture.frag"),
+                Resources.Get<ShadowTextureMaterial>("Resources.Shaders.shadow_texture.vert"),
+                Resources.Get<ShadowTextureMaterial>("Resources.Shaders.shadow_texture.frag"),
                 handle,
                 textureUnit)
         {

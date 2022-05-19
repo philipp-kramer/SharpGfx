@@ -2,18 +2,19 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using OpenTK.Graphics.OpenGL;
+using SharpGfx.Primitives;
 using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
 
 namespace SharpGfx.OpenTK
 {
     internal static class OtkTextures
     {
-        public static int CreateTexture(Size pixels, PixelInternalFormat pixelInternalFormat, PixelFormat pixelFormat, PixelType pixelType)
+        public static int CreateTexture(Vector2 pixels, PixelInternalFormat pixelInternalFormat, PixelFormat pixelFormat, PixelType pixelType)
         {
             int texture = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, texture);
 
-            GL.TexImage2D(TextureTarget.Texture2D, 0, pixelInternalFormat, pixels.Width, pixels.Height, 0, pixelFormat, pixelType, default);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, pixelInternalFormat, (int) pixels.X, (int) pixels.Y, 0, pixelFormat, pixelType, default);
 
             int linear = (int)TextureMinFilter.Linear;
             GL.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, ref linear);

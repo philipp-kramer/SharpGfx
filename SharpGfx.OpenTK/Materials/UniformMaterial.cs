@@ -4,29 +4,16 @@ namespace SharpGfx.OpenTK.Materials
 {
     public sealed class UniformMaterial : OtkShadedMaterial
     {
-        private readonly Color4 _color;
-
         public UniformMaterial(Color4 color)
             : base(
-                Resources.Get<UniformMaterial>("Shaders.basic.vert"), 
-                Resources.Get<UniformMaterial>("Shaders.single_color.frag"),
-                false)
+                Resources.Get<UniformMaterial>("Resources.Shaders.basic.vert"), 
+                Resources.Get<UniformMaterial>("Resources.Shaders.single_color.frag"))
         {
-            _color = color;
-
+            Shading.DoInContext(() =>
+            {
+                Shading.Set("color", color.Vector);
+            });
             Shading.CheckUndefinedChannels = false;
-        }
-
-        protected internal override void Apply(Point3 cameraPosition)
-        {
-            Shading.Set("color", _color.Vector);
-            base.Apply(cameraPosition);
-        }
-
-        protected internal override void UnApply()
-        {
-            base.UnApply();
-            Shading.ResetVector4("color");
         }
     }
 }

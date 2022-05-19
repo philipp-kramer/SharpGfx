@@ -13,10 +13,10 @@ namespace SharpGfx.Host
             _elements = elements;
         }
 
-        Space Primitive.Space => _space;
+        Space IPrimitive.Space => _space;
         public float this[int row, int col] => _elements[row, col];
 
-        public Vector3 Mul(Vector3 r)
+        public IVector3 Mul(IVector3 r)
         {
             return new HostVector3(
                 r.Space,

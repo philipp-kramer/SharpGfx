@@ -3,7 +3,7 @@ using SharpGfx.Primitives;
 
 namespace SharpGfx.Host
 {
-    internal readonly struct HostVector3 : Vector3
+    internal readonly struct HostVector3 : IVector3
     {
         private readonly Space _space;
         public float X { get; }
@@ -18,7 +18,7 @@ namespace SharpGfx.Host
             Z = z;
         }
 
-        Space Primitive.Space => _space;
+        Space IPrimitive.Space => _space;
         public float this[int index] => index switch { 0 => X, 1 => Y, 2 => Z, _ => throw new ArgumentOutOfRangeException(nameof(index)) };
         public float Length => MathF.Sqrt(Dot(this));
         public Vector2 Xy => new HostVector2(_space, X, Y);
@@ -32,32 +32,32 @@ namespace SharpGfx.Host
             return new HostVector4(_space, X, Y, Z, w);
         }
 
-        Vector3 Vector3.Neg()
+        IVector3 IVector3.Neg()
         {
             return new HostVector3(_space, -X, -Y, -Z);
         }
 
-        Vector3 Vector3.Add(Vector3 r)
+        IVector3 IVector3.Add(IVector3 r)
         {
             return new HostVector3(r.Space, X + r.X, Y + r.Y, Z + r.Z);
         }
 
-        Vector3 Vector3.Sub(Vector3 r)
+        IVector3 IVector3.Sub(IVector3 r)
         {
             return new HostVector3(r.Space, X - r.X, Y - r.Y, Z - r.Z);
         }
 
-        Vector3 Vector3.Mul(float scalar)
+        IVector3 IVector3.Mul(float scalar)
         {
             return new HostVector3(_space, scalar * X, scalar * Y, scalar * Z);
         }
 
-        Vector3 Vector3.Mul(Vector3 r)
+        IVector3 IVector3.Mul(IVector3 r)
         {
             return new HostVector3(r.Space, X * r.X, Y * r.Y, Z * r.Z);
         }
 
-        public Vector3 Cross(Vector3 r)
+        public IVector3 Cross(IVector3 r)
         {
             return new HostVector3(
                 r.Space,
@@ -66,12 +66,12 @@ namespace SharpGfx.Host
                 X * r.Y - Y * r.X);
         }
 
-        public float Dot(Vector3 r)
+        public float Dot(IVector3 r)
         {
             return X * r.X + Y * r.Y + Z * r.Z;
         }
 
-        public Vector3 Normalized()
+        public IVector3 Normalized()
         {
             float invLength = 1 / Length;
             return new HostVector3(_space, X * invLength, Y * invLength, Z * invLength);

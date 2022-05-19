@@ -3,9 +3,10 @@ using SharpGfx.Primitives;
 
 namespace SharpGfx
 {
-    public abstract class RenderObject
+    public abstract class RenderObject : IDisposable
     {
         private Space _space;
+        private readonly string _name;
 
         public Space Space
         {
@@ -26,18 +27,19 @@ namespace SharpGfx
         public Material Material { get; }
         public Matrix4 Transform { get; set; }
 
-        protected RenderObject(Space space, Material material)
+        protected RenderObject(Space space, string name, Material material)
         {
             _space = space;
+            _name = name;
             Material = material;
             Transform = space.Identity4;
         }
 
         public abstract void Render();
 
-        public RenderObject Copy()
+        public RenderObject Copy(string name)
         {
-            return new TransformedObject(this);
+            return new TransformedObject(this, name);
         }
 
         public RenderObject Scale(float scale)
@@ -46,13 +48,13 @@ namespace SharpGfx
             return this;
         }
 
-        public RenderObject Scale(Vector3 scale)
+        public RenderObject Scale(IVector3 scale)
         {
             Transform *= scale.Space.Scale4(scale);
             return this;
         }
 
-        public RenderObject Translate(Vector3 delta)
+        public RenderObject Translate(IVector3 delta)
         {
             if (Space.Domain > delta.Space.Domain) throw new ArgumentException("cross space operation");
             Space = delta.Space;
@@ -77,5 +79,12 @@ namespace SharpGfx
             Transform *= Space.RotationZ4(angle);
             return this;
         }
+
+        public override string ToString()
+        {
+            return _name;
+        }
+
+        public abstract void Dispose();
     }
 }

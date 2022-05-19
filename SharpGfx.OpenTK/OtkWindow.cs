@@ -1,159 +1,166 @@
 ﻿using System;
 using System.Collections.Generic;
-using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-using OpenTK.Input;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
+using OpenTK.Windowing.GraphicsLibraryFramework;
+using SharpGfx.Host;
+using Vector2 = SharpGfx.Primitives.Vector2;
 
 namespace SharpGfx.OpenTK
 {
     public sealed class OtkWindow : Window, IDisposable
     {
-        private static readonly Dictionary<Key, ConsoleKey> KeyMapping;
+        private static readonly Dictionary<Keys, ConsoleKey> KeyMapping;
 
         static OtkWindow()
         {
-            KeyMapping = new Dictionary<Key, ConsoleKey>();
-            foreach (Key key in Enum.GetValues(typeof(Key)))
+            KeyMapping = new Dictionary<Keys, ConsoleKey>();
+            foreach (Keys key in Enum.GetValues(typeof(Keys)))
             {
-                string keyName = Enum.GetName(typeof(Key), key);
-                if (Enum.TryParse(typeof(ConsoleKey), keyName, out var value))
+                string keyName = Enum.GetName(typeof(Keys), key);
+                if (Enum.TryParse(typeof(ConsoleKey), keyName, out var value) && value != null)
                 {
-                    KeyMapping.Add(key, (ConsoleKey)value);
+                    KeyMapping.Add(key, (ConsoleKey) value);
                 }
                 else
                 {
                     switch (key)
                     {
-                        case Key.Keypad0:
+                        case Keys.KeyPad0:
                             KeyMapping.Add(key, ConsoleKey.NumPad0);
                             break;
-                        case Key.Keypad1:
+                        case Keys.KeyPad1:
                             KeyMapping.Add(key, ConsoleKey.NumPad1);
                             break;
-                        case Key.Keypad2:
+                        case Keys.KeyPad2:
                             KeyMapping.Add(key, ConsoleKey.NumPad2);
                             break;
-                        case Key.Keypad3:
+                        case Keys.KeyPad3:
                             KeyMapping.Add(key, ConsoleKey.NumPad3);
                             break;
-                        case Key.Keypad4:
+                        case Keys.KeyPad4:
                             KeyMapping.Add(key, ConsoleKey.NumPad4);
                             break;
-                        case Key.Keypad5:
+                        case Keys.KeyPad5:
                             KeyMapping.Add(key, ConsoleKey.NumPad5);
                             break;
-                        case Key.Keypad6:
+                        case Keys.KeyPad6:
                             KeyMapping.Add(key, ConsoleKey.NumPad6);
                             break;
-                        case Key.Keypad7:
+                        case Keys.KeyPad7:
                             KeyMapping.Add(key, ConsoleKey.NumPad7);
                             break;
-                        case Key.Keypad8:
+                        case Keys.KeyPad8:
                             KeyMapping.Add(key, ConsoleKey.NumPad8);
                             break;
-                        case Key.Keypad9:
+                        case Keys.KeyPad9:
                             KeyMapping.Add(key, ConsoleKey.NumPad9);
                             break;
-                        case Key.Down:
+                        case Keys.Down:
                             KeyMapping.Add(key, ConsoleKey.DownArrow);
                             break;
-                        case Key.Up:
+                        case Keys.Up:
                             KeyMapping.Add(key, ConsoleKey.UpArrow);
                             break;
-                        case Key.Left:
+                        case Keys.Left:
                             KeyMapping.Add(key, ConsoleKey.LeftArrow);
                             break;
-                        case Key.Right:
+                        case Keys.Right:
                             KeyMapping.Add(key, ConsoleKey.RightArrow);
                             break;
-                    };
+                    }
                 }
             }
         }
 
         private readonly GameWindow _window;
         private PolygonMode _polygonMode;
+        private MouseButtons _mouseButton;
 
-        public override event Action<KeyDownArgs> KeyDown;
+        public event Action<KeyDownArgs> KeyDown;
 
-        public OtkWindow(System.Drawing.Size size, string title, bool antiAliased)
-            : base(null)
+        public OtkWindow(
+            Vector2 size, 
+            string title, 
+            int targetFrameRate = 60, 
+            bool antiAliased = false)
         {
-            var graphicsMode = antiAliased
-                ? new GraphicsMode(24, 24, 0, 4)
-                : GraphicsMode.Default;
-            _window = new GameWindow(size.Width, size.Height, graphicsMode, title);
+            var settings = new GameWindowSettings
+            {
+                RenderFrequency = targetFrameRate,
+                UpdateFrequency = targetFrameRate
+            };
+            var nativeSettings = new NativeWindowSettings
+            {
+                Size = new Vector2i((int) size.X, (int) size.Y),
+                Title = title,
+                RedBits = 8,
+                GreenBits = 8,
+                BlueBits = 8,
+                AlphaBits = 8,
+                NumberOfSamples = antiAliased ? 4 : 1
+            };
+            _window = new GameWindow(settings, nativeSettings);
             if (antiAliased)
             {
                 GL.Enable(EnableCap.Multisample);
             }
             _polygonMode = PolygonMode.Fill;
 
+            // TODO: un-register all handlers in dispose
             _window.Load += OnLoad;
             _window.Resize += OnResize;
             _window.UpdateFrame += OnUpdateFrame;
             _window.RenderFrame += OnRenderFrame;
             _window.KeyDown += OnKeyDown;
+            _window.MouseMove += OnMouseMove;
+            _window.MouseDown += OnMouseDown;
+            _window.MouseUp += OnMouseUp;
+            _window.MouseWheel += OnMouseWheel;
         }
 
-        public override void Run(int targetFrameRate)
+        public override void Show(CameraRendering rendering)
         {
-            _window.Run(targetFrameRate);
+            base.Show(rendering);
+            _window.Run();
         }
 
-        private void OnLoad(object sender, EventArgs e)
+        protected override void OnLoad()
         {
             _window.Title += $" (OpenGL Version: {GL.GetString(StringName.Version)})";
-            Rendering?.OnLoad();
-            var mouse = Mouse.GetState();
-            MouseTracking.X = mouse.X;
-            MouseTracking.Y = mouse.Y;
+            base.OnLoad();
         }
 
-        private void OnResize(object sender, EventArgs e)
+        private void OnResize(ResizeEventArgs e)
         {
-            var size = new System.Drawing.Size(
-                _window.Size.Width,
-                _window.Size.Height);
-            Rendering?.OnResize(size);
+            OnResize(HostSpace.Space.Vector2(e.Width, e.Height));
         }
 
-        private void OnUpdateFrame(object sender, FrameEventArgs e)
+        private void OnUpdateFrame(FrameEventArgs e)
         {
-            Rendering?.OnUpdateFrame();
+            OnUpdateFrame();
         }
 
-        private void OnRenderFrame(object sender, FrameEventArgs e)
+        private void OnRenderFrame(FrameEventArgs e)
         {
-            var mouse = Mouse.GetState();
-            MouseTracking.Update(mouse.X, mouse.Y);
-            OnMouseMove();
-            Rendering.OnRenderFrame();
+            OnRenderFrame();
             _window.SwapBuffers();
         }
 
-        private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
+        private void OnKeyDown(KeyboardKeyEventArgs e)
         {
-            if (!KeyMapping.TryGetValue(e.Key, out var key))
-            {
-                return;
-            }
+            if (!KeyMapping.TryGetValue(e.Key, out var key)) return;
 
             if (KeyDown != null)
             {
                 var eventArgs = new KeyDownArgs(key);
                 KeyDown.Invoke(eventArgs);
-                if (eventArgs.Handled)
-                {
-                    return;
-                }
+                if (eventArgs.Handled) return;
             }
 
-            if (Rendering is CameraRendering cameraRendering)
-            {
-                OnCameraKeyDown(key, cameraRendering);
-            }
+            OnKeyDown(key);
 
             switch (key)
             {
@@ -163,11 +170,45 @@ namespace SharpGfx.OpenTK
                     break;
 
                 case ConsoleKey.Escape:
-                    _window.Exit();
+                    _window.Close();
                     break;
             }
         }
 
+        private void OnMouseMove(MouseMoveEventArgs e)
+        {
+            float deltaX = Limit(e.DeltaX, _window.Size.X / 20f);
+            float deltaY = Limit(e.DeltaY, _window.Size.Y / 20f);
+            var delta = HostSpace.Space.Vector2(deltaX, deltaY);
+            MouseMoving(delta, _mouseButton);
+        }
+
+        private static float Limit(float value, float range)
+        {
+            return Math.Min(Math.Max(value, -range), range);
+        }
+
+        private void OnMouseDown(MouseButtonEventArgs e)
+        {
+            _mouseButton = e.Button switch
+            {
+                MouseButton.Left => MouseButtons.Left,
+                MouseButton.Middle => MouseButtons.Middle,
+                MouseButton.Right => MouseButtons.Right,
+                _ => MouseButtons.None
+            };
+        }
+
+        private void OnMouseUp(MouseButtonEventArgs e)
+        {
+            InvokeMouseUp(_mouseButton);
+            _mouseButton = MouseButtons.None;
+        }
+
+        private void OnMouseWheel(MouseWheelEventArgs e)
+        {
+            MouseMoving(HostSpace.Space.Vector2(e.Offset.X, e.OffsetY), MouseButtons.Middle);
+        }
 
         private void TogglePolygonMode()
         {

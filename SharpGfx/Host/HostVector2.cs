@@ -17,7 +17,7 @@ namespace SharpGfx.Host
             Y = y;
         }
 
-        Space Primitive.Space => _space;
+        Space IPrimitive.Space => _space;
 
         Vector2 Vector2.Add(Vector2 r)
         {

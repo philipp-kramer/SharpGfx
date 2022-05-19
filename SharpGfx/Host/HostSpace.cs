@@ -5,14 +5,16 @@ namespace SharpGfx.Host
 {
     public sealed class HostSpace : Space
     {
+        public static readonly Space Space = new HostSpace(Domain.World);
+
         public override Vector2 Zero2 { get; }
         public override Vector2 Unit2X { get; }
         public override Vector2 Unit2Y { get; }
 
-        public override Vector3 Zero3 { get; }
-        public override Vector3 Unit3X { get; }
-        public override Vector3 Unit3Y { get; }
-        public override Vector3 Unit3Z { get; }
+        public override IVector3 Zero3 { get; }
+        public override IVector3 Unit3X { get; }
+        public override IVector3 Unit3Y { get; }
+        public override IVector3 Unit3Z { get; }
 
         public override Vector4 Zero4 { get; }
 
@@ -46,7 +48,7 @@ namespace SharpGfx.Host
 
         }
 
-        public override Vector3 Vector3(float x, float y, float z)
+        public override IVector3 Vector3(float x, float y, float z)
         {
             return new HostVector3(this, x, y, z);
         }
@@ -130,12 +132,12 @@ namespace SharpGfx.Host
                 });
         }
 
-        public override Matrix4 Scale4(Vector3 s)
+        public override Matrix4 Scale4(IVector3 s)
         {
             return Scale4(s.X, s.Y, s.Z);
         }
 
-        public override Matrix4 Translation4(Vector3 p)
+        public override Matrix4 Translation4(IVector3 p)
         {
             return new HostMatrix4(
                 this, 

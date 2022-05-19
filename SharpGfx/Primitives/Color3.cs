@@ -2,13 +2,13 @@
 {
     public readonly struct Color3
     {
-        public readonly Vector3 Vector;
+        public readonly IVector3 Vector;
 
         public float R => Vector.X;
         public float G => Vector.Y;
         public float B => Vector.Z;
 
-        internal Color3(Vector3 vector)
+        internal Color3(IVector3 vector)
         {
             Vector = vector;
         }

@@ -2,7 +2,7 @@
 
 namespace SharpGfx.Primitives
 {
-    public interface Vector4 : Primitive
+    public interface Vector4 : IPrimitive
     {
         public float X { get; }
         public float Y { get; }
@@ -11,7 +11,7 @@ namespace SharpGfx.Primitives
         public float this[int index] { get; }
         public float Length { get; }
         public Array Values { get; }
-        public Vector3 Xyz { get; }
+        public IVector3 Xyz { get; }
 
         protected Vector4 Neg();
         protected Vector4 Add(Vector4 r);

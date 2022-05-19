@@ -4,8 +4,8 @@
     {
         private readonly RenderObject _object;
 
-        internal TransformedObject(RenderObject @object) 
-            : base(@object.Space, @object.Material)
+        internal TransformedObject(RenderObject @object, string name) 
+            : base(@object.Space, name, @object.Material)
         {
             _object = @object;
             Transform = @object.Transform;
@@ -23,6 +23,10 @@
             {
                 _object.Transform = t;
             }
+        }
+
+        public override void Dispose()
+        {
         }
     }
 }

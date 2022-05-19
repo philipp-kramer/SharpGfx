@@ -4,12 +4,10 @@
     {
         public NopMaterial()
             : base(
-                Resources.Get<UniformMaterial>("Shaders.basic.vert"),
-                Resources.Get<NopMaterial>("Shaders.nop.frag"),
-                false)
+                Resources.Get<UniformMaterial>("Resources.Shaders.basic.vert"),
+                Resources.Get<NopMaterial>("Resources.Shaders.nop.frag"))
         {
             Shading.CheckUndefinedChannels = false;
         }
     }
-
 }

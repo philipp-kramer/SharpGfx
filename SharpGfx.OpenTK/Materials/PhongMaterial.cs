@@ -4,13 +4,10 @@ namespace SharpGfx.OpenTK.Materials
 {
     public class PhongMaterial : DiffuseMaterial
     {
-        private readonly Color3 _specular;
-        private readonly float _shininess;
-
         public PhongMaterial(Light light, Color3 materialDiffuse, Color3 specular, float shininess)
             : this(
-                Resources.Get<PhongMaterial>("Shaders.normal_lighting.vert"),
-                Resources.Get<PhongMaterial>("Shaders.phong_lighting.frag"),
+                Resources.Get<PhongMaterial>("Resources.Shaders.normal_lighting.vert"),
+                Resources.Get<PhongMaterial>("Resources.Shaders.phong_lighting.frag"),
                 light, 
                 materialDiffuse,
                 specular, 
@@ -29,29 +26,20 @@ namespace SharpGfx.OpenTK.Materials
                 vertexShader,
                 fragmentShader,
                 light,
-                materialDiffuse,
-                false)
+                materialDiffuse)
         {
-            _specular = specular;
-            _shininess = shininess;
+            Shading.DoInContext(() =>
+            {
+                Shading.Set("light.specular", Light.Specular.Vector);
+                Shading.Set("material.specular", specular.Vector);
+                Shading.Set("material.shininess", shininess);
+            });
         }
 
         protected internal override void Apply(Point3 cameraPosition)
         {
-            Shading.Set("light.specular", Light.Specular.Vector);
-            Shading.Set("material.specular", _specular.Vector);
-            Shading.Set("material.shininess", _shininess);
-
             Shading.Set("cameraPosition", cameraPosition.Vector);
             base.Apply(cameraPosition);
-        }
-
-        protected internal override void UnApply()
-        {
-            base.UnApply();
-            Shading.ResetVector3("light.specular");
-            Shading.ResetVector3("material.specular");
-            Shading.ResetFloat("material.shininess");
         }
     }
 }

@@ -29,12 +29,12 @@ namespace SharpGfx.OpenTK
 
         public static void Render(
             IEnumerable<IGrouping<OtkShadedMaterial, RenderObject>> scene, 
-            Size pixels,
+            Vector2 pixels,
             Point3 cameraPosition,
             Color4 ambientColor)
         {
             GL.Enable(EnableCap.DepthTest);
-            GL.Viewport(0, 0, pixels.Width, pixels.Height);
+            GL.Viewport(0, 0, (int) pixels.X, (int) pixels.Y);
             GL.ClearColor(
                     ambientColor.R, 
                     ambientColor.G, 
@@ -68,7 +68,7 @@ namespace SharpGfx.OpenTK
         public static void TakeColorPicture(
             Device device,
             ICollection<RenderObject> scene,
-            Size pixels,
+            Vector2 pixels,
             Color4 ambientColor,
             Point3 cameraPosition,
             CameraView cameraView,
@@ -99,7 +99,7 @@ namespace SharpGfx.OpenTK
         public static TextureHandle TakeDepthPicture(
             Device device,
             ICollection<RenderObject> scene,
-            Size pixels,
+            Vector2 pixels,
             Color4 ambientColor,
             Point3 cameraPosition,
             CameraView cameraView,
@@ -150,7 +150,7 @@ namespace SharpGfx.OpenTK
             if (!position.Vector.In(world)) throw new ArgumentException("needs to be in world-space", nameof(position));
             foreach (var shader in scene.Select(obj => obj.Key.Shading))
             {
-                shader.DoInContext(() => shader.Set("cameraPosition", position.Vector));
+                shader.DoInContext(() => shader.SetUnchecked("cameraPosition", position.Vector));
             }
         }
     }

@@ -16,17 +16,17 @@ namespace SharpGfx
         public abstract Vector2 Unit2X { get; }
         public abstract Vector2 Unit2Y { get; }
 
-        public abstract Vector3 Zero3 { get; }
-        public abstract Vector3 Unit3X { get; }
-        public abstract Vector3 Unit3Y { get; }
-        public abstract Vector3 Unit3Z { get; }
+        public abstract IVector3 Zero3 { get; }
+        public abstract IVector3 Unit3X { get; }
+        public abstract IVector3 Unit3Y { get; }
+        public abstract IVector3 Unit3Z { get; }
 
         public abstract Vector4 Zero4 { get; }
         public abstract Matrix4 Identity4 { get; }
 
         public abstract Vector2 Vector2(float x, float y);
 
-        public abstract Vector3 Vector3(float x, float y, float z);
+        public abstract IVector3 Vector3(float x, float y, float z);
 
         public abstract Vector4 Vector4(float x, float y, float z, float w);
 
@@ -49,8 +49,8 @@ namespace SharpGfx
             float a30, float a31, float a32, float a33);
         public abstract Matrix4 Scale4(float s);
         public abstract Matrix4 Scale4(float x, float y, float z);
-        public abstract Matrix4 Scale4(Vector3 s);
-        public abstract Matrix4 Translation4(Vector3 p);
+        public abstract Matrix4 Scale4(IVector3 s);
+        public abstract Matrix4 Translation4(IVector3 p);
         public abstract Matrix4 RotationX4(float angle);
         public abstract Matrix4 RotationY4(float angle);
         public abstract Matrix4 RotationZ4(float angle);

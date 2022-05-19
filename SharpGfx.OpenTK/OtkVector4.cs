@@ -5,16 +5,16 @@ namespace SharpGfx.OpenTK
 {
     internal class OtkVector4 : Vector4
     {
-        public readonly global::OpenTK.Vector4 Value;
+        public readonly global::OpenTK.Mathematics.Vector4 Value;
         private readonly Space _space;
 
-        public OtkVector4(Space space, global::OpenTK.Vector4 value)
+        public OtkVector4(Space space, global::OpenTK.Mathematics.Vector4 value)
         {
             _space = space;
             Value = value;
         }
 
-        Space Primitive.Space => _space;
+        Space IPrimitive.Space => _space;
         public float X => Value.X;
         public float Y => Value.Y;
         public float Z => Value.Z;
@@ -22,7 +22,7 @@ namespace SharpGfx.OpenTK
         public float this[int index] => Value[index];
         public float Length => Value.Length;
         public Array Values => new[] { Value.X, Value.Y, Value.Z, Value.W };
-        public Vector3 Xyz => new OtkVector3(_space, Value.Xyz);
+        public IVector3 Xyz => new OtkVector3(_space, Value.Xyz);
 
         Vector4 Vector4.Neg()
         {
@@ -61,7 +61,7 @@ namespace SharpGfx.OpenTK
         public float Dot(Vector4 r)
         {
             var ovr = (OtkVector4)r;
-            return global::OpenTK.Vector4.Dot(Value, ovr.Value);
+            return global::OpenTK.Mathematics.Vector4.Dot(Value, ovr.Value);
         }
 
         public Vector4 Normalized()

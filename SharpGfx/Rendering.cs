@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using SharpGfx.Primitives;
 
 namespace SharpGfx
 {
-    public class Rendering : IDisposable
+    public abstract class Rendering : IDisposable
     {
-        protected static float Fovy { get; } = MathF.PI / 4;
+        public const float Near = 0.1f;
+        public const float Far = 100f;
+        public const float FovY = MathF.PI / 4;
 
         protected Device Device { get; }
-        protected Size Size { get; private set; }
+        protected Vector2 Size { get; private set; }
         protected Color3 AmbientColor { get; }
-        public List<RenderObject> Scene { get; }
+        protected List<RenderObject> Scene { get; }
 
-        protected Rendering(Device device, Size size, Color3 ambientColor)
+        protected Rendering(Device device, Vector2 size, Color3 ambientColor)
         {
             Device = device;
             Size = size;
@@ -23,12 +24,14 @@ namespace SharpGfx
             Scene = new List<RenderObject>();
         }
 
+        protected float Aspect => Size.X / Size.Y;
+
         public void OnLoad()
         {
             Device.CheckSpaces(Scene);
         }
 
-        public virtual void OnResize(Size size)
+        public virtual void OnResize(Vector2 size)
         {
             Size = size;
             Device.SetProjection(Scene, GetPerspectiveProjection());
@@ -36,10 +39,7 @@ namespace SharpGfx
 
         protected Matrix4 GetPerspectiveProjection()
         {
-            return Device.GetPerspectiveProjection(
-                Fovy,
-                (float)Size.Width / Size.Height,
-                0.1f, 100.0f);
+            return Device.GetPerspectiveProjection(FovY, Aspect, Near, Far);
         }
 
         public virtual void OnUpdateFrame()

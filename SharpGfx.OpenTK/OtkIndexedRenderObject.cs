@@ -8,10 +8,10 @@ namespace SharpGfx.OpenTK
     {
         private readonly OtkIndexBuffer<T> _indexBuffer;
 
-        public OtkIndexedRenderObject(Space space, Material material, T[] indices, params VertexAttribute[] attributes) 
-            : base(space, material, attributes)
+        public OtkIndexedRenderObject(Space space, string name, Material material, T[] triangles, params VertexAttribute[] attributes) 
+            : base(space, name, material, attributes)
         {
-            _indexBuffer = new OtkIndexBuffer<T>(indices);
+            _indexBuffer = new OtkIndexBuffer<T>(triangles);
         }
 
         protected override void Draw()

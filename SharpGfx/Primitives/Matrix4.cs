@@ -2,7 +2,7 @@
 
 namespace SharpGfx.Primitives
 {
-    public interface Matrix4 : Primitive
+    public interface Matrix4 : IPrimitive
     {
         public float this[int row, int col] { get; }
         protected internal Array Values { get; }

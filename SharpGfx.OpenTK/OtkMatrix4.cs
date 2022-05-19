@@ -5,16 +5,16 @@ namespace SharpGfx.OpenTK
 {
     internal readonly struct OtkMatrix4 : Matrix4
     {
-        internal readonly global::OpenTK.Matrix4 Value;
+        internal readonly global::OpenTK.Mathematics.Matrix4 Value;
         internal readonly Space _space;
 
-        public OtkMatrix4(Space space, global::OpenTK.Matrix4 value)
+        public OtkMatrix4(Space space, global::OpenTK.Mathematics.Matrix4 value)
         {
             _space = space;
             Value = value;
         }
 
-        Space Primitive.Space => _space;
+        Space IPrimitive.Space => _space;
         public float this[int row, int col] => Value[row, col];
 
         Array Matrix4.Values => new[]

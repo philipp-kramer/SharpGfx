@@ -10,7 +10,7 @@ namespace SharpGfx.OpenTK
 
 
         public OtkTextureMaterial(Device device, string vertexShader, string fragmentShader, TextureHandle handle, int unit)
-            : base(vertexShader, fragmentShader, true)
+            : base(vertexShader, fragmentShader)
         {
             _device = device;
             _handle = handle;

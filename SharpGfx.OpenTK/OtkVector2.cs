@@ -4,16 +4,16 @@ namespace SharpGfx.OpenTK
 {
     internal readonly struct OtkVector2 : Vector2
     {
-        public readonly global::OpenTK.Vector2 Value;
+        public readonly global::OpenTK.Mathematics.Vector2 Value;
         private readonly Space _space;
 
-        public OtkVector2(Space space, global::OpenTK.Vector2 value)
+        public OtkVector2(Space space, global::OpenTK.Mathematics.Vector2 value)
         {
             _space = space;
             Value = value;
         }
 
-        Space Primitive.Space => _space;
+        Space IPrimitive.Space => _space;
         public float X => Value.X;
         public float Y => Value.Y;
         public float Length => Value.Length;
@@ -43,7 +43,7 @@ namespace SharpGfx.OpenTK
 
         float Vector2.Dot(Vector2 r)
         {
-            return global::OpenTK.Vector2.Dot(Value, ((OtkVector2)r).Value);
+            return global::OpenTK.Mathematics.Vector2.Dot(Value, ((OtkVector2)r).Value);
         }
 
         public Vector2 Normalized()

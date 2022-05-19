@@ -2,7 +2,7 @@
 
 namespace SharpGfx.Primitives
 {
-    public interface Vector2 : Primitive
+    public interface Vector2 : IPrimitive
     {
         public float X { get; }
         public float Y { get; }

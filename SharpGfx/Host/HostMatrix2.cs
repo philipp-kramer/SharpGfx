@@ -14,7 +14,7 @@ namespace SharpGfx.Host
             _elements = elements;
         }
 
-        Space Primitive.Space => _space;
+        Space IPrimitive.Space => _space;
         public float this[int row, int col] => _elements[row, col];
 
         Array Matrix2.Values => _elements;

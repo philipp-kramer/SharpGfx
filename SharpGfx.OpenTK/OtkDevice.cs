@@ -22,19 +22,19 @@ namespace SharpGfx.OpenTK
             return new OtkSpace(Domain.Model);
         }
 
-        public override RenderObject Object(Space space, Material material, params (string, float[], int)[] vertexData)
+        public override RenderObject Object(Space space, string name, Material material, params (string, float[], int)[] vertexData)
         {
-            return new OtkRenderObject(space, material, GetVertexAttributes(vertexData));
+            return new OtkRenderObject(space, name, material, GetVertexAttributes(vertexData));
         }
 
-        public override RenderObject Object(Space space, Material material, uint[] indices, params (string, float[], int)[] vertexData) 
+        public override RenderObject Object(Space space, string name, Material material, uint[] triangles, params (string, float[], int)[] vertexData) 
         {
-            return new OtkIndexedRenderObject<uint>(space, material, indices, GetVertexAttributes(vertexData));
+            return new OtkIndexedRenderObject<uint>(space, name, material, triangles, GetVertexAttributes(vertexData));
         }
 
-        public override RenderObject Object(Space space, Material material, ushort[] indices, params (string, float[], int)[] vertexData)
+        public override RenderObject Object(Space space, string name, Material material, ushort[] triangles, params (string, float[], int)[] vertexData)
         {
-            return new OtkIndexedRenderObject<ushort>(space, material, indices, GetVertexAttributes(vertexData));
+            return new OtkIndexedRenderObject<ushort>(space, name, material, triangles, GetVertexAttributes(vertexData));
         }
 
         private static VertexAttribute[] GetVertexAttributes((string, float[], int)[] vertexData)
@@ -51,19 +51,19 @@ namespace SharpGfx.OpenTK
             return attributes;
         }
 
-        public override TextureHandle Texture(Bitmap bitmap, bool manualLevels = false)
+        public override TextureHandle Texture(Bitmap image, bool manualLevels = false)
         {
             return manualLevels
-                ? new OtkTextureHandle(OtkTextures.CreateMipmapTexture(bitmap))
-                : new OtkTextureHandle(OtkTextures.CreateAutoMipmapTexture(bitmap));
+                ? new OtkTextureHandle(OtkTextures.CreateMipmapTexture(image))
+                : new OtkTextureHandle(OtkTextures.CreateAutoMipmapTexture(image));
         }
 
-        public override TextureHandle RgbTexture(Size pixels)
+        public override TextureHandle RgbTexture(Vector2 pixels)
         {
             return new OtkTextureHandle(OtkTextures.CreateTexture(pixels, PixelInternalFormat.Rgb, PixelFormat.Rgb, PixelType.UnsignedByte));
         }
 
-        public override TextureHandle DepthTexture(Size pixels)
+        public override TextureHandle DepthTexture(Vector2 pixels)
         {
             return new OtkTextureHandle(OtkTextures.CreateTexture(pixels, PixelInternalFormat.DepthComponent, PixelFormat.DepthComponent, PixelType.Float));
         }
@@ -78,7 +78,7 @@ namespace SharpGfx.OpenTK
             return new OtkFrameBuffer();
         }
 
-        public override FrameBuffer FrameRenderBuffer(Size pixels)
+        public override FrameBuffer FrameRenderBuffer(Vector2 pixels)
         {
             return new OtkFrameRenderBuffer(pixels);
         }
@@ -86,7 +86,7 @@ namespace SharpGfx.OpenTK
         public override Matrix4 GetViewMatrix(CameraView cameraView)
         {
             var eyeVector = (OtkVector3)cameraView.Eye.Vector;
-            return new OtkMatrix4(View, global::OpenTK.Matrix4.LookAt(
+            return new OtkMatrix4(View, global::OpenTK.Mathematics.Matrix4.LookAt(
                 eyeVector.Value,
                 ((OtkVector3)(cameraView.Eye + cameraView.LookAt).Vector).Value,
                 ((OtkVector3)cameraView.Up).Value));
@@ -94,12 +94,12 @@ namespace SharpGfx.OpenTK
 
         public override Matrix4 GetPerspectiveProjection(float fovy, float aspect, float near, float far)
         {
-            return new OtkMatrix4(View, global::OpenTK.Matrix4.CreatePerspectiveFieldOfView(fovy, aspect, near, far));
+            return new OtkMatrix4(View, global::OpenTK.Mathematics.Matrix4.CreatePerspectiveFieldOfView(fovy, aspect, near, far));
         }
 
         public override Matrix4 GetPerspectivOffCenterProjection(float left, float right, float bottom, float top, float near, float far)
         {
-            return new OtkMatrix4(View, global::OpenTK.Matrix4.CreatePerspectiveOffCenter(left, right, bottom, top, near, far));
+            return new OtkMatrix4(View, global::OpenTK.Mathematics.Matrix4.CreatePerspectiveOffCenter(left, right, bottom, top, near, far));
         }
 
         public override void SetCameraView(ICollection<RenderObject> scene, CameraView cameraView)
@@ -115,7 +115,7 @@ namespace SharpGfx.OpenTK
 
         public override void Render(
             ICollection<RenderObject> scene,
-            Size pixels,
+            Vector2 pixels,
             Point3 cameraPosition,
             Color4 ambientColor)
         {
@@ -133,7 +133,7 @@ namespace SharpGfx.OpenTK
 
         public override void TakeColorPicture(
             ICollection<RenderObject> scene,
-            Size pixels,
+            Vector2 pixels,
             Color4 ambientColor,
             Point3 cameraPosition,
             CameraView cameraView,
@@ -146,7 +146,7 @@ namespace SharpGfx.OpenTK
 
         public override TextureHandle TakeDepthPicture(
             ICollection<RenderObject> scene,
-            Size pixels,
+            Vector2 pixels,
             Color4 ambientColor,
             Point3 cameraPosition,
             CameraView cameraView,

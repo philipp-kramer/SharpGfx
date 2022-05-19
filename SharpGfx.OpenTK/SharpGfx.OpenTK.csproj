@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<Authors>Philipp Kramer</Authors>
 		<Company>OST INS</Company>
@@ -13,7 +13,7 @@
 
 	<PropertyGroup>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.0.7</Version>
+		<Version>1.0.11</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -26,9 +26,11 @@
 
 	<ItemGroup>
 		<None Remove="Resources\Shaders\basic.vert" />
+		<None Remove="Resources\Shaders\camera_facing_texture.vert" />
 		<None Remove="Resources\Shaders\diffuse_lighting.frag" />
 		<None Remove="Resources\Shaders\flat_texture.vert" />
 		<None Remove="Resources\Shaders\nop.frag" />
+		<None Remove="Resources\Shaders\normal.frag" />
 		<None Remove="Resources\Shaders\normal_lighting.vert" />
 		<None Remove="Resources\Shaders\phong_lighting.frag" />
 		<None Remove="Resources\Shaders\shadow_texture.frag" />
@@ -41,6 +43,8 @@
 
 	<ItemGroup>
 		<EmbeddedResource Include="Resources\Shaders\basic.vert" />
+		<EmbeddedResource Include="Resources\Shaders\camera_facing_texture.vert" />
+		<EmbeddedResource Include="Resources\Shaders\normal.frag" />
 		<EmbeddedResource Include="Resources\Shaders\diffuse_lighting.frag" />
 		<EmbeddedResource Include="Resources\Shaders\flat_texture.vert" />
 		<EmbeddedResource Include="Resources\Shaders\nop.frag" />
@@ -55,7 +59,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="OpenTK.NetStandard" Version="1.0.5.32" />
+	  <PackageReference Include="OpenTK" Version="4.7.2" />
+	  <PackageReference Include="OpenTK.Graphics" Version="4.7.2" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -35,9 +36,23 @@ namespace SharpGfx
         public static string GetFullPath<T>(string resourcePath)
         {
             var assembly = Assembly.GetAssembly(typeof(T));
-            return assembly
-                .GetManifestResourceNames()
-                .Single(path => path == $"{assembly.GetName().Name}.{nameof(Resources)}.{resourcePath}");
+            var resourceNames = assembly
+                .GetManifestResourceNames();
+            try
+            {
+                return resourceNames
+                    .Single(path => path == GetResourceName(assembly, resourcePath));
+            }
+            catch (InvalidOperationException)
+            {
+                var allResources = string.Join(Environment.NewLine, resourceNames);
+                throw new InvalidOperationException($"resource '{resourcePath}' not found. Available resources:\n{allResources}");
+            }
+        }
+
+        private static string GetResourceName(Assembly assembly, string resourcePath)
+        {
+            return $"{assembly.GetName().Name}.{resourcePath}";
         }
     }
 }

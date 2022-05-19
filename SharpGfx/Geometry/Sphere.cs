@@ -35,17 +35,17 @@ namespace SharpGfx.Geometry
             return vertices;
         }
 
-        public static ushort[] GetIndices(int longitudeCount, int latitudeCount)
+        public static ushort[] GetTriangles(int longitudeCount, int latitudeCount)
         {
-            ushort[] indices = new ushort[longitudeCount * latitudeCount * 2 * 3];
+            ushort[] triangles = new ushort[longitudeCount * latitudeCount * 2 * 3];
             int upperCapOffset = (latitudeCount - 1) * (longitudeCount + 1);
 
             int i = 0;
             for (ushort longitude = 0; longitude < longitudeCount; longitude++)
             {
-                indices[i++] = longitude;
-                indices[i++] = (ushort) (longitude + longitudeCount + 1);
-                indices[i++] = (ushort) (longitude + longitudeCount + 2);
+                triangles[i++] = longitude;
+                triangles[i++] = (ushort) (longitude + longitudeCount + 1);
+                triangles[i++] = (ushort) (longitude + longitudeCount + 2);
 
                 for (int latitude = 1; latitude < latitudeCount; latitude++)
                 {
@@ -54,22 +54,22 @@ namespace SharpGfx.Geometry
 
                     // 2 triangles per patch
                     // k1 => k2 => k1+1
-                    indices[i++] = (ushort) k1;
-                    indices[i++] = (ushort) k2;
-                    indices[i++] = (ushort) (k1 + 1);
+                    triangles[i++] = (ushort) k1;
+                    triangles[i++] = (ushort) k2;
+                    triangles[i++] = (ushort) (k1 + 1);
 
                     // k1+1 => k2 => k2+1
-                    indices[i++] = (ushort) (k1 + 1);
-                    indices[i++] = (ushort) k2;
-                    indices[i++] = (ushort) (k2 + 1);
+                    triangles[i++] = (ushort) (k1 + 1);
+                    triangles[i++] = (ushort) k2;
+                    triangles[i++] = (ushort) (k2 + 1);
                 }
 
-                indices[i++] = (ushort) (upperCapOffset + longitude);
-                indices[i++] = (ushort) (upperCapOffset + longitude + 1);
-                indices[i++] = (ushort) (upperCapOffset + longitude + longitudeCount + 1);
+                triangles[i++] = (ushort) (upperCapOffset + longitude);
+                triangles[i++] = (ushort) (upperCapOffset + longitude + 1);
+                triangles[i++] = (ushort) (upperCapOffset + longitude + longitudeCount + 1);
             }
 
-            return indices;
+            return triangles;
         }
 
         public static float[] GetIsoVertices(int rings)
@@ -109,24 +109,24 @@ namespace SharpGfx.Geometry
             }
         }
 
-        public static ushort[] GetIsoIndices(int rings)
+        public static ushort[] GetIsoTriangles(int rings)
         {
-            var indices = new List<ushort>();
-            Circle.SetIsoIndices(rings, indices);
+            var triangles = new List<ushort>();
+            Circle.AddIsoTriangles(rings, triangles);
 
-            int fullHemiIndicesCount = indices.Count;
+            int fullHemiIndicesCount = triangles.Count;
             int hemiIsoVerticesCount = HemiIsoVerticesCount(rings);
             int equatorVertexIndex = hemiIsoVerticesCount - EquatorIsoVerticesCount(rings);
             for (int i = 0; i < fullHemiIndicesCount; i++)
             {
-                int index = indices[i];
-                if (indices[i] < equatorVertexIndex)
+                int index = triangles[i];
+                if (triangles[i] < equatorVertexIndex)
                 {
-                    index = hemiIsoVerticesCount + indices[i];
+                    index = hemiIsoVerticesCount + triangles[i];
                 }
-                indices.Add((ushort) index);
+                triangles.Add((ushort) index);
             }
-            return indices.ToArray();
+            return triangles.ToArray();
         }
 
         private static int FullIsoVerticesCount(int rings)

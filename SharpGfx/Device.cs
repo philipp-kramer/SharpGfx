@@ -24,17 +24,17 @@ namespace SharpGfx
 
         public abstract Space Model();
 
-        public abstract RenderObject Object(Space space, Material material, params (string, float[], int)[] vertexData);
-        public abstract RenderObject Object(Space space, Material material, uint[] indices, params (string, float[], int)[] vertexData);
-        public abstract RenderObject Object(Space space, Material material, ushort[] indices, params (string, float[], int)[] vertexData);
+        public abstract RenderObject Object(Space space, string name, Material material, params (string, float[], int)[] vertexData);
+        public abstract RenderObject Object(Space space, string name, Material material, uint[] triangles, params (string, float[], int)[] vertexData);
+        public abstract RenderObject Object(Space space, string name, Material material, ushort[] triangles, params (string, float[], int)[] vertexData);
 
-        public abstract TextureHandle Texture(Bitmap bitmap, bool manualLevels = false);
-        public abstract TextureHandle RgbTexture(Size pixels);
-        public abstract TextureHandle DepthTexture(Size pixels);
+        public abstract TextureHandle Texture(Bitmap image, bool manualLevels = false);
+        public abstract TextureHandle RgbTexture(Vector2 pixels);
+        public abstract TextureHandle DepthTexture(Vector2 pixels);
         public abstract void ClearTexture(int unit);
 
         public abstract FrameBuffer FrameBuffer();
-        public abstract FrameBuffer FrameRenderBuffer(Size pixels);
+        public abstract FrameBuffer FrameRenderBuffer(Vector2 pixels);
 
         public void CheckSpaces(ICollection<RenderObject> scene)
         {
@@ -52,9 +52,9 @@ namespace SharpGfx
         public abstract void SetCameraView(ICollection<RenderObject> scene, CameraView cameraView);
         public abstract void SetProjection(ICollection<RenderObject> scene, Matrix4 projection);
 
-        public abstract void Render(ICollection<RenderObject> scene, Size pixels, Point3 cameraPosition, Color4 ambientColor);
-        public abstract void TakeColorPicture(ICollection<RenderObject> scene, Size pixels, Color4 ambientColor, Point3 cameraPosition, CameraView cameraView, TextureHandle texture);
-        public abstract TextureHandle TakeDepthPicture(ICollection<RenderObject> scene, Size pixels, Color4 ambientColor, Point3 cameraPosition, CameraView cameraView, Matrix4 projection);
+        public abstract void Render(ICollection<RenderObject> scene, Vector2 pixels, Point3 cameraPosition, Color4 ambientColor);
+        public abstract void TakeColorPicture(ICollection<RenderObject> scene, Vector2 pixels, Color4 ambientColor, Point3 cameraPosition, CameraView cameraView, TextureHandle texture);
+        public abstract TextureHandle TakeDepthPicture(ICollection<RenderObject> scene, Vector2 pixels, Color4 ambientColor, Point3 cameraPosition, CameraView cameraView, Matrix4 projection);
     }
 
     public static class DeviceExtensions

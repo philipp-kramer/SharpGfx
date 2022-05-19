@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SharpGfx.OpenTK
 {
@@ -15,9 +14,9 @@ namespace SharpGfx.OpenTK
 
         internal static void ExecutePending()
         {
-            while (Queue.Any())
+            while (Queue.Count > 0)
             {
-                Queue.Dequeue()();
+                Queue.Dequeue()?.Invoke();
             }
         }
     }

@@ -24,11 +24,11 @@ namespace SharpGfx.Host
             W = w;
         }
 
-        Space Primitive.Space => _space;
+        Space IPrimitive.Space => _space;
 
         public float this[int index] => index switch { 0 => X, 1 => Y, 2 => Z, 3 => W, _ => throw new ArgumentOutOfRangeException(nameof(index)) };
         public float Length => MathF.Sqrt(Dot(this));
-        public Vector3 Xyz => new HostVector3(_space, X, Y, Z);
+        public IVector3 Xyz => new HostVector3(_space, X, Y, Z);
         public Array Values => new[] { X, Y, Z, W };
 
         Vector4 Vector4.Neg()

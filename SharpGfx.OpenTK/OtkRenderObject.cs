@@ -10,8 +10,8 @@ namespace SharpGfx.OpenTK
         internal readonly int Handle;
         private readonly VertexAttribute[] _attributes;
 
-        public OtkRenderObject(Space space, Material material, params VertexAttribute[] attributes)
-            : base(space, material)
+        public OtkRenderObject(Space space, string name, Material material, params VertexAttribute[] attributes)
+            : base(space, name, material)
         {
             _attributes = attributes;
             _vertexCount = GetVertexCount(attributes[0]);
@@ -62,10 +62,10 @@ namespace SharpGfx.OpenTK
             GL.DrawArrays(PrimitiveType.Triangles, 0, _vertexCount);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
-            Dispose(true);
             GC.SuppressFinalize(this);
+            Dispose(true);
         }
 
         protected virtual void Dispose(bool disposing)

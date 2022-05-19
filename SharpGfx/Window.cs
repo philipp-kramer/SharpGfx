@@ -1,74 +1,52 @@
 ﻿using System;
+using SharpGfx.Primitives;
 
 namespace SharpGfx
 {
     public abstract class Window
     {
-        private const float NavigationSpeed = 0.1f;
-        private const float MouseSensitivity = 1/200f;
+        private CameraRendering _rendering;
 
-        protected readonly PositionTracking MouseTracking;
+        public event Action<MouseButtons> MouseUp;
 
-        public Rendering Rendering { get; set; }
-
-        protected Window(Rendering rendering)
+        public virtual void Show(CameraRendering rendering)
         {
-            Rendering = rendering;
-            MouseTracking = new PositionTracking();
+            _rendering = rendering;
         }
 
-        private static float Limit(float value, float range)
+        protected void OnKeyDown(ConsoleKey key)
         {
-            return Math.Min(Math.Max(value, -range), range);
+            _rendering.Camera.OnKeyDown(key);
         }
 
-        public abstract event Action<KeyDownArgs> KeyDown;
-        public abstract void Run(int targetFrameRate);
-
-        protected void OnCameraKeyDown(ConsoleKey key, CameraRendering rendering)
+        protected void MouseMoving(Vector2 delta, MouseButtons mouseButton)
         {
-            switch (key)
-            {
-                case ConsoleKey.NumPad5:
-                case ConsoleKey.PageUp:
-                case ConsoleKey.E:
-                    rendering.CameraForward(NavigationSpeed);
-                    break;
-                case ConsoleKey.NumPad0:
-                case ConsoleKey.PageDown:
-                case ConsoleKey.Q:
-                    rendering.CameraForward(-NavigationSpeed);
-                    break;
-                case ConsoleKey.NumPad4:
-                case ConsoleKey.LeftArrow:
-                case ConsoleKey.A:
-                    rendering.CameraRight(-NavigationSpeed);
-                    break;
-                case ConsoleKey.NumPad6:
-                case ConsoleKey.RightArrow:
-                case ConsoleKey.D:
-                    rendering.CameraRight(NavigationSpeed);
-                    break;
-                case ConsoleKey.NumPad8:
-                case ConsoleKey.UpArrow:
-                case ConsoleKey.W:
-                    rendering.CameraUp(NavigationSpeed);
-                    break;
-                case ConsoleKey.NumPad2:
-                case ConsoleKey.DownArrow:
-                case ConsoleKey.S:
-                    rendering.CameraUp(-NavigationSpeed);
-                    break;
-            }
+            _rendering.Camera.MouseMoving(delta, mouseButton);
         }
 
-        protected void OnMouseMove()
+        protected void InvokeMouseUp(MouseButtons buttonClicked)
         {
-            if (Rendering is CameraRendering cameraRendering)
-            {
-                cameraRendering.CameraYaw = Limit(cameraRendering.CameraYaw + MouseTracking.DeltaX * MouseSensitivity, MathF.PI);
-                cameraRendering.CameraPitch = Limit(cameraRendering.CameraPitch - MouseTracking.DeltaY * MouseSensitivity, MathF.PI / 2);
-            }
+            MouseUp?.Invoke(buttonClicked);
+        }
+
+        protected virtual void OnLoad()
+        {
+            _rendering?.OnLoad();
+        }
+
+        protected void OnResize(Vector2 size)
+        {
+            _rendering?.OnResize(size);
+        }
+
+        protected void OnUpdateFrame()
+        {
+            _rendering.OnUpdateFrame();
+        }
+
+        protected void OnRenderFrame()
+        {
+            _rendering.OnRenderFrame();
         }
     }
 }

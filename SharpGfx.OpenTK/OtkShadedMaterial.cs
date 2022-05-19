@@ -9,9 +9,9 @@ namespace SharpGfx.OpenTK
         public bool Transparent { get; set; }
         protected internal OtkShading Shading { get; }
 
-        protected OtkShadedMaterial(string vertexShader, string fragmentShader, bool hasTexture)
+        protected OtkShadedMaterial(string vertexShader, string fragmentShader)
         {
-            Shading = new OtkShading(vertexShader, fragmentShader, hasTexture);
+            Shading = new OtkShading(vertexShader, fragmentShader);
         }
 
         protected internal virtual void Apply(Point3 cameraPosition)
@@ -33,8 +33,8 @@ namespace SharpGfx.OpenTK
 
         public void Dispose()
         {
-            Dispose(true);
             GC.SuppressFinalize(this);
+            Dispose(true);
         }
 
         protected virtual void Dispose(bool disposing)
