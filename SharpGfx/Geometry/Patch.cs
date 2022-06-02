@@ -27,10 +27,10 @@ namespace SharpGfx.Geometry
             return vertices;
         }
 
-        public static float[] GetTexture(int nx, int nz, float scale)
+        public static float[] GetTexture(int nx, int nz)
         {
             var vertices = new float[(nx + 1) * (nz + 1) * 2];
-            float d = 2f / (scale * (nx + nz));
+            float d = 2f / (nx + nz);
             float cx = 0;
             int i = 0;
             for (int x = 0; x <= nx; x++)

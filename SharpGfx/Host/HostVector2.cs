@@ -3,7 +3,7 @@ using SharpGfx.Primitives;
 
 namespace SharpGfx.Host
 {
-    internal readonly struct HostVector2 : Vector2
+    public readonly struct HostVector2 : IVector2
     {
         private readonly Space _space;
         public float X { get; }
@@ -19,32 +19,32 @@ namespace SharpGfx.Host
 
         Space IPrimitive.Space => _space;
 
-        Vector2 Vector2.Add(Vector2 r)
+        IVector2 IVector2.Add(IVector2 r)
         {
             return new HostVector2(r.Space, X + r.X, Y + r.Y);
         }
 
-        Vector2 Vector2.Sub(Vector2 r)
+        IVector2 IVector2.Sub(IVector2 r)
         {
             return new HostVector2(r.Space, X - r.X, Y - r.Y);
         }
 
-        Vector2 Vector2.Mul(float scalar)
+        IVector2 IVector2.Mul(float scalar)
         {
             return new HostVector2(_space, scalar * X, scalar * Y);
         }
 
-        Vector2 Vector2.Mul(Vector2 r)
+        IVector2 IVector2.Mul(IVector2 r)
         {
             return new HostVector2(r.Space, X * r.X, Y * r.Y);
         }
 
-        public float Dot(Vector2 r)
+        public float Dot(IVector2 r)
         {
             return X * r.X + Y * r.Y;
         }
 
-        public Vector2 Normalized()
+        public IVector2 Normalized()
         {
             float invLength = 1 / MathF.Sqrt(Dot(this));
             return new HostVector2(_space, X * invLength, Y * invLength);

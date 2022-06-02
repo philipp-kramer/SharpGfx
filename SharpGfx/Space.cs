@@ -12,9 +12,9 @@ namespace SharpGfx
             Domain = domain;
         }
 
-        public abstract Vector2 Zero2 { get; }
-        public abstract Vector2 Unit2X { get; }
-        public abstract Vector2 Unit2Y { get; }
+        public abstract IVector2 Zero2 { get; }
+        public abstract IVector2 Unit2X { get; }
+        public abstract IVector2 Unit2Y { get; }
 
         public abstract IVector3 Zero3 { get; }
         public abstract IVector3 Unit3X { get; }
@@ -24,7 +24,7 @@ namespace SharpGfx
         public abstract Vector4 Zero4 { get; }
         public abstract Matrix4 Identity4 { get; }
 
-        public abstract Vector2 Vector2(float x, float y);
+        public abstract IVector2 Vector2(float x, float y);
 
         public abstract IVector3 Vector3(float x, float y, float z);
 

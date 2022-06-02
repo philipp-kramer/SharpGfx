@@ -1,52 +1,37 @@
-﻿using System;
+﻿using SharpGfx.Host;
 using SharpGfx.Primitives;
 
 namespace SharpGfx
 {
     public abstract class Window
     {
-        private CameraRendering _rendering;
+        public static readonly Space Screen = new HostSpace(Domain.View);
 
-        public event Action<MouseButtons> MouseUp;
+        protected Rendering Rendering { get; private set; }
 
-        public virtual void Show(CameraRendering rendering)
+        public virtual void Show(Rendering rendering)
         {
-            _rendering = rendering;
-        }
-
-        protected void OnKeyDown(ConsoleKey key)
-        {
-            _rendering.Camera.OnKeyDown(key);
-        }
-
-        protected void MouseMoving(Vector2 delta, MouseButtons mouseButton)
-        {
-            _rendering.Camera.MouseMoving(delta, mouseButton);
-        }
-
-        protected void InvokeMouseUp(MouseButtons buttonClicked)
-        {
-            MouseUp?.Invoke(buttonClicked);
+            Rendering = rendering;
         }
 
         protected virtual void OnLoad()
         {
-            _rendering?.OnLoad();
+            Rendering.OnLoad();
         }
 
-        protected void OnResize(Vector2 size)
+        protected void OnResize(IVector2 size)
         {
-            _rendering?.OnResize(size);
+            Rendering.OnResize(size);
         }
 
         protected void OnUpdateFrame()
         {
-            _rendering.OnUpdateFrame();
+            Rendering.OnUpdateFrame();
         }
 
         protected void OnRenderFrame()
         {
-            _rendering.OnRenderFrame();
+            Rendering.OnRenderFrame();
         }
     }
 }

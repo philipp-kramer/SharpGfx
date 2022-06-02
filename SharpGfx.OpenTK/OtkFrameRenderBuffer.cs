@@ -7,20 +7,20 @@ namespace SharpGfx.OpenTK
     internal sealed class OtkFrameRenderBuffer : OtkFrameBuffer
     {
         private readonly OtkFrameBuffer _frameBuffer;
-        private readonly int _renderHandle;
+        private readonly int _handle;
 
-        public OtkFrameRenderBuffer(Vector2 pixels)
+        public OtkFrameRenderBuffer(IVector2 pixels)
         {
             _frameBuffer = new OtkFrameBuffer();
 
-            _renderHandle = GL.GenRenderbuffer();
-            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, _renderHandle);
+            _handle = GL.GenRenderbuffer();
+            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, _handle);
             GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.Depth24Stencil8, (int) pixels.X, (int) pixels.Y);
             GL.FramebufferRenderbuffer(
                 FramebufferTarget.Framebuffer,
                 FramebufferAttachment.DepthStencilAttachment,
                 RenderbufferTarget.Renderbuffer,
-                _renderHandle);
+                _handle);
 
             if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
             {
@@ -30,7 +30,7 @@ namespace SharpGfx.OpenTK
 
         private void ReleaseUnmanagedResources()
         {
-            GL.DeleteRenderbuffer(_renderHandle);
+            GL.DeleteRenderbuffer(_handle);
         }
 
         protected override void Dispose(bool disposing)

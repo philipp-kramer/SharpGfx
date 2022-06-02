@@ -8,7 +8,9 @@
 	</PropertyGroup>
 	<PropertyGroup>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.0.10</Version>
+		<Version>1.1.1</Version>
+		<AssemblyVersion>1.1.1.0</AssemblyVersion>
+		<FileVersion>1.1.1.0</FileVersion>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="OpenTK.Windowing.Common" Version="4.7.2" />

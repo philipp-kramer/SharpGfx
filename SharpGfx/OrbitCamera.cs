@@ -23,7 +23,7 @@ namespace SharpGfx
         {
         }
 
-        public override void MouseMoving(Vector2 delta, MouseButtons buttonClicked)
+        public override void MouseMoving(IVector2 delta, MouseButtons buttonClicked)
         {
             switch (buttonClicked)
             {

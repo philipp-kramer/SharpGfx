@@ -7,13 +7,13 @@
 		<Company>OST INS</Company>
 		<Product>SharpGfx</Product>
 		<PackageId>SharpGfx.OpenTK</PackageId>
-		<AssemblyVersion>1.0.0.1</AssemblyVersion>
-		<FileVersion>1.0.0.1</FileVersion>
+		<AssemblyVersion>1.1.2.0</AssemblyVersion>
+		<FileVersion>1.1.2.0</FileVersion>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.0.11</Version>
+		<Version>1.1.2</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -25,46 +25,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="Resources\Shaders\basic.vert" />
-		<None Remove="Resources\Shaders\camera_facing_texture.vert" />
-		<None Remove="Resources\Shaders\diffuse_lighting.frag" />
-		<None Remove="Resources\Shaders\flat_texture.vert" />
-		<None Remove="Resources\Shaders\nop.frag" />
-		<None Remove="Resources\Shaders\normal.frag" />
-		<None Remove="Resources\Shaders\normal_lighting.vert" />
-		<None Remove="Resources\Shaders\phong_lighting.frag" />
-		<None Remove="Resources\Shaders\shadow_texture.frag" />
-		<None Remove="Resources\Shaders\shadow_texture.vert" />
-		<None Remove="Resources\Shaders\single_color.frag" />
-		<None Remove="Resources\Shaders\texture.frag" />
-		<None Remove="Resources\Shaders\vertex_color.frag" />
-		<None Remove="Resources\Shaders\vertex_color.vert" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Include="Resources\Shaders\basic.vert" />
-		<EmbeddedResource Include="Resources\Shaders\camera_facing_texture.vert" />
-		<EmbeddedResource Include="Resources\Shaders\normal.frag" />
-		<EmbeddedResource Include="Resources\Shaders\diffuse_lighting.frag" />
-		<EmbeddedResource Include="Resources\Shaders\flat_texture.vert" />
-		<EmbeddedResource Include="Resources\Shaders\nop.frag" />
-		<EmbeddedResource Include="Resources\Shaders\normal_lighting.vert" />
-		<EmbeddedResource Include="Resources\Shaders\phong_lighting.frag" />
-		<EmbeddedResource Include="Resources\Shaders\shadow_texture.frag" />
-		<EmbeddedResource Include="Resources\Shaders\shadow_texture.vert" />
-		<EmbeddedResource Include="Resources\Shaders\single_color.frag" />
-		<EmbeddedResource Include="Resources\Shaders\texture.frag" />
-		<EmbeddedResource Include="Resources\Shaders\vertex_color.frag" />
-		<EmbeddedResource Include="Resources\Shaders\vertex_color.vert" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <PackageReference Include="OpenTK" Version="4.7.2" />
 	  <PackageReference Include="OpenTK.Graphics" Version="4.7.2" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\GlslParser\GlslParser.csproj" />
+		<ProjectReference Include="..\SharpGfx.OpenGL.Shading\SharpGfx.OpenGL.Shading.csproj" />
 		<ProjectReference Include="..\SharpGfx\SharpGfx.csproj" />
 	</ItemGroup>
 

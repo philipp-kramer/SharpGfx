@@ -1,4 +1,6 @@
-﻿namespace SharpGfx.OpenTK
+﻿using OpenTK.Graphics.OpenGL;
+
+namespace SharpGfx.OpenTK
 {
     internal class OtkTextureHandle : TextureHandle
     {
@@ -11,12 +13,14 @@
 
         public override void ActivateTexture(int unit)
         {
-            OtkTextures.ActivateTexture(this, unit);
+            var textureUnit = OtkTextures.GetTextureUnit(unit);
+            GL.ActiveTexture(textureUnit);
+            GL.BindTexture(TextureTarget.Texture2D, Handle);
         }
 
         public override void DeleteTexture()
         {
-            OtkTextures.DeleteTexture(this);
+            GL.DeleteTexture(Handle);
         }
     }
 }

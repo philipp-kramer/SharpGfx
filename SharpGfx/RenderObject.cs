@@ -85,6 +85,17 @@ namespace SharpGfx
             return _name;
         }
 
-        public abstract void Dispose();
+        protected abstract void Dispose(bool disposing);
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+            Dispose(true);
+        }
+
+        ~RenderObject()
+        {
+            Dispose(false);
+        }
     }
 }

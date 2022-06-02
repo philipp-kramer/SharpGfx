@@ -1,5 +1,6 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL;
+using SharpGfx.OpenGL.Shading;
 
 namespace SharpGfx.OpenTK
 {
@@ -8,7 +9,7 @@ namespace SharpGfx.OpenTK
     {
         private readonly OtkIndexBuffer<T> _indexBuffer;
 
-        public OtkIndexedRenderObject(Space space, string name, Material material, T[] triangles, params VertexAttribute[] attributes) 
+        public OtkIndexedRenderObject(Space space, string name, OpenGlMaterial material, T[] triangles, params VertexAttribute[] attributes) 
             : base(space, name, material, attributes)
         {
             _indexBuffer = new OtkIndexBuffer<T>(triangles);

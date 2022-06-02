@@ -3,34 +3,16 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using OpenTK.Graphics.OpenGL;
-using SharpGfx.OpenTK.Materials;
+using SharpGfx.OpenGL.Shading;
 using SharpGfx.Primitives;
 
 namespace SharpGfx.OpenTK
 {
     internal static class OtkRenderer
     {
-        public static void SetProjection(IEnumerable<IGrouping<OtkShadedMaterial, RenderObject>> scene, Matrix4 projection)
-        {
-            foreach (var shader in scene.Select(obj => obj.Key.Shading))
-            {
-                shader.DoInContext(() => shader.Set("projection", projection));
-            }
-        }
-
-        public static void SetCameraView(Device device, IEnumerable<IGrouping<OtkShadedMaterial, RenderObject>> scene, CameraView cameraView)
-        {
-            var view = device.GetViewMatrix(cameraView);
-            foreach (var shader in scene.Select(obj => obj.Key.Shading))
-            {
-                shader.DoInContext(() => shader.Set("cameraView", view));
-            }
-        }
-
         public static void Render(
-            IEnumerable<IGrouping<OtkShadedMaterial, RenderObject>> scene, 
-            Vector2 pixels,
-            Point3 cameraPosition,
+            IEnumerable<IGrouping<OpenGlMaterial, RenderObject>> scene, 
+            IVector2 pixels,
             Color4 ambientColor)
         {
             GL.Enable(EnableCap.DepthTest);
@@ -45,64 +27,66 @@ namespace SharpGfx.OpenTK
             foreach (var materialObject in scene)
             {
                 var material = materialObject.Key;
-                var shading = material.Shading;
-                shading.DoInContext(() =>
+                material.Apply();
+
+                foreach (var obj in materialObject)
                 {
-                    material.Apply(cameraPosition);
+                    material.Set("model", obj.Transform);
+                    material.CheckInputs();
 
-                    foreach (var obj in materialObject)
-                    {
-                        shading.Set("model", obj.Transform);
-                        shading.CheckInputs();
+                    obj.Render();
 
-                        obj.Render();
+                    material.Set("model", obj.Space.Identity4);
+                    material.Reset("model");
+                }
 
-                        shading.ResetIdentityMatrix4("model");
-                    }
-
-                    material.UnApply();
-                });
+                material.UnApply();
             }
         }
 
         public static void TakeColorPicture(
             Device device,
             ICollection<RenderObject> scene,
-            Vector2 pixels,
+            IVector2 pixels,
             Color4 ambientColor,
             Point3 cameraPosition,
-            CameraView cameraView,
+            Matrix4 view,
             TextureHandle texture)
         {
             using (new OtkFrameRenderBuffer(pixels))
             {
-                if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
-                {
-                    throw new InvalidOperationException("framebuffer not configured correctly");
-                }
-                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, ((OtkTextureHandle)texture).Handle, 0);
+                GL.FramebufferTexture2D(
+                    FramebufferTarget.Framebuffer, 
+                    FramebufferAttachment.ColorAttachment0, 
+                    TextureTarget.Texture2D, 
+                    ((OtkTextureHandle)texture).Handle, 0);
 
                 device.CheckSpaces(scene);
                 
-                var groupedScene = scene
-                    .GroupBy(obj => (OtkShadedMaterial)obj.Material)
-                    .ToList();
+                var materials = OtkDevice
+                    .GetMaterials(scene)
+                    .ToArray();
+                var materialScene = scene.GroupBy(obj => (OpenGlMaterial) obj.Material);
 
-                SetCameraPosition(device.World, groupedScene, cameraPosition);
-                SetCameraView(device, groupedScene, cameraView);
-                Render(groupedScene, pixels, cameraPosition, ambientColor);
+                OpenGlMaterial.SetIfDefined(device.World, materials, "cameraPosition", cameraPosition.Vector);
+                OpenGlMaterial.Set(materials, "cameraView", view);
+                Render(materialScene, pixels, ambientColor);
 
-                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, 0, 0);
+                GL.FramebufferTexture2D(
+                    FramebufferTarget.Framebuffer, 
+                    FramebufferAttachment.ColorAttachment0, 
+                    TextureTarget.Texture2D, 
+                    0, 0);
             }
         }
 
         public static TextureHandle TakeDepthPicture(
             Device device,
             ICollection<RenderObject> scene,
-            Vector2 pixels,
+            IVector2 pixels,
             Color4 ambientColor,
             Point3 cameraPosition,
-            CameraView cameraView,
+            Matrix4 view,
             Matrix4 projection)
         {
             var depthTexture = device.DepthTexture(pixels);
@@ -125,15 +109,17 @@ namespace SharpGfx.OpenTK
 
                 device.CheckSpaces(scene);
 
-                using var material = new NopMaterial();
+                using var material = new NopMaterial(device);
+                var materials = new[] { material };
                 var nopMaterialScene = new[]
                 {
-                    new Grouping<OtkShadedMaterial, RenderObject>(material, scene)
+                    new Grouping<OpenGlMaterial, RenderObject>(material, scene)
                 };
-                SetProjection(nopMaterialScene, projection);
-                SetCameraPosition(device.World, nopMaterialScene, cameraPosition); // supply scene also the same way as for Render
-                SetCameraView(device, nopMaterialScene, cameraView);
-                Render(nopMaterialScene, pixels, cameraPosition, ambientColor);
+
+                OpenGlMaterial.SetIfDefined(device.World, materials, "cameraPosition", cameraPosition.Vector); // supply scene also the same way as for Render
+                OpenGlMaterial.Set(materials, "cameraView", view);
+                OpenGlMaterial.Set(materials, "projection", projection);
+                Render(nopMaterialScene, pixels, ambientColor);
 
                 GL.FramebufferTexture2D(
                     FramebufferTarget.Framebuffer, 
@@ -142,15 +128,6 @@ namespace SharpGfx.OpenTK
                     0, 0); // detach
 
                 return depthTexture;
-            }
-        }
-
-        private static void SetCameraPosition(Space world, IEnumerable<IGrouping<OtkShadedMaterial, RenderObject>> scene, Point3 position)
-        {
-            if (!position.Vector.In(world)) throw new ArgumentException("needs to be in world-space", nameof(position));
-            foreach (var shader in scene.Select(obj => obj.Key.Shading))
-            {
-                shader.DoInContext(() => shader.SetUnchecked("cameraPosition", position.Vector));
             }
         }
     }

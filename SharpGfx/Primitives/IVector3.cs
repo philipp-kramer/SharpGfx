@@ -11,9 +11,9 @@ namespace SharpGfx.Primitives
         public float this[int index] { get; }
         public Array Values { get; }
         public float Length { get; }
-        public Vector2 Xy { get; }
-        public Vector2 Xz { get; }
-        public Vector2 Yz { get; }
+        public IVector2 Xy { get; }
+        public IVector2 Xz { get; }
+        public IVector2 Yz { get; }
 
         public Vector4 Extend(float w);
         protected IVector3 Neg();

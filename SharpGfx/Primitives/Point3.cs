@@ -8,7 +8,7 @@
         public float Y => Vector.Y;
         public float Z => Vector.Z;
 
-        internal Point3(IVector3 vector)
+        public Point3(IVector3 vector)
         {
             Vector = vector;
         }

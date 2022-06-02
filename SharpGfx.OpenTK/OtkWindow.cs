@@ -5,8 +5,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using SharpGfx.Host;
-using Vector2 = SharpGfx.Primitives.Vector2;
+using SharpGfx.Primitives;
 
 namespace SharpGfx.OpenTK
 {
@@ -76,17 +75,20 @@ namespace SharpGfx.OpenTK
         }
 
         private readonly GameWindow _window;
+        private readonly Camera _camera;
         private PolygonMode _polygonMode;
         private MouseButtons _mouseButton;
 
         public event Action<KeyDownArgs> KeyDown;
 
         public OtkWindow(
-            Vector2 size, 
-            string title, 
+            string title,
+            IVector2 size,
+            Camera camera = null,
             int targetFrameRate = 60, 
             bool antiAliased = false)
         {
+            _camera = camera;
             var settings = new GameWindowSettings
             {
                 RenderFrequency = targetFrameRate,
@@ -109,7 +111,6 @@ namespace SharpGfx.OpenTK
             }
             _polygonMode = PolygonMode.Fill;
 
-            // TODO: un-register all handlers in dispose
             _window.Load += OnLoad;
             _window.Resize += OnResize;
             _window.UpdateFrame += OnUpdateFrame;
@@ -121,7 +122,7 @@ namespace SharpGfx.OpenTK
             _window.MouseWheel += OnMouseWheel;
         }
 
-        public override void Show(CameraRendering rendering)
+        public override void Show(Rendering rendering)
         {
             base.Show(rendering);
             _window.Run();
@@ -135,7 +136,7 @@ namespace SharpGfx.OpenTK
 
         private void OnResize(ResizeEventArgs e)
         {
-            OnResize(HostSpace.Space.Vector2(e.Width, e.Height));
+            OnResize(Screen.Vector2(e.Width, e.Height));
         }
 
         private void OnUpdateFrame(FrameEventArgs e)
@@ -160,7 +161,7 @@ namespace SharpGfx.OpenTK
                 if (eventArgs.Handled) return;
             }
 
-            OnKeyDown(key);
+            _camera?.OnKeyDown(key);
 
             switch (key)
             {
@@ -179,8 +180,8 @@ namespace SharpGfx.OpenTK
         {
             float deltaX = Limit(e.DeltaX, _window.Size.X / 20f);
             float deltaY = Limit(e.DeltaY, _window.Size.Y / 20f);
-            var delta = HostSpace.Space.Vector2(deltaX, deltaY);
-            MouseMoving(delta, _mouseButton);
+            var delta = Screen.Vector2(deltaX, deltaY);
+            _camera?.MouseMoving(delta, _mouseButton);
         }
 
         private static float Limit(float value, float range)
@@ -201,13 +202,13 @@ namespace SharpGfx.OpenTK
 
         private void OnMouseUp(MouseButtonEventArgs e)
         {
-            InvokeMouseUp(_mouseButton);
+            Rendering.OnMouseUp(_mouseButton);
             _mouseButton = MouseButtons.None;
         }
 
         private void OnMouseWheel(MouseWheelEventArgs e)
         {
-            MouseMoving(HostSpace.Space.Vector2(e.Offset.X, e.OffsetY), MouseButtons.Middle);
+            _camera?.MouseMoving(Screen.Vector2(e.Offset.X, e.OffsetY), MouseButtons.Middle);
         }
 
         private void TogglePolygonMode()
@@ -225,18 +226,27 @@ namespace SharpGfx.OpenTK
             }
         }
 
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-            Dispose(true);
-        }
-
         private void Dispose(bool disposing)
         {
             if (disposing)
             {
+                _window.Load -= OnLoad;
+                _window.Resize -= OnResize;
+                _window.UpdateFrame -= OnUpdateFrame;
+                _window.RenderFrame -= OnRenderFrame;
+                _window.KeyDown -= OnKeyDown;
+                _window.MouseMove -= OnMouseMove;
+                _window.MouseDown -= OnMouseDown;
+                _window.MouseUp -= OnMouseUp;
+                _window.MouseWheel -= OnMouseWheel;
                 _window.Dispose();
             }
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+            Dispose(true);
         }
 
         ~OtkWindow()

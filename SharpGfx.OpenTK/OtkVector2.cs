@@ -2,7 +2,7 @@
 
 namespace SharpGfx.OpenTK
 {
-    internal readonly struct OtkVector2 : Vector2
+    internal readonly struct OtkVector2 : IVector2
     {
         public readonly global::OpenTK.Mathematics.Vector2 Value;
         private readonly Space _space;
@@ -18,35 +18,35 @@ namespace SharpGfx.OpenTK
         public float Y => Value.Y;
         public float Length => Value.Length;
 
-        Vector2 Vector2.Add(Vector2 r)
+        IVector2 IVector2.Add(IVector2 r)
         {
             var ovr = (OtkVector2)r;
             return new OtkVector2(ovr._space, Value + ((OtkVector2)r).Value);
         }
 
-        Vector2 Vector2.Sub(Vector2 r)
+        IVector2 IVector2.Sub(IVector2 r)
         {
             var ovr = (OtkVector2)r;
             return new OtkVector2(ovr._space, Value - ((OtkVector2)r).Value);
         }
 
-        Vector2 Vector2.Mul(float scalar)
+        IVector2 IVector2.Mul(float scalar)
         {
             return new OtkVector2(_space, Value * scalar);
         }
 
-        Vector2 Vector2.Mul(Vector2 r)
+        IVector2 IVector2.Mul(IVector2 r)
         {
             var ovr = (OtkVector2)r;
             return new OtkVector2(ovr._space, Value * ((OtkVector2)r).Value);
         }
 
-        float Vector2.Dot(Vector2 r)
+        float IVector2.Dot(IVector2 r)
         {
             return global::OpenTK.Mathematics.Vector2.Dot(Value, ((OtkVector2)r).Value);
         }
 
-        public Vector2 Normalized()
+        public IVector2 Normalized()
         {
             return new OtkVector2(_space, Value.Normalized());
         }

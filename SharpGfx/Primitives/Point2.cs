@@ -2,27 +2,27 @@
 {
     public readonly struct Point2
     {
-        public readonly Vector2 Relative;
+        public readonly IVector2 Relative;
 
         public float X => Relative.X;
         public float Y => Relative.Y;
-        
-        internal Point2(Vector2 relative)
+
+        public Point2(IVector2 relative)
         {
             Relative = relative;
         }
 
-        public static Point2 operator +(Point2 l, Vector2 r)
+        public static Point2 operator +(Point2 l, IVector2 r)
         {
             return new Point2(l.Relative + r);
         }
 
-        public static Point2 operator -(Point2 l, Vector2 r)
+        public static Point2 operator -(Point2 l, IVector2 r)
         {
             return new Point2(l.Relative - r);
         }
 
-        public static Vector2 operator -(Point2 l, Point2 r)
+        public static IVector2 operator -(Point2 l, Point2 r)
         {
             return l.Relative - r.Relative;
         }

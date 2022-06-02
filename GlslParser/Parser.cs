@@ -21,13 +21,13 @@ namespace GlslParser
         private const string ErrorIdentifier = "$ERROR$";
 
         private readonly Lexer _lexer;
-        private readonly Diagnosis _diagnosis;
+        private readonly List<string> _errors;
         private Token _current;
 
-        public Parser(Lexer lexer, Diagnosis diagnosis)
+        public Parser(Lexer lexer, List<string> errors)
         {
             _lexer = lexer;
-            _diagnosis = diagnosis;
+            _errors = errors;
             Next();
         }
 
@@ -264,7 +264,7 @@ namespace GlslParser
 
         private void Error(string message)
         {
-            _diagnosis.ReportError($"{message} LOCATION {_current.Location}");
+            _errors.Add($"{message} LOCATION {_current.Location}");
         }
     }
 }

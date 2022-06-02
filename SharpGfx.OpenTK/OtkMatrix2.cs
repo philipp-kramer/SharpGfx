@@ -14,13 +14,13 @@ namespace SharpGfx.OpenTK
             _value = value;
         }
 
-        public float this[int row, int col] => _value[row, col];
-
-        Array Matrix2.Values => new []
+        public float[,] Elements => new[,]
         {
-            _value.M11, _value.M12,
-            _value.M21, _value.M22,
+            { _value.M11, _value.M12 },
+            { _value.M21, _value.M22 }
         };
+
+        public float this[int row, int col] => _value[row, col];
 
         Space IPrimitive.Space => _space;
     }

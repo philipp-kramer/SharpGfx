@@ -24,17 +24,19 @@ namespace SharpGfx
 
         public abstract Space Model();
 
-        public abstract RenderObject Object(Space space, string name, Material material, params (string, float[], int)[] vertexData);
-        public abstract RenderObject Object(Space space, string name, Material material, uint[] triangles, params (string, float[], int)[] vertexData);
-        public abstract RenderObject Object(Space space, string name, Material material, ushort[] triangles, params (string, float[], int)[] vertexData);
+        public abstract RenderObject Object(Space space, string name, Material material, params VertexAttribute[] attributes);
+        public abstract RenderObject Object(Space space, string name, Material material, uint[] triangles, params VertexAttribute[] attributes);
+        public abstract RenderObject Object(Space space, string name, Material material, ushort[] triangles, params VertexAttribute[] attributes);
+        public abstract void SetVertexArrayAttributes(uint arrayHandle, uint shaderHandle, VertexAttribute[] attributes, VertexBuffer[] buffers);
 
-        public abstract TextureHandle Texture(Bitmap image, bool manualLevels = false);
-        public abstract TextureHandle RgbTexture(Vector2 pixels);
-        public abstract TextureHandle DepthTexture(Vector2 pixels);
+        public abstract TextureHandle Texture(Bitmap image);
+        public abstract TextureHandle RgbTexture(IVector2 pixels);
+        public abstract TextureHandle DepthTexture(IVector2 pixels);
         public abstract void ClearTexture(int unit);
 
-        public abstract FrameBuffer FrameBuffer();
-        public abstract FrameBuffer FrameRenderBuffer(Vector2 pixels);
+        public abstract uint Compile(string vertexShader, string fragShader, string fragColorChannel, List<string> errors);
+        public abstract void UseProgram(uint handle);
+        public abstract void DeleteProgram(uint handle);
 
         public void CheckSpaces(ICollection<RenderObject> scene)
         {
@@ -44,17 +46,29 @@ namespace SharpGfx
             }
         }
 
-        // TODO: consider computing using HostMatrix and move the following to into Matrix4
+        public abstract void EnableBlend();
+        public abstract void DisableBlend();
+
         public abstract Matrix4 GetViewMatrix(CameraView cameraView);
         public abstract Matrix4 GetPerspectiveProjection(float fovy, float aspect, float near, float far);
-        public abstract Matrix4 GetPerspectivOffCenterProjection(float left, float right, float bottom, float top,  float near, float far);
-
+        public abstract Matrix4 GetPerspectiveOffCenterProjection(float left, float right, float bottom, float top,  float near, float far);
         public abstract void SetCameraView(ICollection<RenderObject> scene, CameraView cameraView);
         public abstract void SetProjection(ICollection<RenderObject> scene, Matrix4 projection);
+        public abstract void Render(ICollection<RenderObject> scene, IVector2 pixels, Color4 ambientColor);
+        public abstract void Render(ICollection<RenderObject> scene, IVector2 pixels, Point3 cameraPosition, Color4 ambientColor);
+        public abstract void TakeColorPicture(ICollection<RenderObject> scene, IVector2 pixels, Color4 ambientColor, Point3 cameraPosition, CameraView cameraView, TextureHandle texture);
+        public abstract TextureHandle TakeDepthPicture(ICollection<RenderObject> scene, IVector2 pixels, Color4 ambientColor, Point3 cameraPosition, CameraView cameraView, Matrix4 projection);
 
-        public abstract void Render(ICollection<RenderObject> scene, Vector2 pixels, Point3 cameraPosition, Color4 ambientColor);
-        public abstract void TakeColorPicture(ICollection<RenderObject> scene, Vector2 pixels, Color4 ambientColor, Point3 cameraPosition, CameraView cameraView, TextureHandle texture);
-        public abstract TextureHandle TakeDepthPicture(ICollection<RenderObject> scene, Vector2 pixels, Color4 ambientColor, Point3 cameraPosition, CameraView cameraView, Matrix4 projection);
+        public abstract uint GetUniformLocation(uint shader, string name);
+        public abstract void Uniform1(uint location, int value);
+        public abstract void Uniform1(uint location, int count, int[] values);
+        public abstract void Uniform1(uint location, float value);
+        public abstract void Uniform1(uint location, int count, float[] values);
+        public abstract void Uniform2(uint location, float valueX, float valueY);
+        public abstract void Uniform3(uint location, float valueX, float valueY, float valueZ);
+        public abstract void Uniform3(uint location, ICollection<IVector3> values);
+        public abstract void Uniform4(uint location, float valueX, float valueY, float valueZ, float valueW);
+        public abstract void UniformMatrix4(uint location, Matrix4 value);
     }
 
     public static class DeviceExtensions

@@ -19,15 +19,15 @@ namespace SharpGfx.OpenTK
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            ReleaseUnmanagedResources();
+        }
+
         public void Dispose()
         {
             GC.SuppressFinalize(this);
             Dispose(true);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            ReleaseUnmanagedResources();
         }
 
         ~OtkFrameBuffer()

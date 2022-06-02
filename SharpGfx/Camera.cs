@@ -24,7 +24,7 @@ namespace SharpGfx
         }
 
         public abstract void OnKeyDown(ConsoleKey key);
-        public abstract void MouseMoving(Vector2 delta, MouseButtons buttonClicked);
+        public abstract void MouseMoving(IVector2 delta, MouseButtons buttonClicked);
 
         public float Pitch
         {

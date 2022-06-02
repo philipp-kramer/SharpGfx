@@ -12,11 +12,11 @@ namespace SharpGfx
         public const float FovY = MathF.PI / 4;
 
         protected Device Device { get; }
-        protected Vector2 Size { get; private set; }
+        protected IVector2 Size { get; private set; }
         protected Color3 AmbientColor { get; }
-        protected List<RenderObject> Scene { get; }
+        public List<RenderObject> Scene { get; }
 
-        protected Rendering(Device device, Vector2 size, Color3 ambientColor)
+        protected Rendering(Device device, IVector2 size, Color3 ambientColor)
         {
             Device = device;
             Size = size;
@@ -31,24 +31,18 @@ namespace SharpGfx
             Device.CheckSpaces(Scene);
         }
 
-        public virtual void OnResize(Vector2 size)
+        public virtual void OnMouseUp(MouseButtons mouseButton) { }
+
+        public virtual void OnResize(IVector2 size)
         {
             Size = size;
-            Device.SetProjection(Scene, GetPerspectiveProjection());
         }
 
-        protected Matrix4 GetPerspectiveProjection()
-        {
-            return Device.GetPerspectiveProjection(FovY, Aspect, Near, Far);
-        }
-
-        public virtual void OnUpdateFrame()
-        {
-        }
+        public virtual void OnUpdateFrame() { }
 
         public virtual void OnRenderFrame()
         {
-            Device.Render(Scene, Size, default, AmbientColor.GetColor4(1));
+            Device.Render(Scene, Size, AmbientColor.GetColor4(1));
         }
 
         protected void DisposeObjects()
@@ -87,8 +81,8 @@ namespace SharpGfx
 
         public void Dispose()
         {
-            Dispose(true);
             GC.SuppressFinalize(this);
+            Dispose(true);
         }
 
         ~Rendering()

@@ -2,7 +2,7 @@
 
 namespace SharpGfx.Host
 {
-    internal readonly struct HostMatrix3 : Matrix3
+    public readonly struct HostMatrix3 : Matrix3
     {
         private readonly float[,] _elements;
         private readonly Space _space;

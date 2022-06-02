@@ -8,16 +8,16 @@ namespace GlslParser
     public sealed class Lexer
     {
         private readonly TextReader _reader;
-        private readonly Diagnosis _diagnosis;
+        private readonly List<string> _errors;
         private int _position;
         private char _current;
         private bool _endOfText;
         private int _tokenStart;
 
-        public Lexer(TextReader reader, Diagnosis diagnosis)
+        public Lexer(TextReader reader, List<string> errors)
         {
             _reader = reader;
-            _diagnosis = diagnosis;
+            _errors = errors;
             _position = 0;
             ReadNext();
         }
@@ -176,7 +176,7 @@ namespace GlslParser
 
         private void Error(int position, string message)
         {
-            _diagnosis.ReportError($"{message} POSITION {position}");
+            _errors.Add($"{message} POSITION {position}");
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SharpGfx
+﻿namespace SharpGfx
 {
     public abstract class FrameBuffer
     {

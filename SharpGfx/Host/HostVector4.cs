@@ -3,7 +3,7 @@ using SharpGfx.Primitives;
 
 namespace SharpGfx.Host
 {
-    internal readonly struct HostVector4 : Vector4
+    public readonly struct HostVector4 : Vector4
     {
         private readonly Space _space;
 

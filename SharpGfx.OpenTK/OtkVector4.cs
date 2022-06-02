@@ -55,7 +55,7 @@ namespace SharpGfx.OpenTK
         Vector4 Vector4.Mul(Matrix4 r)
         {
             var omr = (OtkMatrix4)r;
-            return new OtkVector4(omr._space, Value * omr.Value);
+            return new OtkVector4(omr.Space, Value * omr.Value);
         }
 
         public float Dot(Vector4 r)

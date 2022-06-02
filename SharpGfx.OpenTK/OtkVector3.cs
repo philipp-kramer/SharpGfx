@@ -21,9 +21,9 @@ namespace SharpGfx.OpenTK
         public float Y => Value.Y;
         public float Z => Value.Z;
         public float Length => Value.Length;
-        public Vector2 Xy => new OtkVector2(_space, Value.Xy);
-        public Vector2 Xz => new OtkVector2(_space, Value.Xz);
-        public Vector2 Yz => new OtkVector2(_space, Value.Yz);
+        public IVector2 Xy => new OtkVector2(_space, Value.Xy);
+        public IVector2 Xz => new OtkVector2(_space, Value.Xz);
+        public IVector2 Yz => new OtkVector2(_space, Value.Yz);
 
         public Vector4 Extend(float w)
         {

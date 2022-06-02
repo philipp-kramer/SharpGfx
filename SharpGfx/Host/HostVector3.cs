@@ -3,7 +3,7 @@ using SharpGfx.Primitives;
 
 namespace SharpGfx.Host
 {
-    internal readonly struct HostVector3 : IVector3
+    public readonly struct HostVector3 : IVector3
     {
         private readonly Space _space;
         public float X { get; }
@@ -21,9 +21,9 @@ namespace SharpGfx.Host
         Space IPrimitive.Space => _space;
         public float this[int index] => index switch { 0 => X, 1 => Y, 2 => Z, _ => throw new ArgumentOutOfRangeException(nameof(index)) };
         public float Length => MathF.Sqrt(Dot(this));
-        public Vector2 Xy => new HostVector2(_space, X, Y);
-        public Vector2 Xz => new HostVector2(_space, X, Z);
-        public Vector2 Yz => new HostVector2(_space, Y, Z);
+        public IVector2 Xy => new HostVector2(_space, X, Y);
+        public IVector2 Xz => new HostVector2(_space, X, Z);
+        public IVector2 Yz => new HostVector2(_space, Y, Z);
 
         public Array Values => new[] { X, Y, Z };
 

@@ -1,53 +1,32 @@
 ﻿using System;
-using System.Linq;
 using OpenTK.Graphics.OpenGL;
+using SharpGfx.OpenGL.Shading;
 
 namespace SharpGfx.OpenTK
 {
-    internal class OtkRenderObject : RenderObject, IDisposable
+    internal class OtkRenderObject : RenderObject
     {
         private readonly int _vertexCount;
-        internal readonly int Handle;
-        private readonly VertexAttribute[] _attributes;
+        internal readonly uint Handle;
+        private readonly VertexBuffer[] _buffers;
 
-        public OtkRenderObject(Space space, string name, Material material, params VertexAttribute[] attributes)
+        public OtkRenderObject(Space space, string name, OpenGlMaterial material, params VertexAttribute[] attributes)
             : base(space, name, material)
         {
-            _attributes = attributes;
-            _vertexCount = GetVertexCount(attributes[0]);
-            for (int i = 1; i < attributes.Length; i++)
+            _vertexCount = attributes[0].Values.Length / attributes[0].Stride;
+            _buffers = new VertexBuffer[attributes.Length];
+
+            for (int i = 0; i < attributes.Length; i++)
             {
-                if (_vertexCount != GetVertexCount(attributes[i]))
-                {
-                    throw new InvalidOperationException("all attributes must be for the same number of vertices");
-                }
+                var attribute = attributes[i];
+
+                if (_vertexCount != attribute.Values.Length / attribute.Stride) throw new InvalidOperationException("all attributes must be for the same number of vertices");
+
+                _buffers[i] = new OtkVertexBuffer<float>((float[]) attribute.Values); // TODO: support other types
             }
 
-            Handle = GL.GenVertexArray();
-            var shading = ((OtkShadedMaterial)material).Shading;
-
-            shading.DoInContext(() =>
-            {
-                GL.BindVertexArray(Handle);
-
-                foreach (var attribute in _attributes)
-                {
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, ((OtkVertexBuffer<float>)attribute.Buffer).Handle);
-
-                    var location = shading.GetAttributeHandle(attribute.Parameter);
-                    GL.EnableVertexAttribArray(location);
-                    GL.VertexAttribPointer(location, attribute.Rank, VertexAttribPointerType.Float, false, attribute.Rank * sizeof(float), 0);
-
-                    GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-                }
-
-                GL.BindVertexArray(0);
-            });
-        }
-
-        private static int GetVertexCount(VertexAttribute attribute)
-        {
-            return (int) (attribute.Buffer.Length / attribute.Rank);
+            Handle = (uint) GL.GenVertexArray();
+            material.SetVertexArrayAttributes(Handle, attributes, _buffers);
         }
 
         public override void Render()
@@ -62,28 +41,22 @@ namespace SharpGfx.OpenTK
             GL.DrawArrays(PrimitiveType.Triangles, 0, _vertexCount);
         }
 
-        public override void Dispose()
+        private void ReleaseUnmanagedResources()
         {
-            GC.SuppressFinalize(this);
-            Dispose(true);
+            GL.DeleteVertexArray(Handle);
         }
 
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             ReleaseUnmanagedResources();
 
             if (disposing)
             {
-                foreach (var buffer in _attributes.Select(a => a.Buffer).Cast<IDisposable>())
+                foreach (var buffer in _buffers)
                 {
                     buffer.Dispose();
                 }
             }
-        }
-
-        private void ReleaseUnmanagedResources()
-        {
-            GL.DeleteVertexArray(Handle);
         }
 
         ~OtkRenderObject()

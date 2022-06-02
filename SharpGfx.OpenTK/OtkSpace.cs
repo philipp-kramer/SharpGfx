@@ -4,9 +4,9 @@ namespace SharpGfx.OpenTK
 {
     internal sealed class OtkSpace : Space
     {
-        public override Vector2 Zero2 { get; }
-        public override Vector2 Unit2X { get; }
-        public override Vector2 Unit2Y { get; }
+        public override IVector2 Zero2 { get; }
+        public override IVector2 Unit2X { get; }
+        public override IVector2 Unit2Y { get; }
 
         public override IVector3 Zero3 { get; }
         public override IVector3 Unit3X { get; }
@@ -31,7 +31,7 @@ namespace SharpGfx.OpenTK
             Identity4 = new OtkMatrix4(this, global::OpenTK.Mathematics.Matrix4.Identity);
         }
 
-        public override Vector2 Vector2(float x, float y)
+        public override IVector2 Vector2(float x, float y)
         {
             return new OtkVector2(this, new global::OpenTK.Mathematics.Vector2(x, y));
         }
