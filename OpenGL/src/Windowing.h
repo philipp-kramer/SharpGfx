@@ -1,7 +1,11 @@
 #pragma once
 using namespace std; 
-#include <GLFW/glfw3.h>
 #include <iostream>
+#include <string>
+#include <limits.h>
+#include <math.h>
+#include <GLFW/glfw3.h>
+#include "Export.h"
 
 static unsigned int last_key = UINT_MAX;
 static unsigned int last_button = UINT_MAX;
@@ -14,6 +18,10 @@ static double last_pos_y = NAN;
 static double scroll_x = 0;
 static double scroll_y = 0;
 
+void error_callback(int error, const char* msg) {
+	std::cerr << " [ OpenGL Error " << std::to_string(error) << ": " << msg << " ] " << std::endl;
+}
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     width_change = width;
@@ -22,7 +30,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (action == GLFW_PRESS) {
+    if (action == GLFW_PRESS || action == GLFW_REPEAT) {
         last_key = key;
     }
 }
@@ -62,6 +70,11 @@ GLFWwindow* createWindow(const char* title, const int width, const int height)
 {
     if (!glfwInit()) return NULL;
 
+    glfwSetErrorCallback(error_callback);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
     GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
     if (!window)
     {
@@ -90,12 +103,12 @@ GLFWwindow* createWindow(const char* title, const int width, const int height)
 
 extern "C"
 {
-    __declspec(dllexport) void* createGlfWindow(const char* title, const int width, const int height) { return (void*) createWindow(title, width, height); }
-    __declspec(dllexport) bool isWindowCloseRequested(void* glfWindow) { glfwPollEvents(); return glfwWindowShouldClose((GLFWwindow*) glfWindow); }
-    __declspec(dllexport) void swapBuffers(void* glfWindow) { glfwSwapBuffers((GLFWwindow*)glfWindow); }
-    __declspec(dllexport) void terminateGlfw() { glfwTerminate(); }
+    EXPORT void* createGlfWindow(const char* title, const int width, const int height) { return (void*) createWindow(title, width, height); }
+    EXPORT bool isWindowCloseRequested(void* glfWindow) { glfwPollEvents(); return glfwWindowShouldClose((GLFWwindow*) glfWindow); }
+    EXPORT void swapBuffers(void* glfWindow) { glfwSwapBuffers((GLFWwindow*)glfWindow); }
+    EXPORT void terminateGlfw() { glfwTerminate(); }
 
-    __declspec(dllexport) void getEvents(unsigned int* data) 
+    EXPORT void getEvents(unsigned int* data)
     {
         data[0] = last_key;
         data[1] = last_button;
@@ -109,7 +122,7 @@ extern "C"
         height_change = UINT_MAX;
     }
 
-    __declspec(dllexport) void getMouseInputs(double* data)
+    EXPORT void getMouseInputs(double* data)
     { 
         data[0] = last_pos_x; 
         data[1] = last_pos_y; 

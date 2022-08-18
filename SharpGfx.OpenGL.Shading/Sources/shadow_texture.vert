@@ -1,4 +1,4 @@
-#version 450
+#version 410
 
 in vec3 positionIn;
 in vec2 texCoordIn;
@@ -14,7 +14,7 @@ out vec2 texCoord;
 
 void main(void)
 {
-	const vec4 fragPos4 = vec4(positionIn, 1.0) * model;
+	vec4 fragPos4 = vec4(positionIn, 1.0) * model;
 	fragPos = vec3(fragPos4);
 	fragPosLightSpace = fragPos4 * lightViewProjection;
     texCoord = texCoordIn;

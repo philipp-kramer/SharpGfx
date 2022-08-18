@@ -13,7 +13,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL", "OpenGL\OpenGL.vcx
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpGfx.OpenGL", "SharpGfx.OpenGL\SharpGfx.OpenGL.csproj", "{42AABA8A-82EC-4D68-A913-F95DEA3A7915}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpGfx.OpenGL.Shading", "SharpGfx.OpenGL.Shading\SharpGfx.OpenGL.Shading.csproj", "{D272BAF9-D3B8-455F-BAD7-18536BE3DBEE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpGfx.OpenGL.Shading", "SharpGfx.OpenGL.Shading\SharpGfx.OpenGL.Shading.csproj", "{D272BAF9-D3B8-455F-BAD7-18536BE3DBEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

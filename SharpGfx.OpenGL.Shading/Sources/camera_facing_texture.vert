@@ -1,4 +1,4 @@
-#version 450
+#version 410
 
 in vec3 positionIn;
 in vec2 texCoordIn;
@@ -11,7 +11,7 @@ out vec2 texCoord;
 
 void main(void)
 {
-	const mat4 invView = inverse(cameraView);
+	mat4 invView = inverse(cameraView);
 	gl_Position = vec4(positionIn, 1.0) * invView * model * cameraView * projection;
     texCoord = texCoordIn;
 }

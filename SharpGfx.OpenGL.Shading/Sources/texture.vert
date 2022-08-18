@@ -1,4 +1,4 @@
-#version 450
+#version 410
 
 in vec3 positionIn;
 in vec2 texCoordIn;

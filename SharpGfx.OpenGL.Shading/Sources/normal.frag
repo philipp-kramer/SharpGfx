@@ -1,4 +1,4 @@
-﻿#version 450
+﻿#version 410
 
 #define COLOR_CORRECTION vec3(0, 0.2, 0.1)
 

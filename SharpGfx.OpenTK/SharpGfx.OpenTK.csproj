@@ -1,19 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
-		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<TargetFramework>net6.0</TargetFramework>
 		<Authors>Philipp Kramer</Authors>
-		<Company>OST INS</Company>
-		<Product>SharpGfx</Product>
-		<PackageId>SharpGfx.OpenTK</PackageId>
-		<AssemblyVersion>1.1.2.0</AssemblyVersion>
-		<FileVersion>1.1.2.0</FileVersion>
+		<Company>OST IFS</Company>
+		<Product>GfxSharp</Product>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.1.2</Version>
+		<Version>1.2.3</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -25,8 +21,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="OpenTK" Version="4.7.2" />
-	  <PackageReference Include="OpenTK.Graphics" Version="4.7.2" />
+	  <PackageReference Include="OpenTK" Version="4.7.4" />
+	  <PackageReference Include="OpenTK.Graphics" Version="4.7.4" />
 	</ItemGroup>
 
 	<ItemGroup>

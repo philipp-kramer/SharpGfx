@@ -1,61 +1,64 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyVersion>1.1.1.0</AssemblyVersion>
-    <FileVersion>1.1.1.0</FileVersion>
-    <Version>1.1.1</Version>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Authors>Philipp Kramer</Authors>
+		<Company>OST IFS</Company>
+		<Product>GfxSharp</Product>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
+	<PropertyGroup>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Version>1.2.3</Version>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Sources\depth_texture.frag" />
-    <None Remove="Sources\diffuse_lighting.frag" />
-    <None Remove="Sources\diffuse_texture.frag" />
-    <None Remove="Sources\nop.frag" />
-    <None Remove="Sources\normal.frag" />
-    <None Remove="Sources\normal_texture.vert" />
-    <None Remove="Sources\phong_lighting.frag" />
-    <None Remove="Sources\shadow_texture.frag" />
-    <None Remove="Sources\single_color.frag" />
-    <None Remove="Sources\texture.frag" />
-    <None Remove="Sources\vertex_color.frag" />
-  </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Sources\diffuse_lighting.frag" />
-    <EmbeddedResource Include="Sources\diffuse_texture.frag" />
-    <EmbeddedResource Include="Sources\nop.frag" />
-    <EmbeddedResource Include="Sources\normal.frag" />
-    <EmbeddedResource Include="Sources\normal_texture.vert" />
-    <EmbeddedResource Include="Sources\phong_lighting.frag" />
-    <EmbeddedResource Include="Sources\shadow_texture.frag" />
-    <EmbeddedResource Include="Sources\single_color.frag" />
-    <EmbeddedResource Include="Sources\depth_texture.frag" />
-    <EmbeddedResource Include="Sources\texture.frag" />
-    <EmbeddedResource Include="Sources\vertex_color.frag" />
-    <EmbeddedResource Include="Sources\basic.vert" />
-    <EmbeddedResource Include="Sources\camera_facing_texture.vert" />
-    <EmbeddedResource Include="Sources\texture.vert" />
-    <EmbeddedResource Include="Sources\normal_lighting.vert" />
-    <EmbeddedResource Include="Sources\shadow_texture.vert" />
-    <EmbeddedResource Include="Sources\vertex_color.vert" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Sources\depth_texture.frag" />
+		<None Remove="Sources\diffuse_lighting.frag" />
+		<None Remove="Sources\diffuse_texture.frag" />
+		<None Remove="Sources\direct.vert" />
+		<None Remove="Sources\nop.frag" />
+		<None Remove="Sources\normal.frag" />
+		<None Remove="Sources\normal_texture.vert" />
+		<None Remove="Sources\phong_lighting.frag" />
+		<None Remove="Sources\shadow_texture.frag" />
+		<None Remove="Sources\single_color.frag" />
+		<None Remove="Sources\texture.frag" />
+		<None Remove="Sources\vertex_color.frag" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Sources\diffuse_lighting.frag" />
+		<EmbeddedResource Include="Sources\diffuse_texture.frag" />
+		<EmbeddedResource Include="Sources\direct.vert" />
+		<EmbeddedResource Include="Sources\nop.frag" />
+		<EmbeddedResource Include="Sources\normal.frag" />
+		<EmbeddedResource Include="Sources\normal_texture.vert" />
+		<EmbeddedResource Include="Sources\phong_lighting.frag" />
+		<EmbeddedResource Include="Sources\shadow_texture.frag" />
+		<EmbeddedResource Include="Sources\single_color.frag" />
+		<EmbeddedResource Include="Sources\depth_texture.frag" />
+		<EmbeddedResource Include="Sources\texture.frag" />
+		<EmbeddedResource Include="Sources\vertex_color.frag" />
+		<EmbeddedResource Include="Sources\basic.vert" />
+		<EmbeddedResource Include="Sources\camera_facing_texture.vert" />
+		<EmbeddedResource Include="Sources\texture.vert" />
+		<EmbeddedResource Include="Sources\normal_lighting.vert" />
+		<EmbeddedResource Include="Sources\shadow_texture.vert" />
+		<EmbeddedResource Include="Sources\vertex_color.vert" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\GlslParser\GlslParser.csproj" />
-    <ProjectReference Include="..\SharpGfx\SharpGfx.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\GlslParser\GlslParser.csproj" />
+		<ProjectReference Include="..\SharpGfx\SharpGfx.csproj" />
+	</ItemGroup>
 
 </Project>

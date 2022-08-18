@@ -32,10 +32,7 @@ namespace SharpGfx.Geometry
         public static float[] GetCakeVertices(int sectors)
         {
             var vertices = new float[3 * (sectors + 1)];
-            int i = 0;
-            vertices[i++] = 0;
-            vertices[i++] = 0;
-            vertices[i++] = 0;
+            int i = 3;
 
             float angle = 0;
             var deltaAngle = 2 * MathF.PI / sectors;

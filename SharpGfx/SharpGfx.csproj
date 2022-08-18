@@ -1,19 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
-		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<TargetFramework>net6.0</TargetFramework>
 		<Authors>Philipp Kramer</Authors>
-		<Company>OST INS</Company>
-		<RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+		<Company>OST IFS</Company>
+		<Product>GfxSharp</Product>
 	</PropertyGroup>
 	<PropertyGroup>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.1.1</Version>
-		<AssemblyVersion>1.1.1.0</AssemblyVersion>
-		<FileVersion>1.1.1.0</FileVersion>
+		<Version>1.2.3</Version>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="OpenTK.Windowing.Common" Version="4.7.2" />
 		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
 	</ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿#version 450
+﻿#version 410
 
 struct Light {
     vec3 position;
@@ -21,12 +21,12 @@ out vec4 fragColor;
 
 void main()
 {
-	const vec3 ambient = light.ambient * material.diffuse;
+	vec3 ambient = light.ambient * material.diffuse;
 	
-	const vec3 normDir = normalize(normal);
-	const vec3 lightDir = normalize(light.position - fragPos); 
-	const float cosTheta = max(dot(normDir, lightDir), 0.0);
-	const vec3 diffuse = cosTheta * light.diffuse * material.diffuse;
+	vec3 normDir = normalize(normal);
+	vec3 lightDir = normalize(light.position - fragPos); 
+	float cosTheta = max(dot(normDir, lightDir), 0.0);
+	vec3 diffuse = cosTheta * light.diffuse * material.diffuse;
 
 	fragColor = vec4(ambient + diffuse, 1.0);
 }

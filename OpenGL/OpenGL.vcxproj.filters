@@ -15,18 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="OpenGL.cpp">
+    <ClCompile Include="src/OpenGL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Shading.h">
+    <ClInclude Include="src/Shading.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Windowing.h">
+    <ClInclude Include="src/Windowing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OpenGL.h">
+    <ClInclude Include="src/OpenGL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src/Export.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

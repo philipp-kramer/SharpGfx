@@ -1,10 +1,11 @@
 #pragma once
 #include <glad/glad.h>
 #include <iostream>
+#include "Export.h"
 
 extern "C"
 {
-    __declspec(dllexport) unsigned int compile(const char* vertexShaderSource, const char* fragmentShaderSource)
+    EXPORT unsigned int compile(const char* vertexShaderSource, const char* fragmentShaderSource)
     {
         // vertex shader
         int vertexShader = glCreateShader(GL_VERTEX_SHADER);

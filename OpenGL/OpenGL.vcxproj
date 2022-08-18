@@ -151,12 +151,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="OpenGL.cpp" />
+    <ClCompile Include="src/OpenGL.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="OpenGL.h" />
-    <ClInclude Include="Shading.h" />
-    <ClInclude Include="Windowing.h" />
+    <ClInclude Include="src/Export.h" />
+    <ClInclude Include="src/OpenGL.h" />
+    <ClInclude Include="src/Shading.h" />
+    <ClInclude Include="src/Windowing.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

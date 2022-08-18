@@ -1,4 +1,4 @@
-#version 450
+#version 410
 
 in vec2 texCoord;
 in vec4 fragPosLightSpace;
@@ -13,13 +13,13 @@ float ShadowCalculation()
 {
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
     projCoords = projCoords * 0.5 + 0.5;
-    const float closestDepth = texture(shadowUnit, projCoords.xy).r; 
-    const float currentDepth = projCoords.z;
+    float closestDepth = texture(shadowUnit, projCoords.xy).r; 
+    float currentDepth = projCoords.z;
     return currentDepth > closestDepth  ? 0.0 : 1.0;
 }
 
 void main()
 {
-    const vec4 texColor = texture(texUnit, texCoord);
+    vec4 texColor = texture(texUnit, texCoord);
 	fragColor = vec4((ambient + (1 - ambient) * ShadowCalculation()), 1.0) * texColor;
 }

@@ -21,6 +21,18 @@ namespace SharpGfx.OpenGL
                 { 263, ConsoleKey.LeftArrow },
                 { 264, ConsoleKey.DownArrow },
                 { 265, ConsoleKey.UpArrow },
+                { 266, ConsoleKey.PageUp },
+                { 267, ConsoleKey.PageDown },
+                { 320, ConsoleKey.NumPad0 },
+                { 321, ConsoleKey.NumPad1 },
+                { 322, ConsoleKey.NumPad2 },
+                { 323, ConsoleKey.NumPad3 },
+                { 324, ConsoleKey.NumPad4 },
+                { 325, ConsoleKey.NumPad5 },
+                { 326, ConsoleKey.NumPad6 },
+                { 327, ConsoleKey.NumPad7 },
+                { 328, ConsoleKey.NumPad8 },
+                { 329, ConsoleKey.NumPad9 },
             };
         }
 
@@ -145,18 +157,19 @@ namespace SharpGfx.OpenGL
             {
                 return true;
             }
-            if ('0' <= key && key <= '9')
+            switch (key)
             {
-                mappedKey = (ConsoleKey) (key - '0' + (uint) ConsoleKey.D0);
-                return true;
-            }
-            if ('a' <= key && key <= 'z')
-            {
-                mappedKey = (ConsoleKey) (key - 'a' + (uint) ConsoleKey.A);
-                return true;
-            }
+                case <= '0' and <= '9':
+                    mappedKey = (ConsoleKey) (key - '0' + (uint) ConsoleKey.D0);
+                    return true;
 
-            return false;
+                case <= 'A' and <= 'Z':
+                    mappedKey = (ConsoleKey) (key - 'A' + (uint) ConsoleKey.A);
+                    return true;
+
+                default:
+                    return false;
+            }
         }
     }
 }
