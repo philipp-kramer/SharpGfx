@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Linq;
 using SharpGfx.OpenGL.Shading;
 using SharpGfx.Primitives;

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using SharpGfx.Host;
 using SharpGfx.OpenGL.Shading;
 using SharpGfx.Primitives;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace SharpGfx.OpenGL
 {
@@ -54,7 +55,7 @@ namespace SharpGfx.OpenGL
             GL.BindVertexArray(0);
         }
 
-        public override TextureHandle Texture(Bitmap image)
+        public override TextureHandle Texture(Image<Bgra32> image)
         {
             return new OglTextureHandle(OglTextures.CreateMipmapTexture(image));
         }

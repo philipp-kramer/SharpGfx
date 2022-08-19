@@ -2,7 +2,9 @@
 {
     public enum GlTextureParameterName
     {
-        TextureMagFilter = 0x2800,
-        TextureMinFilter = 0x2801,
+        MagFilter = 0x2800,
+        MinFilter = 0x2801,
+        WrapS = 0x2802,
+        WrapT = 0x2803
     }
 }

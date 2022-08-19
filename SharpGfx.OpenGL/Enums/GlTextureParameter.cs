@@ -8,5 +8,6 @@
         LinearMipmapNearest = 0x2701,
         NearestMipmapLinear = 0x2702,
         LinearMipmapLinear = 0x2703,
+        Repeat = 0x2901
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using OpenTK.Graphics.OpenGL;
 using SharpGfx.OpenGL.Shading;
 using SharpGfx.Primitives;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace SharpGfx.OpenTK
 {
@@ -58,7 +59,7 @@ namespace SharpGfx.OpenTK
             GL.BindVertexArray(0);
         }
 
-        public override TextureHandle Texture(Bitmap image)
+        public override TextureHandle Texture(Image<Bgra32> image)
         {
             return new OtkTextureHandle(OtkTextures.CreateAutoMipmapTexture(image));
         }

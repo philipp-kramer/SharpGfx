@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using OpenTK.Graphics.OpenGL;
 using SharpGfx.Primitives;
-using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace SharpGfx.OpenTK
 {
@@ -23,7 +22,7 @@ namespace SharpGfx.OpenTK
             return texture;
         }
 
-        internal static int CreateAutoMipmapTexture(Bitmap bitmap)
+        internal static int CreateAutoMipmapTexture(Image<Bgra32> image)
         {
             int handle = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, handle);
@@ -35,25 +34,24 @@ namespace SharpGfx.OpenTK
 
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
-            var rectangle = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-            var bitmapData = bitmap.LockBits(rectangle, ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                try
-                {
-                GL.TexImage2D(
-                    TextureTarget.Texture2D,
-                    0,
-                    PixelInternalFormat.Rgba,
-                    bitmap.Width,
-                    bitmap.Height,
-                    0,
-                    PixelFormat.Bgra,
-                    PixelType.UnsignedByte,
-                    bitmapData.Scan0);
-            }
-            finally
-            {
-                bitmap.UnlockBits(bitmapData);
+            var pixels = new Bgra32[image.Width * image.Height];
+            image.CopyPixelDataTo(pixels);
 
+            unsafe
+            {
+                fixed (void* array = pixels)
+                {
+                    GL.TexImage2D(
+                        TextureTarget.Texture2D,
+                        0,
+                        PixelInternalFormat.Rgba,
+                        image.Width,
+                        image.Height,
+                        0,
+                        PixelFormat.Bgra,
+                        PixelType.UnsignedByte,
+                        (IntPtr) array);
+                }
             }
 
             GL.BindTexture(TextureTarget.Texture2D, 0);

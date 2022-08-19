@@ -58,8 +58,8 @@ namespace SharpGfx
 
     public static class SpaceExtensions
     {
-        private static readonly Dictionary<Space, Point2> _origin2 = new Dictionary<Space, Point2>();
-        private static readonly Dictionary<Space, Point3> _origin3 = new Dictionary<Space, Point3>();
+        private static readonly Dictionary<Space, Point2> _origin2 = new();
+        private static readonly Dictionary<Space, Point3> _origin3 = new();
 
         public static Point2 Origin2(this Space space)
         {

@@ -26,13 +26,11 @@ extern "C"
     EXPORT void blendFunc(const unsigned int sfactor, const unsigned int dfactor) { glBlendFunc(sfactor, dfactor); }
 
     EXPORT unsigned int genTexture() { glGenTextures(1, &glData[0]); return glData[0]; }
-    EXPORT void texImage2D(const unsigned int target, const int level, const int width, const int height, const int border, const unsigned int format, const unsigned int type, const void* pixels) { glTexImage2D(target, level, format, width, height, border, format, type, pixels); }
-    EXPORT unsigned int createTexture(const unsigned int target) { glCreateTextures(target, 1, glData); return glData[0]; }
-    EXPORT void textureStorage2D(const unsigned int texture, const int levels, const unsigned int internalformat, const int width, const int height) { glTextureStorage2D(texture, levels, internalformat, width, height); }
-    EXPORT void textureSubImage2D(const unsigned int texture, const int level, const int xoffset, const int yoffset, const int width, const int height, const unsigned int format, const unsigned int type, const void* pixels) { glTextureSubImage2D(texture, level, xoffset, yoffset, width, height, format, type, pixels); }
-    EXPORT void textureParameterI(const unsigned int texture, const unsigned int pname, const int param) { glTextureParameteri(texture, pname, param); }
-    EXPORT void activeTexture(const unsigned int texture) { glActiveTexture(texture); }
     EXPORT void bindTexture(const unsigned int target, const unsigned int texture) { glBindTexture(target, texture); }
+    EXPORT void texImage2D(const unsigned int target, const int level, const int width, const int height, const int border, const unsigned int format, const unsigned int type, const void* pixels) { glTexImage2D(target, level, format, width, height, border, format, type, pixels); }
+    EXPORT void generateMipmap(const unsigned int target) { glGenerateMipmap(target); }
+    EXPORT void textureParameterI(const unsigned int target, const unsigned int name, const int parameter) { glTexParameteri(target, name, parameter); }
+    EXPORT void activeTexture(const unsigned int texture) { glActiveTexture(texture); }
     EXPORT void deleteTexture(const unsigned int texture) { glData[0] = texture; glDeleteTextures(1, &glData[0]); }
 
     EXPORT unsigned int genFramebuffer() { glGenFramebuffers(1, &glData[0]); return glData[0]; }

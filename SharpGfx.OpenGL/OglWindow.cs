@@ -70,17 +70,7 @@ namespace SharpGfx.OpenGL
 
             while (!GL.IsWindowCloseRequested(_window))
             {
-                var events = new uint[5];
-                fixed (uint* keyAndButtonData = events)
-                {
-                    GL.GetEvents(keyAndButtonData);
-                }
-                uint key = events[0];
-                uint button = events[1];
-                uint action = events[2];
-                uint width = events[3];
-                uint height = events[4];
-
+                uint key = GL.getKey();
                 if (key < uint.MaxValue && TryGetConsoleKey(key, out var mappedKey))
                 {
                     if (mappedKey == ConsoleKey.Escape) break;
@@ -88,18 +78,16 @@ namespace SharpGfx.OpenGL
                     _camera?.OnKeyDown(mappedKey);
                 }
 
+                uint width = GL.getNewWidth();
+                uint height = GL.getNewHeight();
                 if (width < uint.MaxValue || height < uint.MaxValue)
                 {
                     _size = Screen.Vector2(width, height);
                     rendering.OnResize(_size);
                 }
 
-                var mouseInputs = new double[4];
-                fixed (double* mouseData = mouseInputs)
-                {
-                    GL.GetMouseInputs(mouseData);
-                }
-
+                uint button = GL.getMouseButton();
+                uint action = GL.getMouseAction();
                 if (button == (uint)GlfwMouseButton.Left)
                 {
                     if (action == (uint)GlfwButtonAction.Press) _mouseLeftButton.Activate();
@@ -112,11 +100,13 @@ namespace SharpGfx.OpenGL
                     if (action == (uint)GlfwButtonAction.Release) _mouseRightButton.Deactivate();
                 }
 
-                if (0 <= mouseInputs[0] && mouseInputs[0] < _size.X &&
-                    0 <= mouseInputs[1] && mouseInputs[1] < _size.Y)
+                double posX = GL.getMousePosX();
+                double posY = GL.getMousePosY();
+                if (0 <= posX && posX < _size.X &&
+                    0 <= posY && posY < _size.Y)
                 {
-                    _mouseMove.X = (int) mouseInputs[0];
-                    _mouseMove.Y = (int) mouseInputs[1];
+                    _mouseMove.X = (int) posX;
+                    _mouseMove.Y = (int) posY;
                     int deltaX = _mouseMove.DeltaX;
                     int deltaY = _mouseMove.DeltaY;
                     if (deltaX != 0 || deltaY != 0)
@@ -130,8 +120,8 @@ namespace SharpGfx.OpenGL
                             _camera?.MouseMoving(new HostVector2(Screen, -deltaX, -deltaY), MouseButtons.Right);
                         }
                     }
-                    float wheelX = (float) mouseInputs[2];
-                    float wheelY = (float) mouseInputs[3];
+                    float wheelX = (float) GL.getMouseScrollX();
+                    float wheelY = (float) GL.getMouseScrollY();
                     if (wheelX != 0 || wheelY != 0)
                     {
                         _camera?.MouseMoving(new HostVector2(Screen, -wheelX, -wheelY), MouseButtons.Middle);

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Runtime.CompilerServices;
 using SharpGfx.Host;
 using SharpGfx.Primitives;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 
 [assembly: InternalsVisibleTo("Test")]
@@ -29,7 +30,7 @@ namespace SharpGfx
         public abstract RenderObject Object(Space space, string name, Material material, ushort[] triangles, params VertexAttribute[] attributes);
         public abstract void SetVertexArrayAttributes(uint arrayHandle, uint shaderHandle, VertexAttribute[] attributes, VertexBuffer[] buffers);
 
-        public abstract TextureHandle Texture(Bitmap image);
+        public abstract TextureHandle Texture(Image<Bgra32> image);
         public abstract TextureHandle RgbTexture(IVector2 pixels);
         public abstract TextureHandle DepthTexture(IVector2 pixels);
         public abstract void ClearTexture(int unit);

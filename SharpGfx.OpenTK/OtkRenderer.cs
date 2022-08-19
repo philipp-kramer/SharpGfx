@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using OpenTK.Graphics.OpenGL;
 using SharpGfx.OpenGL.Shading;
