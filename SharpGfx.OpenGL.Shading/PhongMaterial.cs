@@ -4,38 +4,41 @@ namespace SharpGfx.OpenGL.Shading
 {
     public class PhongMaterial : DiffuseMaterial
     {
-        public PhongMaterial(Device device, Light light, Color3 materialDiffuse, Color3 specular, float shininess)
+        public PhongMaterial(
+            Device device,
+            Point3 lightPosition,
+            Light light,
+            Reflectance reflectance)
             : this(
                 device,
                 Resources.GetSource("normal_lighting.vert"),
                 Resources.GetSource("phong_lighting.frag"),
+                lightPosition,
                 light, 
-                materialDiffuse,
-                specular, 
-                shininess)
+                reflectance)
         {
         }
 
-        protected PhongMaterial(
+        public PhongMaterial(
             Device device,
             string vertexShader, 
-            string fragShader, 
+            string fragShader,
+            Point3 lightPosition,
             Light light, 
-            Color3 materialDiffuse, 
-            Color3 specular, 
-            float shininess)
+            Reflectance reflectance)
             : base(
                 device,
                 vertexShader,
                 fragShader,
+                lightPosition,
                 light,
-                materialDiffuse)
+                reflectance.Diffuse)
         {
             DoInContext(() =>
             {
-                Set("light.specular", Light.Specular.Vector);
-                Set("material.specular", specular.Vector);
-                Set("material.shininess", shininess);
+                Set("light.specular", light.Specular.Vector);
+                Set("material.specular", reflectance.Specular.Vector);
+                Set("material.shininess", reflectance.Shininess);
             });
         }
     }

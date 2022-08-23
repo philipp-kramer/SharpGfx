@@ -2,17 +2,17 @@
 
 namespace SharpGfx.OpenGL.Shading
 {
-    public readonly struct Light
+    public readonly struct Reflectance
     {
-        public readonly Color3 Ambient;
         public readonly Color3 Diffuse;
         public readonly Color3 Specular;
+        public readonly float Shininess;
 
-        public Light(Color3 ambient, Color3 diffuse, Color3 specular)
+        public Reflectance(Color3 diffuse, Color3 specular, float shininess)
         {
-            Ambient = ambient;
             Diffuse = diffuse;
             Specular = specular;
+            Shininess = shininess;
         }
     }
 }
