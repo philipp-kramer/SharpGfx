@@ -19,7 +19,7 @@ namespace SharpGfx.OpenGL
             return texture;
         }
 
-        internal static uint CreateMipmapTexture(Image<Bgra32> image)
+        internal static uint CreateMipmapTexture(Image<Rgba32> image)
         {
             uint handle = GL.GenTexture();
             GL.BindTexture(GlTextureTarget.Texture2D, handle);
@@ -31,7 +31,7 @@ namespace SharpGfx.OpenGL
 
             GL.GenerateMipmap(GlTextureTarget.Texture2D);
 
-            var pixels = new Bgra32[image.Width * image.Height];
+            var pixels = new byte[image.Width * image.Height * 4];
             image.CopyPixelDataTo(pixels);
             unsafe
             {
@@ -43,7 +43,7 @@ namespace SharpGfx.OpenGL
                         image.Width,
                         image.Height,
                         0,
-                        GlPixelFormat.Bgra,
+                        GlPixelFormat.Rgba,
                         GlPixelType.UnsignedByte,
                         array);
                 }

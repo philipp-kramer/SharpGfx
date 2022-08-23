@@ -7,7 +7,7 @@
 	</PropertyGroup>
 	<PropertyGroup>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.2.4</Version>
+		<Version>1.2.5</Version>
 	</PropertyGroup>
 	<ItemGroup>
 	  <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />

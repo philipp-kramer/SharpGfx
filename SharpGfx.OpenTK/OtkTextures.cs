@@ -22,7 +22,7 @@ namespace SharpGfx.OpenTK
             return texture;
         }
 
-        internal static int CreateAutoMipmapTexture(Image<Bgra32> image)
+        internal static int CreateAutoMipmapTexture(Image<Rgba32> image)
         {
             int handle = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, handle);
@@ -34,7 +34,7 @@ namespace SharpGfx.OpenTK
 
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
-            var pixels = new Bgra32[image.Width * image.Height];
+            var pixels = new byte[image.Width * image.Height * 4];
             image.CopyPixelDataTo(pixels);
 
             unsafe

@@ -59,7 +59,7 @@ namespace SharpGfx.OpenTK
             GL.BindVertexArray(0);
         }
 
-        public override TextureHandle Texture(Image<Bgra32> image)
+        public override TextureHandle Texture(Image<Rgba32> image)
         {
             return new OtkTextureHandle(OtkTextures.CreateAutoMipmapTexture(image));
         }

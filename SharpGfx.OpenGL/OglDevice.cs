@@ -55,7 +55,7 @@ namespace SharpGfx.OpenGL
             GL.BindVertexArray(0);
         }
 
-        public override TextureHandle Texture(Image<Bgra32> image)
+        public override TextureHandle Texture(Image<Rgba32> image)
         {
             return new OglTextureHandle(OglTextures.CreateMipmapTexture(image));
         }

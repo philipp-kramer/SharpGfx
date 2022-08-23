@@ -30,7 +30,7 @@ namespace SharpGfx
         public abstract RenderObject Object(Space space, string name, Material material, ushort[] triangles, params VertexAttribute[] attributes);
         public abstract void SetVertexArrayAttributes(uint arrayHandle, uint shaderHandle, VertexAttribute[] attributes, VertexBuffer[] buffers);
 
-        public abstract TextureHandle Texture(Image<Bgra32> image);
+        public abstract TextureHandle Texture(Image<Rgba32> image);
         public abstract TextureHandle RgbTexture(IVector2 pixels);
         public abstract TextureHandle DepthTexture(IVector2 pixels);
         public abstract void ClearTexture(int unit);
