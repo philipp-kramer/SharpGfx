@@ -131,7 +131,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(OutDir)\OpenGL.dll $(SolutionDir)\SharpGfx.OpenGL\x64</Command>
+      <Command>copy $(OutDir)\OpenGL.dll $(SolutionDir)\SharpGfx.OpenGL\Windows_x64</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
