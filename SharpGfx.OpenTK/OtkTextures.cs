@@ -48,7 +48,7 @@ namespace SharpGfx.OpenTK
                         image.Width,
                         image.Height,
                         0,
-                        PixelFormat.Bgra,
+                        PixelFormat.Rgba,
                         PixelType.UnsignedByte,
                         (IntPtr) array);
                 }
