@@ -5,6 +5,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using SharpGfx.Host;
 using SharpGfx.Primitives;
 
 namespace SharpGfx.OpenTK
@@ -78,6 +79,7 @@ namespace SharpGfx.OpenTK
         private readonly Camera _camera;
         private PolygonMode _polygonMode;
         private MouseButtons _mouseButton;
+        private Point2 _mousePosition;
 
         public event Action<KeyDownArgs> KeyDown;
 
@@ -121,6 +123,8 @@ namespace SharpGfx.OpenTK
             _window.MouseUp += OnMouseUp;
             _window.MouseWheel += OnMouseWheel;
         }
+
+        public override Point2 Position => _mousePosition;
 
         public override void Show(Rendering rendering)
         {
@@ -182,6 +186,8 @@ namespace SharpGfx.OpenTK
             float deltaY = Limit(e.DeltaY, _window.Size.Y / 20f);
             var delta = Screen.Vector2(deltaX, deltaY);
             _camera?.MouseMoving(delta, _mouseButton);
+
+            _mousePosition = new Point2(new HostVector2(Screen, e.X, e.Y));
         }
 
         private static float Limit(float value, float range)

@@ -59,6 +59,8 @@ namespace SharpGfx.OpenGL
             _mouseRightButton = new StateTracking();
         }
 
+        public override Point2 Position => new(new HostVector2(Screen, _mouseMove.X, _mouseMove.Y));
+
         public override void Show(Rendering rendering)
         {
             base.Show(rendering);

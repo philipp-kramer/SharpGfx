@@ -9,6 +9,7 @@
 
         public int X
         {
+            get => _x;
             set
             {
                 if (_x != int.MinValue) _deltaX += _x - value;
@@ -18,6 +19,7 @@
 
         public int Y
         {
+            get => _y;
             set
             {
                 if (_y != int.MinValue) _deltaY += _y - value;

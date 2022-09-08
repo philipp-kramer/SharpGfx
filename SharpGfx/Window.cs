@@ -3,9 +3,11 @@ using SharpGfx.Primitives;
 
 namespace SharpGfx
 {
-    public abstract class Window
+    public abstract class Window : IMouse
     {
         public static readonly Space Screen = new HostSpace(Domain.View);
+
+        public abstract Point2 Position { get; }
 
         protected Rendering Rendering { get; private set; }
 

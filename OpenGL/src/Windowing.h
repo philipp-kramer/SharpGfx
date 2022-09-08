@@ -68,7 +68,11 @@ void scroll_callback(GLFWwindow* window, double offset_x, double offset_y)
 
 GLFWwindow* createWindow(const char* title, const int width, const int height)
 {
-    if (!glfwInit()) return NULL;
+    if (!glfwInit()) {
+        std::cout << "Failed to initialize glfw" << std::endl;
+        return NULL;
+    }
+    std::cout << "SharpGfx.OpenGL version 1.2.4" << std::endl;
 
     glfwSetErrorCallback(error_callback);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
