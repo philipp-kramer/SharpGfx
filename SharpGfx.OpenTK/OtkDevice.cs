@@ -93,7 +93,7 @@ namespace SharpGfx.OpenTK
 
         public override void DeleteProgram(uint handle)
         {
-            GL.DeleteProgram(handle);
+            UnmanagedRelease.Add(() => GL.DeleteProgram(handle)); // can be called from finalizers
         }
 
         public override void EnableBlend()

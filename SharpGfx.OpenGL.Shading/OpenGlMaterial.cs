@@ -273,7 +273,6 @@ namespace SharpGfx.OpenGL.Shading
 
         ~OpenGlMaterial()
         {
-            // TODO for otk: UnmanagedRelease.Add(() => Dispose(false));
             Dispose(false);
         }
     }
