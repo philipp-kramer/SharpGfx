@@ -71,20 +71,19 @@ namespace GlslParser
                 Next();
                 return Struct();
             }
-            else if (Is(Tag.In))
+            else if (Is(Tag.Flat))
             {
                 Next();
-                return Channel(Direction.In);
+                return InOut();
+            }
+            else if (Is(Tag.In) || Is(Tag.Out))
+            {
+                return InOut();
             }
             else if (Is(Tag.Uniform))
             {
                 Next();
                 return Channel(Direction.Uniform);
-            }
-            else if (Is(Tag.Out))
-            {
-                Next();
-                return Channel(Direction.Out);
             }
             else if (Is(Tag.Hash))
             {
@@ -95,6 +94,24 @@ namespace GlslParser
             {
                 return Procedure();
             }
+        }
+
+        private ChannelNode InOut()
+        {
+            if (Is(Tag.In))
+            {
+                Next();
+                return Channel(Direction.In);
+            }
+            else if (Is(Tag.Out))
+            {
+                Next();
+                return Channel(Direction.Out);
+            }
+
+            Error("in our out parameter expected");
+
+            return null;
         }
 
         /// struct = "struct" identifier '{' { variable } '}' ';'.

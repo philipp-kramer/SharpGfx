@@ -4,6 +4,7 @@
     {
         // keywords
         Version,
+        Flat,
         In,
         Out,
         Uniform,

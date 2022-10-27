@@ -25,6 +25,7 @@ namespace GlslParser
         private static readonly Dictionary<string, Tag> Keywords =
             new Dictionary<string, Tag> {
                 { "version", Tag.Version },
+                { "flat", Tag.Flat },
                 { "in", Tag.In },
                 { "out", Tag.Out },
                 { "uniform", Tag.Uniform },
