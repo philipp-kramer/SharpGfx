@@ -17,17 +17,17 @@ namespace SharpGfx.Geometry
             for (int lat = 0; lat <= latitudeCount; lat++)
             {
                 float latitude = lat * latStep - MathF.PI / 2;
-                float xy = MathF.Cos(latitude);
-                float z = MathF.Sin(latitude); // vertex position
+                float xz = MathF.Cos(latitude);
+                float y = MathF.Sin(latitude); // vertex position
 
                 // add (sectorCount+1) vertices per stack
                 // the first and last vertices have same position and normal, but different tex coords
                 float longitude = 0;
                 for (int lng = 0; lng <= longitudeCount; lng++)
                 {
-                    vertices[i++] = xy * MathF.Cos(longitude); // x
-                    vertices[i++] = xy * MathF.Sin(longitude); // y
-                    vertices[i++] = z;
+                    vertices[i++] = xz * MathF.Cos(longitude); // x
+                    vertices[i++] = y;
+                    vertices[i++] = xz * MathF.Sin(longitude); // z
                     longitude += lngStep;
                 }
             }
