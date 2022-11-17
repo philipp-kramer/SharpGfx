@@ -66,7 +66,7 @@ namespace SharpGfx.OpenTK
 
         public override TextureHandle RgbTexture(IVector2 pixels)
         {
-            return new OtkTextureHandle(OtkTextures.CreateTexture(pixels, PixelInternalFormat.Rgb, PixelFormat.Rgb, PixelType.UnsignedByte));
+            return new OtkTextureHandle(OtkTextures.CreateTexture(pixels, PixelInternalFormat.Rgba, PixelFormat.Rgba, PixelType.UnsignedByte));
         }
 
         public override TextureHandle DepthTexture(IVector2 pixels)

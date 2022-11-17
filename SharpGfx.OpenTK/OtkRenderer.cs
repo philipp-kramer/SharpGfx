@@ -52,7 +52,7 @@ namespace SharpGfx.OpenTK
             Matrix4 view,
             TextureHandle texture)
         {
-            using (new OtkFrameRenderBuffer(pixels, RenderbufferStorage.Depth24Stencil8, FramebufferAttachment.DepthStencilAttachment))
+            using (new OtkFrameRenderBuffer(pixels, RenderbufferStorage.Rgba32i, FramebufferAttachment.ColorAttachment0))
             {
                 GL.FramebufferTexture2D(
                     FramebufferTarget.Framebuffer, 
