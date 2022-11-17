@@ -67,7 +67,7 @@ namespace SharpGfx.OpenGL
 
         public override TextureHandle DepthTexture(IVector2 pixels)
         {
-            return new OglTextureHandle(OglTextures.CreateTexture(pixels, GlPixelFormat.DepthComponent, GlPixelType.Float));
+            return new OglTextureHandle(OglTextures.CreateTexture(pixels, GlPixelFormat.DepthComponent32f, GlPixelType.Float));
         }
 
         public override void ClearTexture(int unit)

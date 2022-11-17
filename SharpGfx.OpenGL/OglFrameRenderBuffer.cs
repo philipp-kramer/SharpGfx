@@ -8,16 +8,16 @@ namespace SharpGfx.OpenGL
         private readonly OglFrameBuffer _frameBuffer;
         private readonly uint _handle;
 
-        public OglFrameRenderBuffer(IVector2 pixels)
+        public OglFrameRenderBuffer(IVector2 pixels, GlRenderbufferStorage storage, GlFramebufferAttachment attachment)
         {
             _frameBuffer = new OglFrameBuffer();
 
             _handle = GL.GenRenderbuffer();
             GL.BindRenderbuffer(GlRenderbufferTarget.Renderbuffer, _handle);
-            GL.RenderbufferStorage(GlRenderbufferTarget.Renderbuffer, GlRenderbufferStorage.Depth24Stencil8, (int) pixels.X, (int) pixels.Y);
+            GL.RenderbufferStorage(GlRenderbufferTarget.Renderbuffer, storage, (int) pixels.X, (int) pixels.Y);
             GL.FramebufferRenderbuffer(
                 GlFramebufferTarget.Framebuffer,
-                GlFramebufferAttachment.DepthStencilAttachment,
+                attachment,
                 GlRenderbufferTarget.Renderbuffer,
                 _handle);
 

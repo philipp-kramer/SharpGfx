@@ -9,16 +9,16 @@ namespace SharpGfx.OpenTK
         private readonly OtkFrameBuffer _frameBuffer;
         private readonly int _handle;
 
-        public OtkFrameRenderBuffer(IVector2 pixels)
+        public OtkFrameRenderBuffer(IVector2 pixels, RenderbufferStorage storage, FramebufferAttachment attachment)
         {
             _frameBuffer = new OtkFrameBuffer();
 
             _handle = GL.GenRenderbuffer();
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, _handle);
-            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.Depth24Stencil8, (int) pixels.X, (int) pixels.Y);
+            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, storage, (int) pixels.X, (int) pixels.Y);
             GL.FramebufferRenderbuffer(
                 FramebufferTarget.Framebuffer,
-                FramebufferAttachment.DepthStencilAttachment,
+                attachment,
                 RenderbufferTarget.Renderbuffer,
                 _handle);
 

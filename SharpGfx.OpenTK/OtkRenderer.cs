@@ -52,7 +52,7 @@ namespace SharpGfx.OpenTK
             Matrix4 view,
             TextureHandle texture)
         {
-            using (new OtkFrameRenderBuffer(pixels))
+            using (new OtkFrameRenderBuffer(pixels, RenderbufferStorage.Depth24Stencil8, FramebufferAttachment.DepthStencilAttachment))
             {
                 GL.FramebufferTexture2D(
                     FramebufferTarget.Framebuffer, 
@@ -90,11 +90,12 @@ namespace SharpGfx.OpenTK
         {
             var depthTexture = device.DepthTexture(pixels);
 
-            using (new OtkFrameRenderBuffer(pixels))
+            var attachment = FramebufferAttachment.DepthAttachment;
+            using (new OtkFrameRenderBuffer(pixels, RenderbufferStorage.DepthComponent32f, attachment))
             {
                 GL.FramebufferTexture2D(
                     FramebufferTarget.Framebuffer, 
-                    FramebufferAttachment.DepthAttachment,
+                    attachment,
                     TextureTarget.Texture2D, 
                     ((OtkTextureHandle) depthTexture).Handle, 0);
 
@@ -122,7 +123,7 @@ namespace SharpGfx.OpenTK
 
                 GL.FramebufferTexture2D(
                     FramebufferTarget.Framebuffer, 
-                    FramebufferAttachment.DepthAttachment,
+                    attachment,
                     TextureTarget.Texture2D, 
                     0, 0); // detach
 

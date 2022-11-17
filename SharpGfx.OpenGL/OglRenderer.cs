@@ -51,7 +51,7 @@ namespace SharpGfx.OpenGL
             Matrix4 view,
             TextureHandle texture)
         {
-            using (new OglFrameRenderBuffer(pixels))
+            using (new OglFrameRenderBuffer(pixels, GlRenderbufferStorage.Depth24Stencil8, GlFramebufferAttachment.DepthStencilAttachment))
             {
                 GL.FramebufferTexture2D(
                     GlFramebufferTarget.Framebuffer, 
@@ -89,11 +89,12 @@ namespace SharpGfx.OpenGL
         {
             var depthTexture = device.DepthTexture(pixels);
 
-            using (new OglFrameRenderBuffer(pixels))
+            var attachment = GlFramebufferAttachment.DepthAttachment;
+            using (new OglFrameRenderBuffer(pixels, GlRenderbufferStorage.DepthComponent32f, attachment))
             {
                 GL.FramebufferTexture2D(
                     GlFramebufferTarget.Framebuffer,
-                    GlFramebufferAttachment.DepthAttachment,
+                    attachment,
                     GlTextureTarget.Texture2D,
                     ((OglTextureHandle) depthTexture).Handle, 0);
 
@@ -121,7 +122,7 @@ namespace SharpGfx.OpenGL
 
                 GL.FramebufferTexture2D(
                     GlFramebufferTarget.Framebuffer,
-                    GlFramebufferAttachment.DepthAttachment,
+                    attachment,
                     GlTextureTarget.Texture2D,
                     0, 0); // detach
 
