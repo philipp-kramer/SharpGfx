@@ -15,6 +15,7 @@ namespace SharpGfx.OpenTK
 
         private void ReleaseUnmanagedResources()
         {
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, Handle);
             GL.DeleteFramebuffer(Handle);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }

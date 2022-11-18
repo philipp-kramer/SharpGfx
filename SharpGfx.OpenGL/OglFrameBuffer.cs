@@ -14,6 +14,7 @@ namespace SharpGfx.OpenGL
 
         private void ReleaseUnmanagedResources()
         {
+            GL.BindFramebuffer(GlFramebufferTarget.Framebuffer, Handle);
             GL.DeleteFramebuffer(Handle);
             GL.BindFramebuffer(GlFramebufferTarget.Framebuffer, 0);
         }
