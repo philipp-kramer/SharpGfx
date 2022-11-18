@@ -52,13 +52,13 @@ namespace SharpGfx.OpenTK
             Matrix4 view,
             TextureHandle texture)
         {
-            using (new OtkFrameRenderBuffer(pixels, RenderbufferStorage.Rgba32i, FramebufferAttachment.ColorAttachment0))
+            const FramebufferTarget bufferTarget = FramebufferTarget.Framebuffer;
+            const FramebufferAttachment attachment = FramebufferAttachment.ColorAttachment0;
+            const TextureTarget textureTarget = TextureTarget.Texture2D;
+
+            using (new OtkFrameRenderBuffer(pixels, RenderbufferStorage.Depth24Stencil8, FramebufferAttachment.DepthStencilAttachment))
             {
-                GL.FramebufferTexture2D(
-                    FramebufferTarget.Framebuffer, 
-                    FramebufferAttachment.ColorAttachment0, 
-                    TextureTarget.Texture2D, 
-                    ((OtkTextureHandle)texture).Handle, 0);
+                GL.FramebufferTexture2D(bufferTarget, attachment, textureTarget, ((OtkTextureHandle) texture).Handle, 0);
 
                 device.CheckSpaces(scene);
                 
@@ -71,11 +71,8 @@ namespace SharpGfx.OpenTK
                 OpenGlMaterial.Set(materials, "cameraView", view);
                 Render(materialScene, pixels, ambientColor);
 
-                GL.FramebufferTexture2D(
-                    FramebufferTarget.Framebuffer, 
-                    FramebufferAttachment.ColorAttachment0, 
-                    TextureTarget.Texture2D, 
-                    0, 0);
+                GL.FramebufferTexture2D(bufferTarget, attachment, textureTarget, 0, 0);
+
             }
         }
 
@@ -90,22 +87,13 @@ namespace SharpGfx.OpenTK
         {
             var depthTexture = device.DepthTexture(pixels);
 
-            var attachment = FramebufferAttachment.DepthAttachment;
-            using (new OtkFrameRenderBuffer(pixels, RenderbufferStorage.DepthComponent32f, attachment))
+            const FramebufferTarget bufferTarget = FramebufferTarget.Framebuffer;
+            const FramebufferAttachment attachment = FramebufferAttachment.DepthAttachment;
+            const TextureTarget textureTarget = TextureTarget.Texture2D;
+
+            using (new OtkFrameRenderBuffer(pixels, RenderbufferStorage.DepthComponent, attachment))
             {
-                GL.FramebufferTexture2D(
-                    FramebufferTarget.Framebuffer, 
-                    attachment,
-                    TextureTarget.Texture2D, 
-                    ((OtkTextureHandle) depthTexture).Handle, 0);
-
-                GL.DrawBuffer(DrawBufferMode.None);
-                GL.ReadBuffer(ReadBufferMode.None);
-
-                if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
-                {
-                    throw new InvalidOperationException("framebuffer not configured correctly");
-                }
+                GL.FramebufferTexture2D(bufferTarget, attachment, textureTarget,  ((OtkTextureHandle) depthTexture).Handle, 0);
 
                 device.CheckSpaces(scene);
 
@@ -121,11 +109,7 @@ namespace SharpGfx.OpenTK
                 OpenGlMaterial.Set(materials, "projection", projection);
                 Render(nopMaterialScene, pixels, ambientColor);
 
-                GL.FramebufferTexture2D(
-                    FramebufferTarget.Framebuffer, 
-                    attachment,
-                    TextureTarget.Texture2D, 
-                    0, 0); // detach
+                GL.FramebufferTexture2D(bufferTarget, attachment, textureTarget,  0, 0); // detach
 
                 return depthTexture;
             }

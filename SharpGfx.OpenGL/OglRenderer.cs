@@ -51,13 +51,13 @@ namespace SharpGfx.OpenGL
             Matrix4 view,
             TextureHandle texture)
         {
+            const GlFramebufferTarget bufferTarget = GlFramebufferTarget.Framebuffer;
+            const GlFramebufferAttachment attachment = GlFramebufferAttachment.ColorAttachment0;
+            const GlTextureTarget textureTarget = GlTextureTarget.Texture2D;
+
             using (new OglFrameRenderBuffer(pixels, GlRenderbufferStorage.Depth24Stencil8, GlFramebufferAttachment.DepthStencilAttachment))
             {
-                GL.FramebufferTexture2D(
-                    GlFramebufferTarget.Framebuffer, 
-                    GlFramebufferAttachment.ColorAttachment0, 
-                    GlTextureTarget.Texture2D, 
-                    ((OglTextureHandle) texture).Handle, 0);
+                GL.FramebufferTexture2D(bufferTarget, attachment, textureTarget,  ((OglTextureHandle) texture).Handle, 0);
 
                 device.CheckSpaces(scene);
 
@@ -70,11 +70,7 @@ namespace SharpGfx.OpenGL
                 OpenGlMaterial.Set(materials, "cameraView", view);
                 Render(materialScene, pixels, ambientColor);
 
-                GL.FramebufferTexture2D(
-                    GlFramebufferTarget.Framebuffer, 
-                    GlFramebufferAttachment.ColorAttachment0, 
-                    GlTextureTarget.Texture2D, 
-                    0, 0);
+                GL.FramebufferTexture2D(bufferTarget, attachment, textureTarget, 0, 0);
             }
         }
 
@@ -89,22 +85,12 @@ namespace SharpGfx.OpenGL
         {
             var depthTexture = device.DepthTexture(pixels);
 
-            var attachment = GlFramebufferAttachment.DepthAttachment;
-            using (new OglFrameRenderBuffer(pixels, GlRenderbufferStorage.DepthComponent32f, attachment))
+            const GlFramebufferTarget bufferTarget = GlFramebufferTarget.Framebuffer;
+            const GlFramebufferAttachment attachment = GlFramebufferAttachment.DepthAttachment;
+            const GlTextureTarget textureTarget = GlTextureTarget.Texture2D;
+            using (new OglFrameRenderBuffer(pixels, GlRenderbufferStorage.DepthComponent, attachment))
             {
-                GL.FramebufferTexture2D(
-                    GlFramebufferTarget.Framebuffer,
-                    attachment,
-                    GlTextureTarget.Texture2D,
-                    ((OglTextureHandle) depthTexture).Handle, 0);
-
-                GL.DrawBuffer(0);
-                GL.ReadBuffer(0);
-
-                if (GL.CheckFramebufferStatus(GlFramebufferTarget.Framebuffer) != GlFramebufferErrorCode.FramebufferComplete)
-                {
-                    throw new InvalidOperationException("framebuffer not configured correctly");
-                }
+                GL.FramebufferTexture2D(bufferTarget, attachment, textureTarget, ((OglTextureHandle) depthTexture).Handle, 0);
 
                 device.CheckSpaces(scene);
 
@@ -120,11 +106,7 @@ namespace SharpGfx.OpenGL
                 OpenGlMaterial.Set(materials, "projection", projection);
                 Render(nopMaterialScene, pixels, ambientColor);
 
-                GL.FramebufferTexture2D(
-                    GlFramebufferTarget.Framebuffer,
-                    attachment,
-                    GlTextureTarget.Texture2D,
-                    0, 0); // detach
+                GL.FramebufferTexture2D(bufferTarget, attachment, textureTarget, 0, 0); // detach
 
                 return depthTexture;
             }

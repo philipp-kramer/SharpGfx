@@ -2,7 +2,7 @@
 {
     public enum GlRenderbufferStorage
     {
-        Depth24Stencil8 = 0x88F0,
-        DepthComponent32f = 0x8CAC
+        DepthComponent = 0x1902,
+        Depth24Stencil8 = 0x88F0
     }
 }

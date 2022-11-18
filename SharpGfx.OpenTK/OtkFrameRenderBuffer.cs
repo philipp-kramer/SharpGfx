@@ -16,11 +16,7 @@ namespace SharpGfx.OpenTK
             _handle = GL.GenRenderbuffer();
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, _handle);
             GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, storage, (int) pixels.X, (int) pixels.Y);
-            GL.FramebufferRenderbuffer(
-                FramebufferTarget.Framebuffer,
-                attachment,
-                RenderbufferTarget.Renderbuffer,
-                _handle);
+            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, attachment, RenderbufferTarget.Renderbuffer, _handle);
 
             if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
             {
