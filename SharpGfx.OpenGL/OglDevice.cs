@@ -164,18 +164,19 @@ namespace SharpGfx.OpenGL
             OglRenderer.TakeColorPicture(this, scene, pixels, ambientColor, cameraPosition, view, texture);
         }
 
-        public override TextureHandle TakeDepthPicture(
+        public override void TakeDepthPicture(
             ICollection<RenderObject> scene, 
             IVector2 pixels, 
             Color4 ambientColor, 
             Point3 cameraPosition, 
             CameraView cameraView, 
-            Matrix4 projection)
+            Matrix4 projection,
+            TextureHandle texture)
         {
             if (!cameraPosition.Vector.In(World)) throw new ArgumentException("needs to be in world-space", nameof(cameraPosition));
 
             var view = GetViewMatrix(cameraView);
-            return OglRenderer.TakeDepthPicture(this, scene, pixels, ambientColor, cameraPosition, view, projection);
+            OglRenderer.TakeDepthPicture(this, scene, pixels, ambientColor, cameraPosition, view, projection, texture);
         }
 
         public override uint GetUniformLocation(uint shader, string name)

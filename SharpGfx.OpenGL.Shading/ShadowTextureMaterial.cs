@@ -14,8 +14,7 @@ namespace SharpGfx.OpenGL.Shading
             int textureUnit,
             TextureHandle shadowHandle,
             int shadowUnit,
-            Color3 ambient,
-            Matrix4 lightViewProjection)
+            Color3 ambient)
             : base(
                 device,
                 Resources.GetSource("shadow_texture.vert"),
@@ -29,9 +28,16 @@ namespace SharpGfx.OpenGL.Shading
 
             DoInContext(() =>
             {
-                Set("lightViewProjection", lightViewProjection);
                 Set("ambient", ambient.Vector);
                 Set("shadowUnit", _shadowUnit);
+            });
+        }
+
+        public void Update(Matrix4 lightViewProjection)
+        {
+            DoInContext(() =>
+            {
+                Set("lightViewProjection", lightViewProjection);
             });
         }
 

@@ -7,10 +7,10 @@ namespace SharpGfx
 {
     public abstract class Rendering : IDisposable
     {
-        public const float Near = 0.1f;
-        public const float Far = 100f;
         public const float FovY = MathF.PI / 4;
 
+        public float Near { get; set; } = 0.1f;
+        public float Far { get; set; } = 100f;
         protected Device Device { get; }
         protected IVector2 Size { get; private set; }
         protected Color3 AmbientColor { get; }

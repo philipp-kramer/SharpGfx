@@ -157,7 +157,6 @@ namespace SharpGfx.OpenGL.Shading
             {
                 if (!_channels.ContainsKey(channel))
                 {
-                    // TODO: add info in which resource the shader is stored
                     throw new ArgumentException($"shader channel {channel} not found");
                 }
                 if (_channels[channel] != Direction.Uniform)

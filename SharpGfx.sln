@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpGfx.OpenGL.Shading", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpGfx", "SharpGfx\SharpGfx.csproj", "{7F10A64D-900A-4F8A-AB0E-0110618C4CDA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shadow", "Shadow\Shadow.csproj", "{A3E0CB04-A990-4184-A2A3-8727A15D0408}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,18 @@ Global
 		{7F10A64D-900A-4F8A-AB0E-0110618C4CDA}.Release|x64.Build.0 = Release|Any CPU
 		{7F10A64D-900A-4F8A-AB0E-0110618C4CDA}.Release|x86.ActiveCfg = Release|Any CPU
 		{7F10A64D-900A-4F8A-AB0E-0110618C4CDA}.Release|x86.Build.0 = Release|Any CPU
+		{A3E0CB04-A990-4184-A2A3-8727A15D0408}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3E0CB04-A990-4184-A2A3-8727A15D0408}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3E0CB04-A990-4184-A2A3-8727A15D0408}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A3E0CB04-A990-4184-A2A3-8727A15D0408}.Debug|x64.Build.0 = Debug|Any CPU
+		{A3E0CB04-A990-4184-A2A3-8727A15D0408}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A3E0CB04-A990-4184-A2A3-8727A15D0408}.Debug|x86.Build.0 = Debug|Any CPU
+		{A3E0CB04-A990-4184-A2A3-8727A15D0408}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3E0CB04-A990-4184-A2A3-8727A15D0408}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3E0CB04-A990-4184-A2A3-8727A15D0408}.Release|x64.ActiveCfg = Release|Any CPU
+		{A3E0CB04-A990-4184-A2A3-8727A15D0408}.Release|x64.Build.0 = Release|Any CPU
+		{A3E0CB04-A990-4184-A2A3-8727A15D0408}.Release|x86.ActiveCfg = Release|Any CPU
+		{A3E0CB04-A990-4184-A2A3-8727A15D0408}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

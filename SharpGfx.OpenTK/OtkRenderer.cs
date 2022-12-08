@@ -76,24 +76,23 @@ namespace SharpGfx.OpenTK
             }
         }
 
-        public static TextureHandle TakeDepthPicture(
+        public static void TakeDepthPicture(
             Device device,
             ICollection<RenderObject> scene,
             IVector2 pixels,
             Color4 ambientColor,
             Point3 cameraPosition,
             Matrix4 view,
-            Matrix4 projection)
+            Matrix4 projection,
+            TextureHandle texture)
         {
-            var depthTexture = device.DepthTexture(pixels);
-
             const FramebufferTarget bufferTarget = FramebufferTarget.Framebuffer;
             const FramebufferAttachment attachment = FramebufferAttachment.DepthAttachment;
             const TextureTarget textureTarget = TextureTarget.Texture2D;
 
             using (new OtkFrameRenderBuffer(pixels, RenderbufferStorage.DepthComponent, attachment))
             {
-                GL.FramebufferTexture2D(bufferTarget, attachment, textureTarget,  ((OtkTextureHandle) depthTexture).Handle, 0);
+                GL.FramebufferTexture2D(bufferTarget, attachment, textureTarget,  ((OtkTextureHandle)texture).Handle, 0);
 
                 device.CheckSpaces(scene);
 
@@ -110,8 +109,6 @@ namespace SharpGfx.OpenTK
                 Render(nopMaterialScene, pixels, ambientColor);
 
                 GL.FramebufferTexture2D(bufferTarget, attachment, textureTarget,  0, 0); // detach
-
-                return depthTexture;
             }
         }
     }

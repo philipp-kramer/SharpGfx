@@ -58,7 +58,7 @@ namespace SharpGfx
         public abstract void Render(ICollection<RenderObject> scene, IVector2 pixels, Color4 ambientColor);
         public abstract void Render(ICollection<RenderObject> scene, IVector2 pixels, Point3 cameraPosition, Color4 ambientColor);
         public abstract void TakeColorPicture(ICollection<RenderObject> scene, IVector2 pixels, Color4 ambientColor, Point3 cameraPosition, CameraView cameraView, TextureHandle texture);
-        public abstract TextureHandle TakeDepthPicture(ICollection<RenderObject> scene, IVector2 pixels, Color4 ambientColor, Point3 cameraPosition, CameraView cameraView, Matrix4 projection);
+        public abstract void TakeDepthPicture(ICollection<RenderObject> scene, IVector2 pixels, Color4 ambientColor, Point3 cameraPosition, CameraView cameraView, Matrix4 projection, TextureHandle texture);
 
         public abstract uint GetUniformLocation(uint shader, string name);
         public abstract void Uniform1(uint location, int value);
