@@ -1,22 +1,21 @@
-﻿namespace GlslParser.Tree
+﻿namespace GlslParser.Tree;
+
+public class VariableNode : DeclarationNode
 {
-    public class VariableNode : DeclarationNode
+    public IdentifierNode Type { get; }
+    public IdentifierNode Identifier { get; }
+
+    public VariableNode(Location location, IdentifierNode type, IdentifierNode identifier) :
+        base(location)
     {
-        public IdentifierNode Type { get; }
-        public IdentifierNode Identifier { get; }
+        Type = type;
+        Identifier = identifier;
+    }
 
-        public VariableNode(Location location, IdentifierNode type, IdentifierNode identifier) :
-            base(location)
-        {
-            Type = type;
-            Identifier = identifier;
-        }
+    public override string Name => Identifier.Name;
 
-        public override string Name => Identifier.Name;
-
-        public override string ToString()
-        {
-            return $"{Type} {Identifier};";
-        }
+    public override string ToString()
+    {
+        return $"{Type} {Identifier};";
     }
 }

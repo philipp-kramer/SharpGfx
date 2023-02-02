@@ -1,8 +1,7 @@
-﻿namespace SharpGfx.OpenGL
+﻿namespace SharpGfx.OpenGL;
+
+public enum GlRenderbufferTarget
 {
-    public enum GlRenderbufferTarget
-    {
-        Renderbuffer = 0x8D41,
-        RenderbufferExt = 0x8D41,
-    }
+    Renderbuffer = 0x8D41,
+    RenderbufferExt = 0x8D41,
 }

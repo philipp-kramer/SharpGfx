@@ -1,14 +1,13 @@
-﻿namespace GlslParser.Tokens
+﻿namespace GlslParser.Tokens;
+
+public abstract class Token
 {
-    public abstract class Token
+    public Location Location { get; }
+
+    public Token(Location location)
     {
-        public Location Location { get; }
-
-        public Token(Location location)
-        {
-            Location = location;
-        }
-
-        public override abstract string ToString();
+        Location = location;
     }
+
+    public override abstract string ToString();
 }

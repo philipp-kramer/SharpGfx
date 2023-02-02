@@ -1,39 +1,37 @@
-﻿using SharpGfx.Host;
-using SharpGfx.Primitives;
+﻿namespace SharpGfx;
 
-namespace SharpGfx
+public abstract class Window : IMouse
 {
-    public abstract class Window : IMouse
+    public int Width { get; protected set; }
+    public int Height { get; protected set; }
+    public float MouseX { get; protected set; }
+    public float MouseY { get; protected set; }
+
+    protected Rendering Rendering { get; private set; }
+
+    protected Window(int width, int height)
     {
-        public static readonly Space Screen = new HostSpace(Domain.View);
+        Width = width;
+        Height = height;
+    }
 
-        public abstract Point2 Position { get; }
+    public virtual void Show(Rendering rendering)
+    {
+        Rendering = rendering;
+    }
 
-        protected Rendering Rendering { get; private set; }
+    protected virtual void OnLoad()
+    {
+        Rendering.OnLoad();
+    }
 
-        public virtual void Show(Rendering rendering)
-        {
-            Rendering = rendering;
-        }
+    protected void OnUpdateFrame()
+    {
+        Rendering.OnUpdateFrame();
+    }
 
-        protected virtual void OnLoad()
-        {
-            Rendering.OnLoad();
-        }
-
-        protected void OnResize(IVector2 size)
-        {
-            Rendering.OnResize(size);
-        }
-
-        protected void OnUpdateFrame()
-        {
-            Rendering.OnUpdateFrame();
-        }
-
-        protected void OnRenderFrame()
-        {
-            Rendering.OnRenderFrame();
-        }
+    protected void OnRenderFrame()
+    {
+        Rendering.OnRenderFrame(this);
     }
 }

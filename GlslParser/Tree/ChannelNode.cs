@@ -1,22 +1,21 @@
-﻿namespace GlslParser.Tree
+﻿namespace GlslParser.Tree;
+
+public class ChannelNode : DeclarationNode
 {
-    public class ChannelNode : DeclarationNode
+    public Direction Direction { get; }
+    public VariableNode Variable { get; }
+
+    public ChannelNode(Location location, Direction direction, VariableNode variable) 
+        : base(location)
     {
-        public Direction Direction { get; }
-        public VariableNode Variable { get; }
+        Direction = direction;
+        Variable = variable;
+    }
 
-        public ChannelNode(Location location, Direction direction, VariableNode variable) 
-            : base(location)
-        {
-            Direction = direction;
-            Variable = variable;
-        }
+    public override string Name => Variable.Name;
 
-        public override string Name => Variable.Name;
-
-        public override string ToString()
-        {
-            return $"{Direction} {Variable}";
-        }
+    public override string ToString()
+    {
+        return $"{Direction} {Variable}";
     }
 }

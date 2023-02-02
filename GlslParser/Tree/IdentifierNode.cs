@@ -1,18 +1,17 @@
-﻿namespace GlslParser.Tree
+﻿namespace GlslParser.Tree;
+
+public class IdentifierNode : Node
 {
-    public class IdentifierNode : Node
+    public string Name { get; }
+
+    public IdentifierNode(Location location, string name) 
+        : base(location)
     {
-        public string Name { get; }
+        Name = name;
+    }
 
-        public IdentifierNode(Location location, string name) 
-            : base(location)
-        {
-            Name = name;
-        }
-
-        public override string ToString()
-        {
-            return Name;
-        }
+    public override string ToString()
+    {
+        return Name;
     }
 }

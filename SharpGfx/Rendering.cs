@@ -1,93 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SharpGfx.Primitives;
 
-namespace SharpGfx
+namespace SharpGfx;
+
+public abstract class Rendering : IDisposable
 {
-    public abstract class Rendering : IDisposable
+    protected internal Device Device { get; }
+    public Color3 Background { get; }
+    public List<Instance> Scene { get; }
+
+    protected Rendering(Device device, Color3 background)
     {
-        public const float FovY = MathF.PI / 4;
+        Device = device;
+        Background = background;
+        Scene = new List<Instance>();
+    }
 
-        public float Near { get; set; } = 0.1f;
-        public float Far { get; set; } = 100f;
-        protected Device Device { get; }
-        protected IVector2 Size { get; private set; }
-        protected Color3 AmbientColor { get; }
-        public List<RenderObject> Scene { get; }
+    public void OnLoad()
+    {
+        Device.CheckSpaces(Scene);
+    }
 
-        protected Rendering(Device device, IVector2 size, Color3 ambientColor)
+    public virtual void OnMouseUp(MouseButton mouseButton) { }
+
+    public virtual void OnUpdateFrame() { }
+
+    public virtual void OnRenderFrame(Window window)
+    {
+        Device.Render(window, this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
         {
-            Device = device;
-            Size = size;
-            AmbientColor = ambientColor;
-            Scene = new List<RenderObject>();
-        }
-
-        protected float Aspect => Size.X / Size.Y;
-
-        public void OnLoad()
-        {
-            Device.CheckSpaces(Scene);
-        }
-
-        public virtual void OnMouseUp(MouseButtons mouseButton) { }
-
-        public virtual void OnResize(IVector2 size)
-        {
-            Size = size;
-        }
-
-        public virtual void OnUpdateFrame() { }
-
-        public virtual void OnRenderFrame()
-        {
-            Device.Render(Scene, Size, AmbientColor.GetColor4(1));
-        }
-
-        protected void DisposeObjects()
-        {
-            foreach (var @object in Scene)
+            foreach (var instance in Scene)
             {
-                if (@object is IDisposable disposable)
+                if (instance is IDisposable disposable)
                 {
                     disposable.Dispose();
                 }
             }
         }
+    }
 
-        protected void DisposeMaterials()
-        {
-            var materials = Scene
-                .Select(o => o.Material)
-                .Distinct();
-            foreach (var material in materials)
-            {
-                if (material is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
-            }
-        }
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        Dispose(true);
+    }
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                DisposeObjects();
-                DisposeMaterials();
-            }
-        }
-
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-            Dispose(true);
-        }
-
-        ~Rendering()
-        {
-            Dispose(false);
-        }
+    ~Rendering()
+    {
+        Dispose(false);
     }
 }

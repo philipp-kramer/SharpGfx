@@ -1,6 +1,5 @@
-﻿namespace SharpGfx
+﻿namespace SharpGfx;
+
+public abstract class FrameBuffer
 {
-    public abstract class FrameBuffer
-    {
-    }
 }

@@ -1,10 +1,9 @@
-﻿namespace SharpGfx
+﻿namespace SharpGfx;
+
+public enum Domain
 {
-    public enum Domain
-    {
-        Color,
-        Model,
-        World,
-        View
-    }
+    Color,
+    Model,
+    World,
+    View
 }

@@ -1,8 +1,7 @@
-﻿namespace SharpGfx.OpenGL
+﻿namespace SharpGfx.OpenGL;
+
+public enum GlfwButtonAction
 {
-    internal enum GlfwButtonAction
-    {
-        Release = 0,
-        Press = 1
-    }
+    Release = 0,
+    Press = 1
 }

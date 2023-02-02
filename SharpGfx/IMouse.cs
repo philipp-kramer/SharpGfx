@@ -1,9 +1,7 @@
-﻿using SharpGfx.Primitives;
+﻿namespace SharpGfx;
 
-namespace SharpGfx
+public interface IMouse
 {
-    public interface IMouse
-    {
-        public Point2 Position { get; }
-    }
+    public float MouseX { get; }
+    public float MouseY { get; }
 }

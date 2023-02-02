@@ -1,9 +1,8 @@
-﻿namespace SharpGfx.OpenGL
+﻿namespace SharpGfx.OpenGL;
+
+public enum GlType
 {
-    internal enum GlType
-    {
-        UByte = 0x1401, 
-        UShort = 0x1403, 
-        UInt = 0x1405
-    }
+    UByte = 0x1401, 
+    UShort = 0x1403, 
+    UInt = 0x1405
 }

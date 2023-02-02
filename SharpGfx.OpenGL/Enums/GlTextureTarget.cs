@@ -1,8 +1,7 @@
-﻿namespace SharpGfx.OpenGL
+﻿namespace SharpGfx.OpenGL;
+
+public enum GlTextureTarget
 {
-    internal enum GlTextureTarget
-    {
-        Texture1D = 0x0DE0,
-        Texture2D = 0x0DE1
-    }
+    Texture1D = 0x0DE0,
+    Texture2D = 0x0DE1
 }

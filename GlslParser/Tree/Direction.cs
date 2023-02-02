@@ -1,9 +1,8 @@
-﻿namespace GlslParser.Tree
+﻿namespace GlslParser.Tree;
+
+public enum Direction
 {
-    public enum Direction
-    {
-        In,
-        Uniform,
-        Out
-    }
+    In,
+    Uniform,
+    Out
 }

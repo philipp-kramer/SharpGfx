@@ -1,19 +1,18 @@
-﻿namespace GlslParser
+﻿namespace GlslParser;
+
+public struct Location
 {
-    public struct Location
+    public int Start { get; }
+    public int End { get; }
+
+    public Location(int start, int end)
     {
-        public int Start { get; }
-        public int End { get; }
+        Start = start;
+        End = end;
+    }
 
-        public Location(int start, int end)
-        {
-            Start = start;
-            End = end;
-        }
-
-        public override string ToString()
-        {
-            return $"({Start}, {End})";
-        }
+    public override string ToString()
+    {
+        return $"({Start}, {End})";
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace SharpGfx.OpenGL
+﻿namespace SharpGfx.OpenGL;
+
+public enum GlFramebufferErrorCode
 {
-    public enum GlFramebufferErrorCode
-    {
-        FramebufferComplete = 0x8CD5,
-    }
+    FramebufferComplete = 0x8CD5,
 }

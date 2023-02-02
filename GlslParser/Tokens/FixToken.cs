@@ -1,18 +1,17 @@
-﻿namespace GlslParser.Tokens
+﻿namespace GlslParser.Tokens;
+
+public class FixToken : Token
 {
-    public class FixToken : Token
+    public Tag Tag { get; }
+
+    public FixToken(Location location, Tag tag)
+        : base(location)
     {
-        public Tag Tag { get; }
+        Tag = tag;
+    }
 
-        public FixToken(Location location, Tag tag)
-            : base(location)
-        {
-            Tag = tag;
-        }
-
-        public override string ToString()
-        {
-            return $"TOKEN {Tag}";
-        }
+    public override string ToString()
+    {
+        return $"TOKEN {Tag}";
     }
 }

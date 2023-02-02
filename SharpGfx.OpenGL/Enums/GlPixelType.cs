@@ -1,8 +1,7 @@
-﻿namespace SharpGfx.OpenGL
+﻿namespace SharpGfx.OpenGL;
+
+public enum GlPixelType
 {
-    public enum GlPixelType
-    {
-        UnsignedByte = 0x1401,
-        Float = 0x1406,
-    }
+    UnsignedByte = 0x1401,
+    Float = 0x1406,
 }

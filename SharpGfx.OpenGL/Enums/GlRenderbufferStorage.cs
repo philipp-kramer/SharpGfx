@@ -1,8 +1,7 @@
-﻿namespace SharpGfx.OpenGL
+﻿namespace SharpGfx.OpenGL;
+
+public enum GlRenderbufferStorage
 {
-    public enum GlRenderbufferStorage
-    {
-        DepthComponent = 0x1902,
-        Depth24Stencil8 = 0x88F0
-    }
+    DepthComponent = 0x1902,
+    Depth24Stencil8 = 0x88F0
 }

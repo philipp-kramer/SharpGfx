@@ -1,8 +1,7 @@
-﻿namespace SharpGfx.OpenGL
+﻿namespace SharpGfx.OpenGL;
+
+public enum GlBufferTarget
 {
-    public enum GlBufferTarget
-    {
-        ArrayBuffer = 0x8892,
-        ElementArrayBuffer = 0x8893,
-    }
+    ArrayBuffer = 0x8892,
+    ElementArrayBuffer = 0x8893,
 }
