@@ -1,0 +1,1 @@
+﻿This is the generic OpenGL implementation of a little open source graphics framework.

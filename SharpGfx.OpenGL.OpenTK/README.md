@@ -1,1 +1,1 @@
-﻿This is an OpenTK based implemenation of a little open source OpenGL framework.
+﻿This is an OpenTK based implemenation of a little open source graphics framework.

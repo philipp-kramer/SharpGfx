@@ -1,1 +1,1 @@
-﻿This is part of little open source OpenGL framework. It provides additional error checking for GLSL programs.
+﻿This is part of little open source graphics framework. It provides additional error checking for GLSL programs.

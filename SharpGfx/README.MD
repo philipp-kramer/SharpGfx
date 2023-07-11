@@ -1,1 +1,1 @@
-﻿This is the abstraction layer of a little open source OpenGL framework. You find the source code on github.
+﻿This is the abstraction layer of a little open source graphics framework.
