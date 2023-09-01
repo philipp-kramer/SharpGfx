@@ -56,24 +56,24 @@ public abstract class OpenGlDevice : Device
         return new PhongTextureMaterial(this, reflectance, lighting, 0);
     }
 
-    public override Body Body(Material material, params IVertexAttribute[] attributes)
+    public override Surface Surface(Material material, params SurfaceAttribute[] attributes)
     {
-        return new GlBody(GL, (OpenGlMaterial) material, attributes);
+        return new GlSurface(GL, (OpenGlMaterial) material, attributes);
     }
 
-    public override Body Body(Material material, ushort[] triangles, params IVertexAttribute[] attributes)
+    public override Surface Surface(Material material, ushort[] triangles, params SurfaceAttribute[] attributes)
     {
-        return new GlIndexedBody<ushort>(GL, (OpenGlMaterial) material, triangles, attributes);
+        return new GlIndexedSurface<ushort>(GL, (OpenGlMaterial) material, triangles, attributes);
     }
 
-    public override Body Body(Material material, uint[] triangles, params IVertexAttribute[] attributes)
+    public override Surface Surface(Material material, uint[] triangles, params SurfaceAttribute[] attributes)
     {
-        return new GlIndexedBody<uint>(GL, (OpenGlMaterial) material, triangles, attributes);
+        return new GlIndexedSurface<uint>(GL, (OpenGlMaterial) material, triangles, attributes);
     }
 
-    public override Instance Instance(Space space, string name, Body body)
+    public override Instance Instance(Space space, string name, Surface surface)
     {
-        return new GlInstance(GL, space, name, (GlBody) body);
+        return new GlInstance(GL, space, name, (GlSurface) surface);
     }
 
     public override TextureHandle Texture(Image<Rgba32> image)
@@ -120,11 +120,11 @@ public abstract class OpenGlDevice : Device
     public Matrix4 GetOffCenterProjection(IVector3 center, IVector3 positiveX, IVector3 positiveY, float ratio, float near, float far, Matrix4 view)
     {
         var left = (center - positiveX).Extend(View, 1);
-        var rigt = (center + positiveX).Extend(View, 1);
+        var right = (center + positiveX).Extend(View, 1);
         left *= ratio;
-        rigt *= ratio;
+        right *= ratio;
         var l = (view * left).X;
-        var r = (view * rigt).X;
+        var r = (view * right).X;
 
         var bot = (center - positiveY).Extend(View, 1);
         var top = (center + positiveY).Extend(View, 1);
@@ -193,7 +193,7 @@ public abstract class OpenGlDevice : Device
         return scene
             .SelectMany(instance => instance.All)
             .OfType<GlInstance>()
-            .GroupBy(instance => (OpenGlMaterial) instance.Body.Material)
+            .GroupBy(instance => (OpenGlMaterial) instance.Surface.Material)
             .ToList();
     }
 }

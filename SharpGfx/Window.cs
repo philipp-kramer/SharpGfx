@@ -1,13 +1,11 @@
 ﻿namespace SharpGfx;
 
-public abstract class Window : IMouse
+public abstract class Window
 {
     public int Width { get; protected set; }
     public int Height { get; protected set; }
-    public float MouseX { get; protected set; }
-    public float MouseY { get; protected set; }
 
-    protected Rendering Rendering { get; private set; }
+    protected Rendering? Rendering { get; private set; }
 
     protected Window(int width, int height)
     {
@@ -22,16 +20,16 @@ public abstract class Window : IMouse
 
     protected virtual void OnLoad()
     {
-        Rendering.OnLoad();
+        Rendering!.OnLoad();
     }
 
     protected void OnUpdateFrame()
     {
-        Rendering.OnUpdateFrame();
+        Rendering!.OnUpdateFrame();
     }
 
     protected void OnRenderFrame()
     {
-        Rendering.OnRenderFrame(this);
+        Rendering!.OnRenderFrame(this);
     }
 }

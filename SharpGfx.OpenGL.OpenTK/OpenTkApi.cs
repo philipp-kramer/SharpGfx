@@ -18,7 +18,7 @@ public class OpenTkApi : GlApi
 
     protected override uint GenBuffer() { return (uint) GL.GenBuffer(); }
 
-    protected override void BufferData(GlBufferTarget target, int size, IntPtr data) { GL.BufferData((BufferTarget) target, size, data, BufferUsageHint.StaticDraw); }
+    protected override void BufferData(GlBufferTarget target, int size, nint data) { GL.BufferData((BufferTarget) target, size, data, BufferUsageHint.StaticDraw); }
 
     protected override long GetBufferParameter(GlBufferTarget target, GlBufferParameterName name)
     {
@@ -59,7 +59,7 @@ public class OpenTkApi : GlApi
         }
     }
 
-    protected override void DrawIndexedTriangles<T>(int count, IntPtr indices) { GL.DrawElements(PrimitiveType.Triangles, count, GetElementsType<T>(), indices); }
+    protected override void DrawIndexedTriangles<T>(int count, nint indices) { GL.DrawElements(PrimitiveType.Triangles, count, GetElementsType<T>(), indices); }
 
     protected override void Enable(GlCap cap) { GL.Enable((EnableCap) cap);
     }
@@ -72,7 +72,7 @@ public class OpenTkApi : GlApi
 
     protected override void BindTexture(GlTextureTarget target, uint texture) { GL.BindTexture((TextureTarget) target, texture); }
 
-    protected override void TexImage2D(GlTextureTarget target, int level, int width, int height, int border, GlPixelFormat format, GlPixelType type, IntPtr pixels)
+    protected override void TexImage2D(GlTextureTarget target, int level, int width, int height, int border, GlPixelFormat format, GlPixelType type, nint pixels)
     {
         GL.TexImage2D((TextureTarget) target, level, GetInternal(format), width, height, border, (PixelFormat) format, (PixelType) type, pixels);
     }
@@ -85,7 +85,7 @@ public class OpenTkApi : GlApi
 
     protected override void DeleteTexture(uint texture) { GL.DeleteTexture(texture); }
 
-    protected override void GetTexImage(GlTextureTarget target, int level, GlPixelFormat format, GlPixelType type, IntPtr pixels) { GL.GetTexImage((TextureTarget)target, level, (PixelFormat)format, (PixelType)type, pixels); }
+    protected override void GetTexImage(GlTextureTarget target, int level, GlPixelFormat format, GlPixelType type, nint pixels) { GL.GetTexImage((TextureTarget)target, level, (PixelFormat)format, (PixelType)type, pixels); }
 
     protected override uint GenFramebuffer() { return (uint) GL.GenFramebuffer(); }
 
@@ -154,7 +154,7 @@ public class OpenTkApi : GlApi
             GlPixelFormat.Rgb => PixelInternalFormat.Rgb,
             GlPixelFormat.Rgba => PixelInternalFormat.Rgba,
             GlPixelFormat.DepthComponent => PixelInternalFormat.DepthComponent,
-            _ => throw new ArgumentOutOfRangeException(nameof(format), format, null)
+            _ => throw new ArgumentOutOfRangeException(nameof(format), format, default)
         };
     }
 }

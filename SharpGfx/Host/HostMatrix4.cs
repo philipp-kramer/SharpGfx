@@ -109,13 +109,30 @@ public readonly struct HostMatrix4 : Matrix4
 
     public static Matrix4 GetProjection(Space space, float left, float right, float bottom, float top, float near, float far)
     {
+        float deltaX = right - left;
+        float deltaY = top - bottom;
         return new HostMatrix4(space, new float[4, 4])
         {
-            [0, 0] = 2 * near / (right - left), 
-            [1, 1] = 2 * near / (top - bottom),
+            [0, 0] = 2 * near / deltaX, 
+            [1, 1] = 2 * near / deltaY,
+            [2, 0] = (right + left) / deltaX,
+            [2, 1] = (top + bottom) / deltaY,
             [2, 2] = -(far + near) / (far - near), // remap z to [0,1] 
-            [3, 2] = -2 * near * far / (far - near), // remap z [0,1] 
-            [2, 3] = -1 // set w = -z 
+            [2, 3] = -1, // set w = -z 
+            [3, 2] = -2 * near * far / (far - near) // remap z [0,1] 
         };
+    }
+
+    public override string ToString()
+    {
+        var e = Elements;
+        var a = new[]
+        {
+            e[0, 0], e[0, 1], e[0, 2], e[0, 3],
+            e[1, 0], e[1, 1], e[1, 2], e[1, 3],
+            e[2, 0], e[2, 1], e[2, 2], e[2, 3],
+            e[3, 0], e[3, 1], e[3, 2], e[3, 3]
+        };
+        return $"[{string.Join(' ', a)}]";
     }
 }

@@ -40,7 +40,7 @@ public readonly struct Point3
 
     public override string ToString()
     {
-        return Vector.ToString();
+        return Vector.ToString() ?? string.Empty;
     }
 }
 

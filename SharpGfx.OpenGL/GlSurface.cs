@@ -3,13 +3,13 @@ using SharpGfx.OpenGL.Materials;
 
 namespace SharpGfx.OpenGL;
 
-internal class GlBody : Body
+internal class GlSurface : Surface
 {
     private readonly GlApi _gl;
     internal uint[] VertexBuffers { get; }
     internal uint VertexArray { get; }
 
-    public GlBody(GlApi gl, OpenGlMaterial material, params IVertexAttribute[] attributes)
+    public GlSurface(GlApi gl, OpenGlMaterial material, params SurfaceAttribute[] attributes)
         : base(material, attributes[0].Values.Length / attributes[0].Rank)
     {
         _gl = gl;
@@ -48,7 +48,7 @@ internal class GlBody : Body
         ReleaseUnmanagedResources();
     }
 
-    ~GlBody()
+    ~GlSurface()
     {
         _gl.Add(() => Dispose(false));
     }

@@ -1,15 +1,14 @@
-﻿using System;
-using SharpGfx.OpenGL.Materials;
+﻿using SharpGfx.OpenGL.Materials;
 
 namespace SharpGfx.OpenGL;
 
-internal sealed class GlIndexedBody<T> : GlBody
+internal sealed class GlIndexedSurface<T> : GlSurface
     where T : struct
 {
     private readonly GlApi _gl;
     private readonly GlIndexBuffer<T> _indexBuffer;
 
-    public GlIndexedBody(GlApi gl, OpenGlMaterial material, T[] triangles, params IVertexAttribute[] attributes) 
+    public GlIndexedSurface(GlApi gl, OpenGlMaterial material, T[] triangles, params SurfaceAttribute[] attributes) 
         : base(gl, material, attributes)
     {
         _gl = gl;
@@ -20,7 +19,7 @@ internal sealed class GlIndexedBody<T> : GlBody
     {
         _gl.BindVertexArray(VertexArray);
         _gl.BindBuffer(GlBufferTarget.ElementArrayBuffer, _indexBuffer.Handle);
-        _gl.DrawIndexedTriangles<T>(_indexBuffer.Length, IntPtr.Zero);
+        _gl.DrawIndexedTriangles<T>(_indexBuffer.Length, nint.Zero);
         _gl.BindBuffer(GlBufferTarget.ElementArrayBuffer, 0);
         _gl.BindVertexArray(0);
     }
@@ -34,7 +33,7 @@ internal sealed class GlIndexedBody<T> : GlBody
         base.Dispose(disposing);
     }
 
-    ~GlIndexedBody()
+    ~GlIndexedSurface()
     {
         _gl.Add(() => Dispose(false));
     }

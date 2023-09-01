@@ -8,15 +8,12 @@ public class FlyCamera : InteractiveCamera
     private const float FlySpeed = 1f / 10;
     private const float MoveSensitivity = 1/250f;
 
-    private float _mouseX = float.NaN;
-    private float _mouseY = float.NaN;
-
     public FlyCamera(Space world, Point3 position)
         : base(world, position)
     {
     }
 
-    public override void OnKeyDown(ConsoleKey key)
+    public override void KeyDown(ConsoleKey key)
     {
         switch (key)
         {
@@ -64,30 +61,30 @@ public class FlyCamera : InteractiveCamera
         }
     }
 
-    public override void MouseDown(MouseButton button, float x, float y)
+    public override (float x, float y) MousePosition
     {
-        _mouseX = x;
-        _mouseY = y;
+        set
+        {
+            float deltaX = float.IsNaN(MousePosition.x) ? 0 : value.x - MousePosition.x;
+            float deltaY = float.IsNaN(MousePosition.y) ? 0 : value.y - MousePosition.y;
+            base.MousePosition = value;
+
+            switch (MouseButtons.TryGetSingle())
+            {
+                case MouseButton.Left:
+                    Yaw += deltaX * MoveSensitivity;
+                    Pitch = Limit(Pitch - deltaY * MoveSensitivity, MathF.PI / 2);
+                    break;
+
+                case MouseButton.Middle:
+                    break;
+            }
+        }
     }
 
-    public override void MouseDragging(MouseButton button, float x, float y)
+    public override float MouseScrollY
     {
-        float deltaX = float.IsNaN(_mouseX) ? 0 : x - _mouseX;
-        float deltaY = float.IsNaN(_mouseY) ? 0 : y - _mouseY;
-
-        switch (button)
-        {
-            case MouseButton.Left:
-                Yaw += deltaX * MoveSensitivity;
-                Pitch = Limit(Pitch - deltaY * MoveSensitivity, MathF.PI / 2);
-                break;
-
-            case MouseButton.Middle:
-                Position -= y * LookAt;
-                break;
-        }
-
-        MouseDown(button, x, y);
+        set => Position -= value * LookAt;
     }
 
     private IVector3 GetHorizontalDelta()

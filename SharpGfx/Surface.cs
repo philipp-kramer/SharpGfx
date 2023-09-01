@@ -2,14 +2,14 @@
 
 namespace SharpGfx;
 
-public abstract class Body : IDisposable
+public abstract class Surface : IDisposable
 {
     public Material Material { get; }
     public int VertexCount { get; }
 
     private int _referenceCount;
 
-    protected Body(Material material, int vertexCount)
+    protected Surface(Material material, int vertexCount)
     {
         Material = material;
         VertexCount = vertexCount;

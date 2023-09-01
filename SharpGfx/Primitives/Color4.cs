@@ -23,4 +23,6 @@ public readonly struct Color4
     {
         return new Color4(a.Vector + wa * (b.Vector - a.Vector));
     }
+
+    public Color3 Color3 => new(Vector.Xyz);
 }

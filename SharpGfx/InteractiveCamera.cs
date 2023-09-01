@@ -7,9 +7,15 @@ public abstract class InteractiveCamera : Camera
 {
     private float _pitch;
     private float _yaw;
+    public MouseButton MouseButtons { get; private set; }
+
     protected Space World { get; }
+    public virtual (float x, float y) MousePosition { get; set; }
+    public virtual float MouseScrollX { get; set; }
+    public virtual float MouseScrollY { get; set; }
 
     protected InteractiveCamera(Space world, Point3 position) 
+        : base(world.Unit3Z)
     {
         Position = position;
         FovY = MathF.PI / 4;
@@ -17,9 +23,21 @@ public abstract class InteractiveCamera : Camera
         Yaw = -MathF.PI / 2;
     }
 
-    public abstract void OnKeyDown(ConsoleKey key);
-    public abstract void MouseDown(MouseButton button, float x, float y);
-    public abstract void MouseDragging(MouseButton button, float x, float y);
+    public virtual void KeyDown(ConsoleKey key) {}
+
+    public virtual bool MouseDown(MouseButton button)
+    {
+        bool isChange = !MouseButtons.HasFlag(button);
+        MouseButtons |= button;
+        return isChange;
+    }
+
+    public virtual bool MouseUp(MouseButton button)
+    {
+        bool isChange = MouseButtons.HasFlag(button);
+        MouseButtons &= ~button;
+        return isChange;
+    }
 
     public float Pitch
     {

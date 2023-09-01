@@ -4,26 +4,26 @@ internal class GlInstance : Instance
 {
     private readonly GlApi _gl;
 
-    internal GlBody Body { get; }
+    internal GlSurface Surface { get; }
 
-    public GlInstance(GlApi gl, Space space, string name, GlBody body)
+    public GlInstance(GlApi gl, Space space, string name, GlSurface surface)
         : base(space, name)
     {
         _gl = gl;
-        Body = body;
-        body.Use();
+        Surface = surface;
+        surface.Use();
     }
 
     public override void Render()
     {
-        Body.Draw();
+        Surface.Draw();
     }
 
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
-            Body.Unuse();
+            Surface.Unuse();
             base.Dispose(true);
         }
     }

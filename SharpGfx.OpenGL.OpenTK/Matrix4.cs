@@ -31,7 +31,7 @@ internal readonly struct Matrix4 : Primitives.Matrix4
         return new Matrix4(space, Value);
     }
 
-    public Primitives.IVector4 Mul(Primitives.IVector4 r)
+    public IVector4 Mul(IVector4 r)
     {
         return new Vector4(Space, Value * ((Vector4) r).Value);
     }
@@ -51,5 +51,18 @@ internal readonly struct Matrix4 : Primitives.Matrix4
                 Value.Column1, 
                 Value.Column2, 
                 Value.Column3));
+    }
+
+    public override string ToString()
+    {
+        var e = Elements;
+        var a = new[]
+        {
+            e[0, 0], e[0, 1], e[0, 2], e[0, 3],
+            e[1, 0], e[1, 1], e[1, 2], e[1, 3],
+            e[2, 0], e[2, 1], e[2, 2], e[2, 3],
+            e[3, 0], e[3, 1], e[3, 2], e[3, 3]
+        };
+        return $"[{string.Join(' ', a)}]";
     }
 }

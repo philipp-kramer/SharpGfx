@@ -27,21 +27,21 @@ public abstract class GlApi
 
     protected internal abstract uint GenVertexArray();
     protected internal abstract uint GenBuffer();
-    protected internal abstract void BufferData(GlBufferTarget target, int size, IntPtr data);
+    protected internal abstract void BufferData(GlBufferTarget target, int size, nint data);
     protected internal abstract long GetBufferParameter(GlBufferTarget target, GlBufferParameterName name);
     protected internal abstract void FloatVertexAttribPointer(uint index, int size, int stride, int offset);
     protected internal abstract void BindVertexArray(uint array);
     protected internal abstract void BindBuffer(GlBufferTarget target, uint buffer);
     protected internal abstract void EnableVertexAttribArray(uint array);
     protected internal abstract void DrawTriangles(int count);
-    protected internal abstract void DrawIndexedTriangles<T>(int count, IntPtr indices);
+    protected internal abstract void DrawIndexedTriangles<T>(int count, nint indices);
     protected internal abstract void Enable(GlCap cap);
     protected internal abstract void Disable(GlCap cap);
     protected internal abstract void BlendFunc(GlBlendingFactor srcFactor, GlBlendingFactor dstFactor);
 
     protected internal abstract uint GenTexture();
     protected internal abstract void BindTexture(GlTextureTarget target, uint texture);
-    protected internal abstract void TexImage2D(GlTextureTarget target, int level, int width, int height, int border, GlPixelFormat format, GlPixelType type, IntPtr pixels);
+    protected internal abstract void TexImage2D(GlTextureTarget target, int level, int width, int height, int border, GlPixelFormat format, GlPixelType type, nint pixels);
     protected internal abstract void GenerateMipmap(GlTextureTarget target);
 
     protected internal abstract void TextureParameterI(GlTextureTarget target, GlTextureParameterName name, GlTextureParameter parameter);
@@ -52,7 +52,7 @@ public abstract class GlApi
         BindTexture(GlTextureTarget.Texture2D, 0);
     }
 
-    protected internal abstract void GetTexImage(GlTextureTarget target, int level, GlPixelFormat format, GlPixelType type, IntPtr pixels);
+    protected internal abstract void GetTexImage(GlTextureTarget target, int level, GlPixelFormat format, GlPixelType type, nint pixels);
 
     protected internal abstract uint GenFramebuffer();
     protected internal abstract void BindFramebuffer(GlFramebufferTarget target, uint framebuffer);

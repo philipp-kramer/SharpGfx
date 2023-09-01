@@ -1,5 +1,4 @@
-﻿using System;
-using SharpGfx.Primitives;
+﻿using SharpGfx.Primitives;
 
 namespace SharpGfx;
 
@@ -7,8 +6,6 @@ public class OrbitCamera : InteractiveCamera
 {
     private const float MoveSensitivity = 1f/250;
 
-    private float _mouseX;
-    private float _mouseY;
     private float _radius;
 
     public Point3 Center { get; private set; }
@@ -20,42 +17,39 @@ public class OrbitCamera : InteractiveCamera
         _radius = radius;
     }
 
-    public override void OnKeyDown(ConsoleKey key)
+    public override (float x, float y) MousePosition
     {
-    }
-
-    public override void MouseDown(MouseButton button, float x, float y)
-    {
-        _mouseX = x;
-        _mouseY = y;
-    }
-
-    public override void MouseDragging(MouseButton button, float x, float y)
-    {
-        float deltaX = float.IsNaN(_mouseX) ? 0 : x - _mouseX;
-        float deltaY = float.IsNaN(_mouseY) ? 0 : y - _mouseY;
-
-        switch (button)
+        set
         {
-            case MouseButton.Left:
-                Pitch -= MoveSensitivity * deltaY;
-                Yaw += MoveSensitivity * deltaX;
-                break;
+            float deltaX = float.IsNaN(MousePosition.x) ? 0 : value.x - MousePosition.x;
+            float deltaY = float.IsNaN(MousePosition.y) ? 0 : value.y - MousePosition.y;
+            base.MousePosition = value;
 
-            case MouseButton.Middle:
-                _radius += y;
-                break;
+            switch (MouseButtons.TryGetSingle())
+            {
+                case MouseButton.Left:
+                    Pitch -= MoveSensitivity * deltaY;
+                    Yaw += MoveSensitivity * deltaX;
+                    break;
 
-            case MouseButton.Right:
-                var lookAtX = LookAt.Cross(World.Unit3Y);
-                var lookAtY = LookAt.Cross(lookAtX);
-                Center -= MoveSensitivity * (deltaX * lookAtX + deltaY * lookAtY);
-                break;
+                case MouseButton.Right:
+                    var lookAtX = LookAt.Cross(World.Unit3Y);
+                    var lookAtY = LookAt.Cross(lookAtX);
+                    Center -= MoveSensitivity * (deltaX * lookAtX + deltaY * lookAtY);
+                    break;
+            }
+
+            UpdatePosition();
         }
+    }
 
-        MouseDown(button, x, y);
-
-        UpdatePosition();
+    public override float MouseScrollY
+    {
+        set
+        {
+            _radius += value;
+            UpdatePosition();
+        }
     }
 
     private void UpdatePosition()

@@ -30,12 +30,12 @@ public abstract class Device
     public abstract Material Phong(Reflectance<Color3> reflectance, Lighting lighting);
     public abstract Material Phong(Reflectance<TextureHandle> reflectance, Lighting lighting);
 
-    public abstract Body Body(Material material, params IVertexAttribute[] attributes);
-    public abstract Body Body(Material material, uint[] triangles, params IVertexAttribute[] attributes);
-    public abstract Body Body(Material material, ushort[] triangles, params IVertexAttribute[] attributes);
+    public abstract Surface Surface(Material material, params SurfaceAttribute[] attributes);
+    public abstract Surface Surface(Material material, uint[] triangles, params SurfaceAttribute[] attributes);
+    public abstract Surface Surface(Material material, ushort[] triangles, params SurfaceAttribute[] attributes);
 
     public Instance Group(Space space, string name) => new Instance(space, name);
-    public abstract Instance Instance(Space space, string name, Body body);
+    public abstract Instance Instance(Space space, string name, Surface surface);
 
     public abstract TextureHandle Texture(Image<Rgba32> image);
 

@@ -3,7 +3,7 @@ using SharpGfx.Primitives;
 
 namespace SharpGfx;
 
-public readonly struct CameraView
+public readonly ref struct CameraView
 {
     public readonly Point3 Eye;
     public readonly IVector3 LookAt;

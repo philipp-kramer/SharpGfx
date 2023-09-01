@@ -6,7 +6,7 @@ namespace SharpGfx.Geometry;
 
 public static class Normals
 {
-    internal readonly struct HostMatrix23
+    internal readonly ref struct HostMatrix23
     {
         public float[,] Elements { get; }
 

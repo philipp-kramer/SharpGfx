@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -15,7 +14,7 @@ internal static class GlTextures
         gl.TextureParameterI(GlTextureTarget.Texture2D, GlTextureParameterName.MinFilter, GlTextureParameter.Linear);
         gl.TextureParameterI(GlTextureTarget.Texture2D, GlTextureParameterName.MagFilter, GlTextureParameter.Linear);
 
-        gl.TexImage2D(GlTextureTarget.Texture2D, 0, width, height, 0, pixelFormat, pixelType, IntPtr.Zero);
+        gl.TexImage2D(GlTextureTarget.Texture2D, 0, width, height, 0, pixelFormat, pixelType, nint.Zero);
 
         return texture;
     }

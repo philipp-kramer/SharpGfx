@@ -27,11 +27,17 @@ public abstract class OpenGlMaterial : Material, IDisposable
 
         var errors = new List<string>();
 
-        _declarations = GetDeclarations(vertexShader, errors);
-        var fragmentDeclarations = GetDeclarations(fragShader, errors);
+        _declarations = GetDeclarations(vertexShader, errors)
+            .Where(d => d != default)
+            .Cast<DeclarationNode>()
+            .ToList();
+        var fragmentDeclarations = GetDeclarations(fragShader, errors)
+            .Where(d => d != default)
+            .Cast<DeclarationNode>()
+            .ToList();
         CheckShader(_declarations);
         CheckShader(fragmentDeclarations);
-        _declarations.AddRange(fragmentDeclarations.Where(fd => _declarations.All(vd => vd.Name != fd.Name)));
+        _declarations.AddRange(fragmentDeclarations.Where(fd => _declarations.All(vd => vd.Name != fd?.Name)));
 
         var fragOutChannels = fragmentDeclarations
             .OfType<ChannelNode>()
@@ -47,7 +53,7 @@ public abstract class OpenGlMaterial : Material, IDisposable
         Report(errors);
     }
 
-    protected override void DoInContext(Action action)
+    protected void DoInContext(Action action)
     {
         try
         {
@@ -60,7 +66,7 @@ public abstract class OpenGlMaterial : Material, IDisposable
         }
     }
 
-    public override void Apply()
+    public virtual void Apply()
     {
         GL.UseProgram(_handle);
         if (Transparent)
@@ -70,7 +76,7 @@ public abstract class OpenGlMaterial : Material, IDisposable
         }
     }
 
-    public override void UnApply()
+    public virtual void UnApply()
     {
         if (Transparent)
         {
@@ -79,7 +85,7 @@ public abstract class OpenGlMaterial : Material, IDisposable
         GL.UseProgram(0);
     }
 
-    internal void SetVertexArrayAttributes(uint vertexArray, IVertexAttribute[] attributes, uint[] vertexBuffers)
+    internal void SetVertexArrayAttributes(uint vertexArray, SurfaceAttribute[] attributes, uint[] vertexBuffers)
     {
         DoInContext(() =>
         {
@@ -87,9 +93,8 @@ public abstract class OpenGlMaterial : Material, IDisposable
 
             for (int i = 0; i < attributes.Length; i++)
             {
-                string name;
-                var attribute = attributes[i];
-                name = GetName(attribute);
+                var attribute = (GlSurfaceAttribute) attributes[i];
+                var name = attribute.ParameterName;
                 _inputs[name] = Direction.In;
 
                 GL.BindBuffer(GlBufferTarget.ArrayBuffer, vertexBuffers[i]);
@@ -105,19 +110,7 @@ public abstract class OpenGlMaterial : Material, IDisposable
         });
     }
 
-    private static string GetName(IVertexAttribute attribute)
-    {
-        return attribute switch
-        {
-            GlVertexAttribute glva => glva.Name,
-            PositionVa => "positionIn",
-            NormalVa => "normalIn",
-            TexPositionVa => "texCoordIn",
-            _ => throw new ArgumentOutOfRangeException(nameof(attribute))
-        };
-    }
-
-    private static List<DeclarationNode> GetDeclarations(string shader, List<string> errors)
+    private static List<DeclarationNode?> GetDeclarations(string shader, List<string> errors)
     {
         var reader = new StringReader(shader);
         var parser = new Parser(new Lexer(reader, errors), errors);
@@ -268,18 +261,18 @@ public abstract class OpenGlMaterial : Material, IDisposable
 
     public void CheckInputs()
     {
-        foreach (var channel in _netChannels)
+        foreach (var (channel, direction) in _netChannels)
         {
-            if (_inputs.TryGetValue(channel.Key, out var kind))
+            if (_inputs.TryGetValue(channel, out var kind))
             {
-                if (kind != channel.Value)
+                if (kind != direction)
                 {
-                    Throw(channel.Key, $"shader input {kind} {channel.Key} should be {channel.Value}");
+                    Throw(channel, $"shader input {kind} {channel} should be {direction}");
                 }
             }
-            else if (CheckUndefinedChannels && channel.Value != Direction.Out)
+            else if (CheckUndefinedChannels && direction != Direction.Out)
             {
-                Throw(channel.Key, $"shader {kind} channel {channel.Key} has no input");
+                Throw(channel, $"shader {kind} channel {channel} has no input");
             }
         }
     }

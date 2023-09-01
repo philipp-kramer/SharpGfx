@@ -17,8 +17,8 @@ public sealed class OpenTkWindow : Window, IDisposable
         KeyMapping = new Dictionary<Keys, ConsoleKey>();
         foreach (Keys key in Enum.GetValues(typeof(Keys)))
         {
-            string keyName = Enum.GetName(typeof(Keys), key);
-            if (Enum.TryParse(typeof(ConsoleKey), keyName, out var value) && value != null)
+            string keyName = Enum.GetName(typeof(Keys), key)!;
+            if (Enum.TryParse(typeof(ConsoleKey), keyName, out var value))
             {
                 KeyMapping.Add(key, (ConsoleKey) value);
             }
@@ -74,17 +74,16 @@ public sealed class OpenTkWindow : Window, IDisposable
     }
 
     private readonly GameWindow _window;
-    private readonly InteractiveCamera _camera;
+    private readonly InteractiveCamera? _camera;
     private PolygonMode _polygonMode;
-    private MouseButton _mouseButton;
 
-    public event Action<KeyDownArgs> KeyDown;
+    public event Action<KeyDownArgs>? KeyDown;
 
     public OpenTkWindow(
         string title,
         int width,
         int height,
-        InteractiveCamera camera = null,
+        InteractiveCamera? camera = default,
         int targetFrameRate = 60, 
         bool antiAliased = false)
         : base(width, height)
@@ -156,14 +155,13 @@ public sealed class OpenTkWindow : Window, IDisposable
     {
         if (!KeyMapping.TryGetValue(e.Key, out var key)) return;
 
-        if (KeyDown != null)
-        {
-            var eventArgs = new KeyDownArgs(key);
-            KeyDown.Invoke(eventArgs);
-            if (eventArgs.Handled) return;
-        }
+        var eventArgs = new KeyDownArgs(key);
+        KeyDown?.Invoke(eventArgs);
+        if (eventArgs.Handled) return;
 
-        _camera?.OnKeyDown(key);
+        if (_camera == default) return;
+
+        _camera.KeyDown(key);
 
         switch (key)
         {
@@ -180,32 +178,37 @@ public sealed class OpenTkWindow : Window, IDisposable
 
     private void OnMouseMove(MouseMoveEventArgs e)
     {
-        MouseX = e.X;
-        MouseY = e.Y;
-        _camera?.MouseDragging(_mouseButton, MouseX, MouseY);
+        if (_camera == default) return;
+
+        _camera.MousePosition = (e.X, e.Y);
     }
 
     private void OnMouseDown(MouseButtonEventArgs e)
     {
-        _mouseButton = e.Button switch
+        _camera?.MouseDown(GetMouseButton(e));
+    }
+
+    private void OnMouseUp(MouseButtonEventArgs e)
+    {
+        _camera?.MouseUp(GetMouseButton(e));
+    }
+
+    private void OnMouseWheel(MouseWheelEventArgs e)
+    {
+        if (_camera == default) return;
+        _camera.MouseScrollX += e.Offset.X;
+        _camera.MouseScrollY += e.Offset.Y;
+    }
+
+    private static MouseButton GetMouseButton(MouseButtonEventArgs e)
+    {
+        return e.Button switch
         {
             global::OpenTK.Windowing.GraphicsLibraryFramework.MouseButton.Left => MouseButton.Left,
             global::OpenTK.Windowing.GraphicsLibraryFramework.MouseButton.Middle => MouseButton.Middle,
             global::OpenTK.Windowing.GraphicsLibraryFramework.MouseButton.Right => MouseButton.Right,
             _ => MouseButton.None
         };
-        _camera?.MouseDown(_mouseButton, _window.MousePosition.X, _window.MousePosition.Y);
-    }
-
-    private void OnMouseUp(MouseButtonEventArgs e)
-    {
-        Rendering.OnMouseUp(_mouseButton);
-        _mouseButton = MouseButton.None;
-    }
-
-    private void OnMouseWheel(MouseWheelEventArgs e)
-    {
-        _camera?.MouseDragging(MouseButton.Middle, e.Offset.X, e.OffsetY);
     }
 
     private void TogglePolygonMode()

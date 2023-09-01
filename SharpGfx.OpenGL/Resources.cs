@@ -13,7 +13,7 @@ public static class Resources
     public static string GetShader(string name)
     {
         var assembly = Assembly.GetExecutingAssembly();
-        using var stream = assembly.GetManifestResourceStream(GetFullPath(assembly, $"Shaders.{name}"));
+        using var stream = assembly.GetManifestResourceStream(GetFullPath(assembly, $"Shaders.{name}"))!;
         using var reader = new StreamReader(stream);
         return reader.ReadToEnd();
     }

@@ -7,7 +7,7 @@
 //    public sealed class Player : IDisposable
 //    {
 //        private readonly ContextHandle _context;
-//        private readonly IntPtr _device;
+//        private readonly nint _device;
 //        private readonly int _source;
 
 //        public Player(string deviceName)
@@ -15,7 +15,7 @@
 //            _device = Alc.OpenDevice(deviceName);
 //            unsafe
 //            {
-//                _context = Alc.CreateContext(_device, (int*)null);
+//                _context = Alc.CreateContext(_device, (int*)default);
 //            }
 
 //            Alc.MakeContextCurrent(_context);

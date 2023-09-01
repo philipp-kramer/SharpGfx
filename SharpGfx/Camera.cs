@@ -3,7 +3,7 @@ using SharpGfx.Primitives;
 
 namespace SharpGfx;
 
-public class Camera
+public abstract class Camera
 {
     private readonly float _halfFrustumHeight = MathF.Tan(MathF.PI / 8);
 
@@ -12,6 +12,11 @@ public class Camera
     public Point3 Position { get; set; }
     public IVector3 LookAt { get; set; }
     public float FovY { get; set; }
+
+    protected Camera(IVector3 lookAt)
+    {
+        LookAt = lookAt;
+    }
 
     public (Point3, Point3, Point3, Point3) GetFrustum(IVector3 unitY, float aspect)
     {
