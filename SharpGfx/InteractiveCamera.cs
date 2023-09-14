@@ -14,11 +14,10 @@ public abstract class InteractiveCamera : Camera
     public virtual float MouseScrollX { get; set; }
     public virtual float MouseScrollY { get; set; }
 
-    protected InteractiveCamera(Space world, Point3 position) 
-        : base(world.Unit3Z)
+    protected InteractiveCamera(Space world, Point3 position, Projection? projection = default) 
+        : base(world.Unit3Z, projection)
     {
         Position = position;
-        FovY = MathF.PI / 4;
         World = world;
         Yaw = -MathF.PI / 2;
     }

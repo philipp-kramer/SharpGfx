@@ -4,14 +4,13 @@ namespace SharpGfx;
 
 public class OrbitCamera : InteractiveCamera
 {
-    private const float MoveSensitivity = 1f/250;
 
     private float _radius;
 
     public Point3 Center { get; private set; }
 
-    public OrbitCamera(Space world, Point3 center, float radius)
-        : base(world, center + radius * world.Vector3(0, 0, 1))
+    public OrbitCamera(Space world, Point3 center, float radius, Projection? projection = default)
+        : base(world, center + radius * world.Vector3(0, 0, 1), projection)
     {
         Center = center;
         _radius = radius;
@@ -21,6 +20,8 @@ public class OrbitCamera : InteractiveCamera
     {
         set
         {
+            const float moveSensitivity = 1f / 250;
+
             float deltaX = float.IsNaN(MousePosition.x) ? 0 : value.x - MousePosition.x;
             float deltaY = float.IsNaN(MousePosition.y) ? 0 : value.y - MousePosition.y;
             base.MousePosition = value;
@@ -28,14 +29,14 @@ public class OrbitCamera : InteractiveCamera
             switch (MouseButtons.TryGetSingle())
             {
                 case MouseButton.Left:
-                    Pitch -= MoveSensitivity * deltaY;
-                    Yaw += MoveSensitivity * deltaX;
+                    Pitch -= moveSensitivity * deltaY;
+                    Yaw += moveSensitivity * deltaX;
                     break;
 
                 case MouseButton.Right:
                     var lookAtX = LookAt.Cross(World.Unit3Y);
                     var lookAtY = LookAt.Cross(lookAtX);
-                    Center -= MoveSensitivity * (deltaX * lookAtX + deltaY * lookAtY);
+                    Center -= moveSensitivity * (deltaX * lookAtX + deltaY * lookAtY);
                     break;
             }
 
@@ -48,6 +49,11 @@ public class OrbitCamera : InteractiveCamera
         set
         {
             _radius += value;
+            if (Projection is OrthographicProjection orthographic)
+            {
+                const float sensitivity = 1f/10f;
+                orthographic.PixelScale *= 1 + sensitivity * value;
+            }
             UpdatePosition();
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace SharpGfx.OpenGL.OpenTK;
+﻿using System;
+
+namespace SharpGfx.OpenGL.OpenTK;
 
 public class OpenTkDevice : OpenGlDevice
 {
@@ -25,10 +27,21 @@ public class OpenTkDevice : OpenGlDevice
             ((Vector3) cameraView.Up).Value));
     }
 
-    public override Primitives.Matrix4 GetProjection(float aspect, Camera camera)
+    public override Primitives.Matrix4 GetProjection(float width, float height, Camera camera)
     {
-        var perspective = global::OpenTK.Mathematics.Matrix4.CreatePerspectiveFieldOfView(camera.FovY, aspect, camera.Near, camera.Far);
-        return new Matrix4(View, perspective);
+        switch (camera.Projection)
+        {
+            case OrthographicProjection o:
+                var om = global::OpenTK.Mathematics.Matrix4.CreateOrthographic(o.PixelScale * width, o.PixelScale * height, o.Near, o.Far);
+                return new Matrix4(View, om);
+
+            case PerspectiveProjection p:
+                var pm = global::OpenTK.Mathematics.Matrix4.CreatePerspectiveFieldOfView(p.FovY, width / height, p.Near, p.Far);
+                return new Matrix4(View, pm);
+
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 
     protected override Primitives.Matrix4 GetOffCenterProjection(float left, float right, float bottom, float top, float near, float far)

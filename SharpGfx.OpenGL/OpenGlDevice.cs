@@ -93,12 +93,12 @@ public abstract class OpenGlDevice : Device
         int width = window.Width;
         int height = window.Height;
         var materialScene = GetAllInstancesByMaterial(rendering.Scene);
-        SetViewProjection(rendering, (float) width / height, materialScene);
+        SetViewProjection(rendering, width, height, materialScene);
         GlRenderer.Render(GL, materialScene, width, height, rendering.Background);
         GL.ExecutePending();
     }
 
-    private void SetViewProjection(CameraRendering rendering, float aspect, List<IGrouping<OpenGlMaterial, GlInstance>> materialScene)
+    private void SetViewProjection(CameraRendering rendering, float width, float height, List<IGrouping<OpenGlMaterial, GlInstance>> materialScene)
     {
         CheckSpaces(rendering.Scene);
         var materials = materialScene
@@ -109,12 +109,12 @@ public abstract class OpenGlDevice : Device
         var view = GetViewMatrix(rendering.View);
         OpenGlMaterial.Set(materials, "cameraView", true, view);
         OpenGlMaterial.SetIfDefined(World, materials, "cameraPosition", camera.Position.Vector);
-        var projection = GetProjection(aspect, camera);
+        var projection = GetProjection(width, height, camera);
         OpenGlMaterial.Set(materials, "projection", true, projection);
     }
 
     public abstract Matrix4 GetViewMatrix(CameraView cameraView);
-    public abstract Matrix4 GetProjection(float aspect, Camera camera);
+    public abstract Matrix4 GetProjection(float width, float height, Camera camera);
 
     protected abstract Matrix4 GetOffCenterProjection(float left, float right, float bottom, float top, float near, float far);
     public Matrix4 GetOffCenterProjection(IVector3 center, IVector3 positiveX, IVector3 positiveY, float ratio, float near, float far, Matrix4 view)

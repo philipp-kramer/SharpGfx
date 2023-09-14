@@ -7,15 +7,14 @@ public abstract class Camera
 {
     private readonly float _halfFrustumHeight = MathF.Tan(MathF.PI / 8);
 
-    public float Near { get; set; } = 0.1f;
-    public float Far { get; set; } = 100f;
     public Point3 Position { get; set; }
     public IVector3 LookAt { get; set; }
-    public float FovY { get; set; }
+    public Projection Projection { get; }
 
-    protected Camera(IVector3 lookAt)
+    protected Camera(IVector3 lookAt, Projection? projection = default)
     {
         LookAt = lookAt;
+        Projection = projection ?? new PerspectiveProjection(MathF.PI / 4);
     }
 
     public (Point3, Point3, Point3, Point3) GetFrustum(IVector3 unitY, float aspect)

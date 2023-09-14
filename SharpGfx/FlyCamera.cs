@@ -8,8 +8,8 @@ public class FlyCamera : InteractiveCamera
     private const float FlySpeed = 1f / 10;
     private const float MoveSensitivity = 1/250f;
 
-    public FlyCamera(Space world, Point3 position)
-        : base(world, position)
+    public FlyCamera(Space world, Point3 position, Projection? projection = default)
+        : base(world, position, projection)
     {
     }
 

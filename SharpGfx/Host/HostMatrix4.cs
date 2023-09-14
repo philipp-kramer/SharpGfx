@@ -94,7 +94,20 @@ public readonly struct HostMatrix4 : Matrix4
         return transI * rotI;
     }
 
-    public static Matrix4 GetProjection(Space space, float fovy, float aspect, float near, float far)
+    public static Matrix4 GetOrthographicProjection(Space space, float width, float height, float near, float far)
+    {
+        float negDepth = near - far;
+        return new HostMatrix4(space, new float[4, 4])
+        {
+            [0, 0] = 2 / width,
+            [1, 1] = 2 / height,
+            [2, 2] = 2 / negDepth,
+            [3, 2] = (near + far) / negDepth,
+            [3, 3] = 1 
+        };
+    }
+
+    public static Matrix4 GetPerspectiveProjection(Space space, float fovy, float aspect, float near, float far)
     {
         float scale = 1 / MathF.Tan(0.5f * fovy);
         return new HostMatrix4(space, new float[4, 4])
@@ -107,7 +120,7 @@ public readonly struct HostMatrix4 : Matrix4
         };
     }
 
-    public static Matrix4 GetProjection(Space space, float left, float right, float bottom, float top, float near, float far)
+    public static Matrix4 GetOffCenterPerspectiveProjection(Space space, float left, float right, float bottom, float top, float near, float far)
     {
         float deltaX = right - left;
         float deltaY = top - bottom;
